@@ -12,7 +12,7 @@ config_version=5
 
 config/name="NeonDrift"
 config/description="Enter an interesting project description here!"
-run/main_scene="uid://coql3r5d7x8y5"
+run/main_scene="uid://iuascjpmbef1"
 config/features=PackedStringArray("4.4")
 config/icon="res://icon.png"
 
@@ -21,6 +21,7 @@ config/icon="res://icon.png"
 GameManager="*res://autoload/game_manager.gd"
 AudioManager="*res://autoload/audio_manager.gd"
 SaveManager="*res://autoload/save_manager.gd"
+SceneManager="*res://autoload/scene_manager.gd"
 
 [display]
 
@@ -33,6 +34,10 @@ window/size/window_height_override=1280
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[gui]
+
+theme/custom_font="uid://bykgjjv2kp2yq"
 
 [input]
 

@@ -21,3 +21,7 @@ android/
 
 # IDE
 .idea/
+.claude/
+
+# User
+neon_drift_save.json

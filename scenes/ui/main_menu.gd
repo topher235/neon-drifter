@@ -47,5 +47,5 @@ func _start_game(daily_challenge: bool) -> void:
     # Transition to game scene
     AudioManager.stop_music(true)
 
-    var game_scene = preload("res://scenes/game/game.tscn")
-    get_tree().change_scene_to_packed(game_scene)
+    # Use SceneManager for smooth transition
+    await SceneManager.goto_game()

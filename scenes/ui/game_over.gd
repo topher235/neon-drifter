@@ -51,4 +51,4 @@ func _on_retry_pressed() -> void:
 func _on_menu_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     GameManager.return_to_menu()
-    get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+    await SceneManager.goto_main_menu()
