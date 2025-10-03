@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=84 format=3 uid="uid://u5qh1r677ec2"]
+[gd_resource type="Theme" load_steps=84 format=3 uid="uid://b3u4wxbvbpmyv"]
 
-[ext_resource type="FontFile" uid="uid://bh2gj03hg6v4r" path="polentical_neon/Polentical Neon Regular.ttf" id="1"]
-[ext_resource type="Texture2D" uid="uid://6wa5oaqt2vmq" path="neon-wave-theme.png" id="2"]
+[ext_resource type="FontFile" uid="uid://bykgjjv2kp2yq" path="res://assets/fonts/Polentical Neon Regular.ttf" id="1"]
+[ext_resource type="Texture2D" uid="uid://l5uv51bjopyt" path="res://resources/themes/neon-wave-theme.png" id="2"]
 
 [sub_resource type="StyleBoxTexture" id="8"]
 content_margin_top = 7.0
