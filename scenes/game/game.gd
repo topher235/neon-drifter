@@ -2,8 +2,8 @@ extends Node2D
 
 @onready var tunnel_generator: TunnelGenerator = $TunnelGenerator
 @onready var player: PlayerLine = $Player
-@onready var hud: CanvasLayer = $UI/HUD
-@onready var game_over_screen: Control = $UI/GameOverScreen
+@onready var hud: CanvasLayer = $UI/Hud
+@onready var game_over_screen: Control = $UI/GameOverLayer/GameOver
 
 func _ready() -> void:
     player.add_to_group("player")

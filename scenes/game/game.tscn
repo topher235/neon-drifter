@@ -68,5 +68,8 @@ script = ExtResource("1_7h61r")
 
 [node name="Hud" parent="UI" instance=ExtResource("5_5i0tg")]
 
-[node name="GameOver" parent="UI" instance=ExtResource("6_bdhmt")]
+[node name="GameOverLayer" type="CanvasLayer" parent="UI"]
+layer = 100
+
+[node name="GameOver" parent="UI/GameOverLayer" instance=ExtResource("6_bdhmt")]
 visible = false

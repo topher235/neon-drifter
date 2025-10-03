@@ -37,6 +37,7 @@ window/handheld/orientation=1
 
 [gui]
 
+theme/custom="uid://b3u4wxbvbpmyv"
 theme/custom_font="uid://bykgjjv2kp2yq"
 
 [input]
