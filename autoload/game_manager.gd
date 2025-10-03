@@ -3,6 +3,8 @@ extends Node
 # Signals
 signal game_started
 signal game_over(final_score: int, distance: float)
+signal game_paused
+signal game_resumed
 signal score_changed(new_score: int)
 signal speed_changed(new_speed: float)
 signal combo_changed(combo: int)
@@ -78,11 +80,13 @@ func pause_game() -> void:
     if current_state == GameState.PLAYING:
         current_state = GameState.PAUSED
         get_tree().paused = true
+        game_paused.emit()
 
 func resume_game() -> void:
     if current_state == GameState.PAUSED:
         current_state = GameState.PLAYING
         get_tree().paused = false
+        game_resumed.emit()
 
 func return_to_menu() -> void:
     get_tree().paused = false

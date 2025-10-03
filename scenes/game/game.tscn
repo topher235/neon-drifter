@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://qocekvplpmd5"]
+[gd_scene load_steps=9 format=3 uid="uid://qocekvplpmd5"]
 
 [ext_resource type="Script" uid="uid://c7e80m8uq2egm" path="res://scenes/game/game.gd" id="1_0sr1o"]
 [ext_resource type="Script" path="res://scripts/generation/tunnel_generator.gd" id="1_7h61r"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/neon_grid_background.tscn" id="4_bg"]
 [ext_resource type="PackedScene" uid="uid://c5ixwlkb1000h" path="res://scenes/ui/hud.tscn" id="5_5i0tg"]
 [ext_resource type="PackedScene" uid="uid://ctk67ij7axc7n" path="res://scenes/ui/game_over.tscn" id="6_bdhmt"]
+[ext_resource type="PackedScene" uid="uid://csh7moljbneva" path="res://scenes/ui/pause_screen.tscn" id="7_pause"]
 
 [sub_resource type="Environment" id="Environment_glow"]
 background_mode = 3
@@ -42,6 +43,13 @@ script = ExtResource("1_7h61r")
 [node name="UI" type="Node" parent="."]
 
 [node name="Hud" parent="UI" instance=ExtResource("5_5i0tg")]
+
+[node name="PauseLayer" type="CanvasLayer" parent="UI"]
+process_mode = 3
+layer = 50
+
+[node name="PauseScreen" parent="UI/PauseLayer" instance=ExtResource("7_pause")]
+visible = false
 
 [node name="GameOverLayer" type="CanvasLayer" parent="UI"]
 layer = 100

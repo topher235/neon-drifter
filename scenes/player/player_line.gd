@@ -3,7 +3,7 @@ extends Node2D
 
 # Configuration
 @export_group("Movement")
-@export var movement_smoothing: float = 0.15
+@export var movement_smoothing: float = 15.0  # Higher = snappier (lerp speed)
 @export_enum("AutoRun", "FreeMovement") var movement_mode: String = "AutoRun"
 
 @export_group("Trail")
@@ -95,15 +95,16 @@ func _update_position(delta: float) -> void:
     # Apply movement based on controller type
     if movement_controller is AutoRunController:
         # AutoRun: Smooth X only, Y moves directly
-        var x_diff = target_position.x - current_position.x
-        velocity.x = x_diff / movement_smoothing
-        current_position.x += velocity.x * delta
+        # Use lerp for consistent smoothing speed regardless of distance
+        var lerp_speed = movement_smoothing * delta
+        current_position.x = lerp(current_position.x, target_position.x, lerp_speed)
         current_position.y = target_position.y  # Direct Y movement
+        velocity.x = (current_position.x - position.x) / delta if delta > 0 else 0
     else:
         # FreeMovement: Smooth both axes
-        var diff = target_position - current_position
-        velocity = diff / movement_smoothing
-        current_position += velocity * delta
+        var lerp_speed = movement_smoothing * delta
+        current_position = current_position.lerp(target_position, lerp_speed)
+        velocity = (current_position - position) / delta if delta > 0 else Vector2.ZERO
 
     position = current_position
 

@@ -3,6 +3,7 @@ extends Node2D
 @onready var tunnel_generator: TunnelGenerator = $TunnelGenerator
 @onready var player: PlayerLine = $Player
 @onready var hud: CanvasLayer = $UI/Hud
+@onready var pause_screen: PauseScreen = $UI/PauseLayer/PauseScreen
 @onready var game_over_screen: Control = $UI/GameOverLayer/GameOver
 
 func _ready() -> void:
@@ -14,6 +15,10 @@ func _ready() -> void:
     else:
         player.movement_mode = "AutoRun"
 
+    # Connect to GameManager signals
+    GameManager.game_paused.connect(_on_game_paused)
+    GameManager.game_resumed.connect(_on_game_resumed)
+
     # Initialize systems
     tunnel_generator.initialize()
 
@@ -24,7 +29,25 @@ func _start_game() -> void:
     GameManager.start_game()
     AudioManager.play_music("gameplay", false)
 
+func _unhandled_input(event: InputEvent) -> void:
+    # Handle pause input
+    if event.is_action_pressed("pause") and GameManager.is_playing():
+        GameManager.pause_game()
+        get_viewport().set_input_as_handled()
+
 func _process(_delta: float) -> void:
     if GameManager.is_playing():
         # Update tunnel generation based on player position
         tunnel_generator.update_generation(player.get_world_position().y)
+
+func _on_game_paused() -> void:
+    if pause_screen.has_method("show_pause_screen"):
+        pause_screen.show_pause_screen()
+    else:
+        pause_screen.visible = true
+
+func _on_game_resumed() -> void:
+    if pause_screen.has_method("hide_pause_screen"):
+        pause_screen.hide_pause_screen()
+    else:
+        pause_screen.visible = false
