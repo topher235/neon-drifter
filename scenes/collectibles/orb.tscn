@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvlfpp1p5n0c7"]
+
+[ext_resource type="Script" uid="uid://cmsdae7sr5k58" path="res://scenes/collectibles/orb.gd" id="1_ua7sv"]
+
+[node name="Orb" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
+script = ExtResource("1_ua7sv")
+visual = NodePath("Visual")
+collision_shape = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://ckxex8yj4bb37"
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

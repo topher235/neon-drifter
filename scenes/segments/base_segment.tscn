@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cse8b5tty3w8"]
+
+[ext_resource type="Script" uid="uid://d0gtg4yjtl8la" path="res://scenes/segments/base_segment.gd" id="1_f1uo6"]
+
+[node name="BaseSegment" type="Node2D" node_paths=PackedStringArray("obstacles_container", "collectibles_container", "walls_container", "background")]
+script = ExtResource("1_f1uo6")
+obstacles_container = NodePath("Obstacles")
+collectibles_container = NodePath("Collectibles")
+walls_container = NodePath("Walls")
+background = NodePath("Background")
+
+[node name="Background" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Walls" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Collectibles" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="."]
+unique_name_in_owner = true

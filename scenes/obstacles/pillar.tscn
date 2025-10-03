@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://5hhdgqmrixkv"]
+
+[ext_resource type="Script" uid="uid://bjg18t4ciupdj" path="res://scenes/obstacles/pillar.gd" id="1_cmpat"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cmpat"]
+radius = 30.0
+
+[node name="Pillar" type="Area2D"]
+script = ExtResource("1_cmpat")
+metadata/_custom_type_script = "uid://dr8pud32jqdow"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cmpat")
+
+[node name="Visual" type="ColorRect" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Glow" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+color = Color(1, 0.2, 0.5, 1)
+energy = 1.5
+range_layer_min = -512
+range_layer_max = 512
+texture_scale = 2.0

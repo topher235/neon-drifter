@@ -1,0 +1,14 @@
+res://scenes/player/player_line.tscn
+res://resources/materials/trail_glow.tres
+res://scenes/obstacles/base_obstacle.tscn
+res://scenes/obstacles/pillar.tscn
+res://scenes/obstacles/pulse_gate.tscn
+res://scenes/collectibles/base_collectible.tscn
+res://scenes/collectibles/orb.tscn
+res://scenes/segments/base_segment.tscn
+res://scenes/main/world_environment.tscn
+res://scenes/ui/hud.tscn
+res://scenes/ui/main_menu.tscn
+res://scenes/ui/game_over.tscn
+res://scenes/game/game.tscn
+res://scenes/debug/debug_overlay.tscn

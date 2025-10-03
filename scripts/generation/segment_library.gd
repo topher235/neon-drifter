@@ -1,0 +1,315 @@
+class_name SegmentLibrary
+extends RefCounted
+
+var all_segments: Array[SegmentData] = []
+var segments_by_type: Dictionary = {}
+var segments_by_difficulty: Dictionary = {}
+
+func _init() -> void:
+    _create_segments()
+    _index_segments()
+
+func _create_segments() -> void:
+    # Basic segments
+    all_segments.append(_create_straight_empty())
+    all_segments.append(_create_straight_single_pillar())
+    all_segments.append(_create_straight_double_pillar())
+    all_segments.append(_create_straight_gate())
+
+    # Curve segments
+    all_segments.append(_create_gentle_left())
+    all_segments.append(_create_gentle_right())
+    all_segments.append(_create_sharp_left())
+    all_segments.append(_create_sharp_right())
+
+    # Complex segments
+    all_segments.append(_create_s_curve())
+    all_segments.append(_create_slalom())
+    all_segments.append(_create_narrow_passage())
+
+    print("Loaded %d segment templates" % all_segments.size())
+
+# ===== BASIC STRAIGHT SEGMENTS =====
+
+func _create_straight_empty() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "straight_empty"
+    seg.segment_type = "straight"
+    seg.segment_length = 600.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 2
+    seg.complexity = 0
+
+    # Just collectibles, no obstacles
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(0, 300), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_straight_single_pillar() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "straight_single_pillar"
+    seg.segment_type = "straight"
+    seg.segment_length = 700.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 1
+    seg.max_difficulty = 8
+    seg.complexity = 1
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(0, 350), "radius": 30.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(40, 200), "value": 10},
+        {"type": "orb", "position": Vector2(-40, 200), "value": 10},
+        {"type": "orb", "position": Vector2(0, 500), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_straight_double_pillar() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "straight_double_pillar"
+    seg.segment_type = "straight"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 2
+    seg.max_difficulty = 10
+    seg.complexity = 2
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(50, 300), "radius": 30.0},
+        {"type": "pillar", "position": Vector2(-50, 500), "radius": 30.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-60, 300), "value": 10},
+        {"type": "orb", "position": Vector2(60, 500), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_straight_gate() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "straight_gate"
+    seg.segment_type = "straight"
+    seg.segment_length = 700.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 3
+    seg.max_difficulty = 10
+    seg.complexity = 2
+
+    seg.obstacles = [
+        {"type": "pulse_gate", "position": Vector2(0, 400), "rotation_speed": 0.8}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(0, 200), "value": 10},
+        {"type": "orb", "position": Vector2(0, 600), "value": 20}  # Bonus after gate
+    ] as Array[Dictionary]
+
+    return seg
+
+# ===== CURVE SEGMENTS =====
+
+func _create_gentle_left() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "gentle_left"
+    seg.segment_type = "curve"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = -25.0
+    seg.curve_type = "gentle"
+    seg.min_difficulty = 1
+    seg.max_difficulty = 7
+    seg.complexity = 1
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(-40, 400), "radius": 30.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(40, 300), "value": 10},
+        {"type": "orb", "position": Vector2(40, 500), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_gentle_right() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "gentle_right"
+    seg.segment_type = "curve"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 25.0
+    seg.curve_type = "gentle"
+    seg.min_difficulty = 1
+    seg.max_difficulty = 7
+    seg.complexity = 1
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(40, 400), "radius": 30.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-40, 300), "value": 10},
+        {"type": "orb", "position": Vector2(-40, 500), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_sharp_left() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "sharp_left"
+    seg.segment_type = "curve"
+    seg.segment_length = 600.0
+    seg.tunnel_width = 250.0
+    seg.curvature = -60.0
+    seg.curve_type = "sharp"
+    seg.min_difficulty = 4
+    seg.max_difficulty = 10
+    seg.complexity = 2
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(-30, 300), "radius": 25.0},
+        {"type": "pillar", "position": Vector2(20, 450), "radius": 25.0}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_sharp_right() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "sharp_right"
+    seg.segment_type = "curve"
+    seg.segment_length = 600.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 60.0
+    seg.curve_type = "sharp"
+    seg.min_difficulty = 4
+    seg.max_difficulty = 10
+    seg.complexity = 2
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(30, 300), "radius": 25.0},
+        {"type": "pillar", "position": Vector2(-20, 450), "radius": 25.0}
+    ] as Array[Dictionary]
+
+    return seg
+
+# ===== COMPLEX SEGMENTS =====
+
+func _create_s_curve() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "s_curve"
+    seg.segment_type = "s_curve"
+    seg.segment_length = 1000.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0  # Net zero, but curves both ways
+    seg.curve_type = "s_shape"
+    seg.min_difficulty = 5
+    seg.max_difficulty = 10
+    seg.complexity = 3
+
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(40, 350), "radius": 28.0},
+        {"type": "pillar", "position": Vector2(-40, 650), "radius": 28.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-50, 350), "value": 15},
+        {"type": "orb", "position": Vector2(50, 650), "value": 15},
+        {"type": "speed_boost", "position": Vector2(0, 850), "value": 0}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_slalom() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "slalom"
+    seg.segment_type = "straight"
+    seg.segment_length = 900.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 6
+    seg.max_difficulty = 10
+    seg.complexity = 4
+
+    # Alternating pillars forcing S-pattern movement
+    seg.obstacles = [
+        {"type": "pillar", "position": Vector2(50, 250), "radius": 30.0},
+        {"type": "pillar", "position": Vector2(-50, 450), "radius": 30.0},
+        {"type": "pillar", "position": Vector2(50, 650), "radius": 30.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-60, 250), "value": 15},
+        {"type": "orb", "position": Vector2(60, 450), "value": 15},
+        {"type": "orb", "position": Vector2(-60, 650), "value": 15}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_narrow_passage() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "narrow_passage"
+    seg.segment_type = "straight"
+    seg.segment_length = 600.0
+    seg.tunnel_width = 180.0  # Narrower!
+    seg.curvature = 0.0
+    seg.min_difficulty = 7
+    seg.max_difficulty = 10
+    seg.complexity = 3
+
+    seg.obstacles = [
+        {"type": "pulse_gate", "position": Vector2(0, 300), "rotation_speed": 1.2},
+        {"type": "pillar", "position": Vector2(0, 500), "radius": 25.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "speed_boost", "position": Vector2(0, 150), "value": 0}
+    ] as Array[Dictionary]
+
+    return seg
+
+# ===== INDEXING =====
+
+func _index_segments() -> void:
+    for seg in all_segments:
+        # Index by type
+        if not seg.segment_type in segments_by_type:
+            segments_by_type[seg.segment_type] = []
+        segments_by_type[seg.segment_type].append(seg)
+
+        # Index by difficulty range
+        for diff in range(seg.min_difficulty, seg.max_difficulty + 1):
+            if not diff in segments_by_difficulty:
+                segments_by_difficulty[diff] = []
+            segments_by_difficulty[diff].append(seg)
+
+# ===== QUERY METHODS =====
+
+func get_segments_by_difficulty(difficulty: float) -> Array:
+    var diff_int := int(clamp(difficulty, 0, 10))
+    if diff_int in segments_by_difficulty:
+        return segments_by_difficulty[diff_int]
+    return []
+
+func get_segments_by_type(type: String) -> Array:
+    if type in segments_by_type:
+        return segments_by_type[type]
+    return []
+
+func get_fallback_segment() -> SegmentData:
+    return _create_straight_empty()
+
+func get_random_segment(rng: RandomNumberGenerator) -> SegmentData:
+    if all_segments.is_empty():
+        return get_fallback_segment()
+    return all_segments[rng.randi_range(0, all_segments.size() - 1)]

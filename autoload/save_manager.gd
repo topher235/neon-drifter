@@ -1,0 +1,122 @@
+extends Node
+
+# TODO: change 'res' to 'user'
+const SAVE_PATH = "res://neon_drift_save.json"
+
+# Save data structure
+var save_data = {
+                    "high_score": 0,
+                    "longest_distance": 0.0,
+                    "games_played": 0,
+                    "total_orbs_collected": 0,
+                    "unlocked_trails": ["default"],
+                    "selected_trail": "default",
+                    "sfx_volume": 0.8,
+                    "music_volume": 0.6,
+                    "first_launch": true
+                }
+
+func _ready() -> void:
+    _load_save_data()
+
+func save_high_score(score: int) -> void:
+    save_data.high_score = score
+    _write_save_data()
+
+func load_high_score() -> int:
+    return save_data.high_score
+
+func save_longest_distance(distance: float) -> void:
+    save_data.longest_distance = distance
+    _write_save_data()
+
+func load_longest_distance() -> float:
+    return save_data.longest_distance
+
+func increment_games_played() -> void:
+    save_data.games_played += 1
+    _write_save_data()
+
+func add_orbs_collected(count: int) -> void:
+    save_data.total_orbs_collected += count
+    _write_save_data()
+
+func unlock_trail(trail_id: String) -> void:
+    if not trail_id in save_data.unlocked_trails:
+        save_data.unlocked_trails.append(trail_id)
+        _write_save_data()
+
+func is_trail_unlocked(trail_id: String) -> bool:
+    return trail_id in save_data.unlocked_trails
+
+func set_selected_trail(trail_id: String) -> void:
+    if is_trail_unlocked(trail_id):
+        save_data.selected_trail = trail_id
+        _write_save_data()
+
+func get_selected_trail() -> String:
+    return save_data.selected_trail
+
+func save_audio_settings(sfx: float, music: float) -> void:
+    save_data.sfx_volume = sfx
+    save_data.music_volume = music
+    _write_save_data()
+
+func get_sfx_volume() -> float:
+    return save_data.sfx_volume
+
+func get_music_volume() -> float:
+    return save_data.music_volume
+
+func is_first_launch() -> bool:
+    return save_data.first_launch
+
+func set_first_launch_complete() -> void:
+    save_data.first_launch = false
+    _write_save_data()
+
+func _load_save_data() -> void:
+    if not FileAccess.file_exists(SAVE_PATH):
+        print("No save file found, using defaults")
+        return
+
+    var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+    if file:
+        var json_string = file.get_as_text()
+        file.close()
+
+        var json = JSON.new()
+        var parse_result = json.parse(json_string)
+
+        if parse_result == OK:
+            var loaded_data = json.get_data()
+            # Merge loaded data with defaults (in case new fields were added)
+            for key in loaded_data:
+                if key in save_data:
+                    save_data[key] = loaded_data[key]
+            print("Save data loaded successfully")
+        else:
+            push_error("Failed to parse save file")
+
+func _write_save_data() -> void:
+    var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+    if file:
+        var json_string = JSON.stringify(save_data, "\t")
+        file.store_string(json_string)
+        file.close()
+    else:
+        push_error("Failed to write save file")
+
+func reset_save_data() -> void:
+    save_data = {
+        "high_score": 0,
+        "longest_distance": 0.0,
+        "games_played": 0,
+        "total_orbs_collected": 0,
+        "unlocked_trails": ["default"],
+        "selected_trail": "default",
+        "sfx_volume": 0.8,
+        "music_volume": 0.6,
+        "first_launch": false
+    }
+    _write_save_data()

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba18kjd1vsyp2"]
+
+[ext_resource type="Script" uid="uid://ckxex8yj4bb37" path="res://scenes/collectibles/base_collectible.gd" id="1_d3ltt"]
+
+[node name="BaseCollectible" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
+script = ExtResource("1_d3ltt")
+visual = NodePath("Visual")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="Visual" type="ColorRect" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true

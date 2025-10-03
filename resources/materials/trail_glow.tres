@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dkcmuwyyh4a63"]
+
+[ext_resource type="Shader" uid="uid://cdrr2s4shog60" path="res://assets/shaders/trail_glow.gdshader" id="1_l5dfp"]
+
+[resource]
+shader = ExtResource("1_l5dfp")
+shader_parameter/glow_color = Color(0, 1, 1, 1)
+shader_parameter/glow_strength = 2.5
+shader_parameter/tail_fade = 0.0
+shader_parameter/head_alpha = 1.0

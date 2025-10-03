@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://6x870wgvs37q"]
+
+[ext_resource type="Script" uid="uid://ks7pwx1paasf" path="res://scenes/debug/debug_overlay.gd" id="1_dytaf"]
+
+[node name="DebugOverlay" type="CanvasLayer"]
+script = ExtResource("1_dytaf")
+
+[node name="DebugLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0

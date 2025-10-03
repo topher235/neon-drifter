@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxjsi72jnaoqw"]
+
+[ext_resource type="Script" uid="uid://cmsk7t3hxpduw" path="res://scenes/obstacles/pulse_gate.gd" id="1_tjpoi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tjpoi"]
+
+[node name="PulseGate" type="Area2D"]
+script = ExtResource("1_tjpoi")
+metadata/_custom_type_script = "uid://dr8pud32jqdow"
+
+[node name="Bar1" type="ColorRect" parent="."]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Bar2" type="ColorRect" parent="."]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape1" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_tjpoi")
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("RectangleShape2D_tjpoi")

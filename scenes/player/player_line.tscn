@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdsbvjxj0643x"]
+
+[ext_resource type="Script" uid="uid://du3ixkxg5d36g" path="res://scenes/player/player_line.gd" id="1_s0jvp"]
+[ext_resource type="Material" uid="uid://dkcmuwyyh4a63" path="res://resources/materials/trail_glow.tres" id="2_ny1d7"]
+[ext_resource type="Script" uid="uid://cyagxbmxj1gja" path="res://scripts/utilities/camera_controller.gd" id="2_wgtdx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s0jvp"]
+
+[node name="PlayerLine" type="Node2D"]
+script = ExtResource("1_s0jvp")
+
+[node name="Line2D" type="Line2D" parent="."]
+unique_name_in_owner = true
+material = ExtResource("2_ny1d7")
+
+[node name="CollisionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+unique_name_in_owner = true
+shape = SubResource("CircleShape2D_s0jvp")
+
+[node name="ParticleTrail" type="GPUParticles2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_wgtdx")
