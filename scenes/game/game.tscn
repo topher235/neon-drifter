@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://qocekvplpmd5"]
+[gd_scene load_steps=8 format=3 uid="uid://qocekvplpmd5"]
 
 [ext_resource type="Script" uid="uid://c7e80m8uq2egm" path="res://scenes/game/game.gd" id="1_0sr1o"]
 [ext_resource type="Script" path="res://scripts/generation/tunnel_generator.gd" id="1_7h61r"]
 [ext_resource type="PackedScene" uid="uid://bdsbvjxj0643x" path="res://scenes/player/player_line.tscn" id="2_0sr1o"]
-[ext_resource type="Shader" uid="uid://ro1h57y8dvpk" path="res://assets/shaders/background_grid.gdshader" id="4_grid"]
+[ext_resource type="PackedScene" path="res://scenes/ui/neon_grid_background.tscn" id="4_bg"]
 [ext_resource type="PackedScene" uid="uid://c5ixwlkb1000h" path="res://scenes/ui/hud.tscn" id="5_5i0tg"]
 [ext_resource type="PackedScene" uid="uid://ctk67ij7axc7n" path="res://scenes/ui/game_over.tscn" id="6_bdhmt"]
 
@@ -24,38 +24,13 @@ adjustment_brightness = 0.95
 adjustment_contrast = 1.15
 adjustment_saturation = 1.2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_grid"]
-shader = ExtResource("4_grid")
-shader_parameter/line_color = Color(0.78125, 0.863996, 0.999999, 0.588235)
-shader_parameter/grid_size = 200.0
-shader_parameter/line_width = 2.932
-shader_parameter/scroll_speed = 41.781
-shader_parameter/time_scale = 1.0
-
 [node name="Game" type="Node2D"]
 script = ExtResource("1_0sr1o")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_glow")
 
-[node name="BackgroundLayer" type="CanvasLayer" parent="."]
-layer = -100
-
-[node name="DarkBackground" type="ColorRect" parent="BackgroundLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.0331036, 0.0331038, 0.0613967, 1)
-
-[node name="GridBackground" type="ColorRect" parent="BackgroundLayer"]
-material = SubResource("ShaderMaterial_grid")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="NeonGridBackground" parent="." instance=ExtResource("4_bg")]
 
 [node name="Player" parent="." instance=ExtResource("2_0sr1o")]
 unique_name_in_owner = true
