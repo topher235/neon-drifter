@@ -2,8 +2,13 @@
 
 ## Pause Menu
 
-- [ ] Create a Paused scene that gets displayed when the game is paused
-- [ ] Fix player movement so that it does not follow when player clicks Pause button
+- [X] Create a Paused scene that gets displayed when the game is paused
+- [X] Fix player movement so that it does not follow when player clicks Pause button
+- [ ] Fix scene unpausing instead of immediately going to main menu
+
+## Main Menu
+
+- [ ] Add checkmark to Daily Challenge button that is visible when the daily is completed
 
 ## Settings
 
@@ -49,6 +54,19 @@
 ## Tunnel Segments
 
 - [ ] Make all tunnel segments the same width (obstacles will be the difficulty)
+- [ ] Fix player can move outside starting segment if they move fast enough
+
+## Stats
+
+- [ ] Track number of dailies completed
+- [ ] Show top speed for today's daily
+
+## Polish
+
+- [ ] New animation for title
+- [ ] Add explosion particles when player dies
+- [ ] Add particles when player picks up collectible
+- [ ] New animations for HUD elements (score, distance, speed, etc.)
 
 ## Ads
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8vh3n7yq4m8d"]
+[gd_scene load_steps=3 format=3 uid="uid://dcvhm68iau6s"]
 
 [ext_resource type="Shader" uid="uid://ro1h57y8dvpk" path="res://assets/shaders/background_grid.gdshader" id="1_grid"]
 
@@ -19,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.0331036, 0.0331038, 0.0613967, 1)
 
 [node name="GridBackground" type="ColorRect" parent="."]

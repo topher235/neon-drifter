@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://coql3r5d7x8y5"]
 
-[ext_resource type="PackedScene" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
+[ext_resource type="PackedScene" uid="uid://dcvhm68iau6s" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="1_fe2o3"]
 [ext_resource type="Script" uid="uid://btfjpmqe56wav" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
 

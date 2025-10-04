@@ -45,7 +45,7 @@ func _create_transition_overlay() -> void:
 	transition_overlay.z_index = 1000  # Ensure it's on top
 
 	# Add to the scene tree (as a child of root, not current scene)
-	get_tree().root.add_child(transition_overlay)
+	get_tree().root.add_child.call_deferred(transition_overlay)
 
 func change_scene(scene_path: String, fade_out: bool = true, fade_in: bool = true) -> void:
 	"""
