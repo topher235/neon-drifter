@@ -28,6 +28,7 @@ func _create_segments() -> void:
     all_segments.append(_create_slalom())
     all_segments.append(_create_narrow_passage())
     all_segments.append(_create_wall_gauntlet())
+    all_segments.append(_create_pulse_timing())
 
     print("Loaded %d segment templates" % all_segments.size())
 
@@ -306,6 +307,31 @@ func _create_wall_gauntlet() -> SegmentData:
 
     return seg
 
+func _create_pulse_timing() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "pulse_timing"
+    seg.segment_type = "straight"
+    seg.segment_length = 900.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 5
+    seg.max_difficulty = 10
+    seg.complexity = 3
+
+    # Three pulsing walls that require timing to pass through
+    seg.obstacles = [
+        {"type": "pulsing_wall", "position": Vector2(0, 300), "pulse_interval": 1.0},
+        {"type": "pulsing_wall", "position": Vector2(-50, 500), "pulse_interval": 1.0},
+        {"type": "pulsing_wall", "position": Vector2(50, 700), "pulse_interval": 1.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-60, 300), "value": 15},
+        {"type": "orb", "position": Vector2(60, 500), "value": 15},
+        {"type": "orb", "position": Vector2(-60, 700), "value": 15}
+    ] as Array[Dictionary]
+
+    return seg
 
 func _create_simple_static_wall() -> SegmentData:
     var seg = SegmentData.new()

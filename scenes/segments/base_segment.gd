@@ -55,9 +55,16 @@ func _create_obstacle(data: Dictionary) -> Node2D:
 
         "horizontal_wall":
             var wall = preload("res://scenes/obstacles/horizontal_wall.tscn").instantiate()
-            wall.wall_length = data.get("wall_length", 62.5)
+            wall.wall_length = data.get("wall_length", 80)
             wall.thickness = data.get("thickness", 8.0)
             return wall
+
+        "pulsing_wall":
+            var pwall = preload("res://scenes/obstacles/pulsing_wall.tscn").instantiate()
+            pwall.wall_length = data.get("wall_length", 80)
+            pwall.thickness = data.get("thickness", 8.0)
+            pwall.pulse_interval = data.get("pulse_interval", 1.0)
+            return pwall
 
         _:
             push_warning("Unknown obstacle type: " + obs_type)
