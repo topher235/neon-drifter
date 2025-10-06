@@ -53,6 +53,12 @@ func _create_obstacle(data: Dictionary) -> Node2D:
             gate.rotation_speed = data.get("rotation_speed", 1.0)
             return gate
 
+        "horizontal_wall":
+            var wall = preload("res://scenes/obstacles/horizontal_wall.tscn").instantiate()
+            wall.wall_length = data.get("wall_length", 62.5)
+            wall.thickness = data.get("thickness", 8.0)
+            return wall
+
         _:
             push_warning("Unknown obstacle type: " + obs_type)
             return null

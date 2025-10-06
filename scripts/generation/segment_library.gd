@@ -12,6 +12,7 @@ func _init() -> void:
 func _create_segments() -> void:
     # Basic segments
     all_segments.append(_create_straight_empty())
+    all_segments.append(_create_simple_static_wall())
     all_segments.append(_create_straight_single_pillar())
     all_segments.append(_create_straight_double_pillar())
     all_segments.append(_create_straight_gate())
@@ -26,6 +27,7 @@ func _create_segments() -> void:
     all_segments.append(_create_s_curve())
     all_segments.append(_create_slalom())
     all_segments.append(_create_narrow_passage())
+    all_segments.append(_create_wall_gauntlet())
 
     print("Loaded %d segment templates" % all_segments.size())
 
@@ -107,7 +109,7 @@ func _create_straight_gate() -> SegmentData:
     seg.complexity = 2
 
     seg.obstacles = [
-        {"type": "pulse_gate", "position": Vector2(0, 400), "rotation_speed": 0.8}
+        {"type": "pulse_gate", "position": Vector2(0, 400), "rotation_speed": 0.2}
     ] as Array[Dictionary]
 
     seg.collectibles = [
@@ -268,12 +270,64 @@ func _create_narrow_passage() -> SegmentData:
     seg.complexity = 3
 
     seg.obstacles = [
-        {"type": "pulse_gate", "position": Vector2(0, 300), "rotation_speed": 1.2},
+        {"type": "pulse_gate", "position": Vector2(0, 300), "rotation_speed": 0.4},
         {"type": "pillar", "position": Vector2(0, 500), "radius": 25.0}
     ] as Array[Dictionary]
 
     seg.collectibles = [
         {"type": "speed_boost", "position": Vector2(0, 150), "value": 0}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_wall_gauntlet() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "wall_gauntlet"
+    seg.segment_type = "straight"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 4
+    seg.max_difficulty = 10
+    seg.complexity = 3
+
+    # Staggered horizontal walls forcing vertical dodging
+    seg.obstacles = [
+        {"type": "horizontal_wall", "position": Vector2(-40, 250)},
+        {"type": "horizontal_wall", "position": Vector2(40, 400)},
+        {"type": "horizontal_wall", "position": Vector2(-40, 550)}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(50, 250), "value": 10},
+        {"type": "orb", "position": Vector2(-50, 400), "value": 10},
+        {"type": "orb", "position": Vector2(50, 550), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+
+func _create_simple_static_wall() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "simple_wall"
+    seg.segment_type = "straight"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 3
+    seg.complexity = 2
+
+    # Staggered horizontal walls forcing vertical dodging
+    seg.obstacles = [
+        {"type": "horizontal_wall", "position": Vector2(-40, 250)},
+        {"type": "horizontal_wall", "position": Vector2(40, 550)}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(50, 250), "value": 10},
+        {"type": "orb", "position": Vector2(-50, 400), "value": 10},
+        {"type": "orb", "position": Vector2(50, 550), "value": 10}
     ] as Array[Dictionary]
 
     return seg

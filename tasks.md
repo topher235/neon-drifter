@@ -47,7 +47,7 @@ Don't forget to add these to the sandbox as well.
 
 Don't forget to add these to the sandbox as well.
 
-- [ ] Wall - horizontal collision that ends the run
+- [X] Wall - horizontal collision that ends the run
 - [ ] Pulse wall - horizontal collision that ends the run, pulses on and off
 - [ ] Laser wall - horizontal collision extending from one wall to the other, shoots every X seconds
 - [ ] Gravity well - pulls player toward center as they pass, ends the run if in center

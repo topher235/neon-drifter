@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqk3v8yhwmr3g"]
+
+[ext_resource type="Script" path="res://scenes/obstacles/horizontal_wall.gd" id="1_wall"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(62.5, 8)
+
+[node name="HorizontalWall" type="Area2D"]
+script = ExtResource("1_wall")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(62.5, 8)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.25
+offset_top = -4.0
+offset_right = 31.25
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
