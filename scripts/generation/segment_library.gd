@@ -11,6 +11,7 @@ func _init() -> void:
 
 func _create_segments() -> void:
     # Basic segments
+    all_segments.append(_create_split_path())
     all_segments.append(_create_straight_empty())
     all_segments.append(_create_simple_static_wall())
     all_segments.append(_create_straight_single_pillar())
@@ -329,6 +330,32 @@ func _create_pulse_timing() -> SegmentData:
         {"type": "orb", "position": Vector2(-60, 300), "value": 15},
         {"type": "orb", "position": Vector2(60, 500), "value": 15},
         {"type": "orb", "position": Vector2(-60, 700), "value": 15}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_split_path() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "split_path"
+    seg.segment_type = "straight"
+    seg.segment_length = 1600.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 8
+    seg.complexity = 0
+
+    # Vertical wall down the center forces player to choose left or right
+    seg.obstacles = [
+        {"type": "vertical_wall", "position": Vector2(0, 0), "thickness": 16.0}
+    ] as Array[Dictionary]
+
+    # Orbs on both sides reward either path choice
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(-60, 300), "value": 10},
+        {"type": "orb", "position": Vector2(60, 300), "value": 10},
+        {"type": "orb", "position": Vector2(-60, 500), "value": 10},
+        {"type": "orb", "position": Vector2(60, 500), "value": 10}
     ] as Array[Dictionary]
 
     return seg

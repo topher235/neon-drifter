@@ -56,15 +56,21 @@ func _create_obstacle(data: Dictionary) -> Node2D:
         "horizontal_wall":
             var wall = preload("res://scenes/obstacles/horizontal_wall.tscn").instantiate()
             wall.wall_length = data.get("wall_length", 80)
-            wall.thickness = data.get("thickness", 8.0)
+            wall.thickness = data.get("thickness", 16.0)
             return wall
 
         "pulsing_wall":
             var pwall = preload("res://scenes/obstacles/pulsing_wall.tscn").instantiate()
             pwall.wall_length = data.get("wall_length", 80)
-            pwall.thickness = data.get("thickness", 8.0)
+            pwall.thickness = data.get("thickness", 16.0)
             pwall.pulse_interval = data.get("pulse_interval", 1.0)
             return pwall
+
+        "vertical_wall":
+            var vwall = preload("res://scenes/obstacles/vertical_wall.tscn").instantiate()
+            vwall.wall_height = data.get("wall_height", segment_data.segment_length)
+            vwall.thickness = data.get("thickness", 16.0)
+            return vwall
 
         _:
             push_warning("Unknown obstacle type: " + obs_type)
@@ -105,7 +111,7 @@ func _setup_walls() -> void:
 
     # All tunnels are now 250px wide, so walls are at fixed positions
     var wall_line_position = half_width
-    var wall_thickness = 8.0
+    var wall_thickness = 16.0
 
     # Create left wall with collision
     _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness)

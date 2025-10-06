@@ -171,8 +171,6 @@ func _get_valid_segments() -> Array[SegmentData]:
     var candidates = segment_library.get_segments_by_difficulty(current_difficulty)
     var valid: Array[SegmentData] = []
     
-    print(candidates[0].complexity)
-
     for seg_data in candidates:
         if _validate_segment_rules(seg_data):
             valid.append(seg_data)
