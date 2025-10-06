@@ -373,12 +373,16 @@ func _create_spike_corridor() -> SegmentData:
     seg.complexity = 0
 
     # Triangle spikes on alternating walls pointing inward
-    # Left wall spikes point right (0 degrees), right wall spikes point left (180 degrees)
+    # Point is at the position, base extends backward
+    # Left wall: rotation=0° (base at wall, extends right into tunnel)
+    # Right wall: rotation=180° (base at wall, extends left into tunnel)
     seg.obstacles = [
-        {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 25.0},
-        {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 25.0},
-        {"type": "triangle_spike", "position": Vector2(-125, 550), "rotation_degrees": 0, "size": 25.0},
-        {"type": "triangle_spike", "position": Vector2(125, 700), "rotation_degrees": 180, "size": 25.0}
+        {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 30.0},  # Neg X = right wall
+        {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 30.0},  # Pos x = left wall
+        {"type": "triangle_spike", "position": Vector2(-125, 550), "rotation_degrees": 0, "size": 30.0},
+        {"type": "triangle_spike", "position": Vector2(50, 700), "rotation_degrees": 180, "size": 50.0}
+        # TODO: figure out the forumla for calculating position based on what the triangle size is
+        #  e.g. why is x=50 correct for size 50 instead of ~100? Probably geometry
     ] as Array[Dictionary]
 
     seg.collectibles = [

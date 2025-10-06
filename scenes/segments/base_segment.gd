@@ -38,8 +38,6 @@ func _spawn_obstacles() -> void:
         if obstacle:
             obstacles_container.add_child(obstacle)
             obstacle.position = obs_data.position
-            if obstacle.has_method("setup_position"):
-                obstacle.setup_position(obs_data.position)
 
 func _create_obstacle(data: Dictionary) -> Node2D:
     var obs_type = data.get("type", "pillar")

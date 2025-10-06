@@ -9,9 +9,18 @@ extends BaseObstacle
 @onready var pulse_timer: Timer = $PulseTimer
 
 var is_visible_state: bool = true
+var _initialized: bool = false
 
 func _ready() -> void:
 	super._ready()
+	# Defer setup to allow properties to be set first
+	if not _initialized:
+		call_deferred("_deferred_setup")
+
+func _deferred_setup() -> void:
+	if _initialized:
+		return
+	_initialized = true
 	_setup_visuals()
 	_setup_collision()
 	_setup_timer()
