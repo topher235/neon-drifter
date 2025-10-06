@@ -30,16 +30,22 @@
 
 ## Daily Challenge Mode
 
+- [ ] Modify procedural algorithm to use seed and contain X segments
+- [ ] Create end segment that triggers the completion of the run
 - [ ] Fix points to be calculated based on collectibles only
 - [ ] Award bonus points for time
 
 ## Collectibles
+
+Don't forget to add these to the sandbox as well.
 
 - [ ] Star - grants invincibility for X seconds
 - [ ] Magnet - attracts nearby orbs for X seconds
 - [ ] Stopwatch - slows game speed back down (if it increases speed due to distance)
 
 ## Obstacles
+
+Don't forget to add these to the sandbox as well.
 
 - [ ] Wall - horizontal collision that ends the run
 - [ ] Pulse wall - horizontal collision that ends the run, pulses on and off
@@ -68,6 +74,45 @@
 - [ ] Add particles when player picks up collectible
 - [ ] New animations for HUD elements (score, distance, speed, etc.)
 
+## Rush Mode
+
+Players can share seeds and times.
+
+- [ ] Add mode that functions like the daily but you can use any seed
+- [ ] Display seed on HUD
+
+## Meta Progression
+
+### Trail Cosmetics
+
+- Default Trail (cyan, free)
+- Rainbow Trail (collect 500 orbs total)
+- Fire Trail (reach 50,000 score in one run)
+- Ghost Trail (complete 10 daily challenges)
+- Lightning Trail (achieve 10x combo)
+- Starfield Trail (travel 10,000m total)
+- Midnight Trail (play 5 runs after 10pm)
+- Golden Trail (beat your high score 5 times)
+
+### Achievements
+
+Distance Milestones:
+- 🏃 Sprinter: 1,000m total → Unlock "Speed Trail"
+- 🚀 Marathon: 10,000m total → Unlock "Endurance Trail"
+- 🌟 Ultra Runner: 50,000m total → Unlock "Champion Trail"
+
+Score Milestones:
+- 🥉 Bronze Scorer: 10,000 career points
+- 🥈 Silver Scorer: 100,000 career points
+- 🥇 Gold Scorer: 500,000 career points
+
+Skill Milestones:
+- 🎯 Perfectionist: Collect 100% collectibles in daily run
+- 💨 Speed Demon: Complete daily in under 60s
+- 🔥 Combo Master: Achieve 20x combo
+- 👻 Near Miss: Pass within 5px of 100 obstacles
+- ⚡ No Boost: Complete daily without speed boosts
+
 ## Ads
 
 - [ ] Add small button to main menu to watch a rewarded ad
@@ -77,3 +122,9 @@
 ## IAPs
 
 - [ ] Purchase ad removal
+
+## Ghost system
+
+- [ ] Create playback system
+- [ ] Overlay ghost trail in seed-based modes
+- [ ] Toggle on/off in settings

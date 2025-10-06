@@ -46,18 +46,12 @@ func _ready() -> void:
             var cam = player.get_node("Camera2D")
             cam.enabled = true
 
-        print("Player initialized at: ", player.position)
-    else:
-        print("ERROR: Player not found!")
-
     # Connect UI signals
     if sandbox_ui:
         sandbox_ui.spawn_pillar_requested.connect(_on_spawn_pillar)
         sandbox_ui.spawn_orb_requested.connect(_on_spawn_orb)
         sandbox_ui.clear_requested.connect(_on_clear_all)
         sandbox_ui.input_mode_changed.connect(_on_input_mode_changed)
-    else:
-        print("ERROR: Sandbox UI not found!")
 
     # Add a visual marker at origin for reference
     _add_origin_marker()
@@ -148,9 +142,6 @@ func _create_pillar(world_pos: Vector2) -> void:
     pillar.position = world_pos
     pillar.visible = true
     pillar.z_index = 10
-    print("Spawned pillar at: ", world_pos, " in container at: ", spawn_container.get_path())
-    print("  - Pillar global position: ", pillar.global_position)
-    print("  - Total objects: ", spawn_container.get_child_count())
 
 func _create_orb(world_pos: Vector2) -> void:
     var orb = orb_scene.instantiate()
@@ -158,18 +149,13 @@ func _create_orb(world_pos: Vector2) -> void:
     orb.position = world_pos
     orb.visible = true
     orb.z_index = 10
-    print("Spawned orb at: ", world_pos, " in container at: ", spawn_container.get_path())
-    print("  - Orb global position: ", orb.global_position)
-    print("  - Total objects: ", spawn_container.get_child_count())
 
 func _on_clear_all() -> void:
     # Remove all spawned objects
     for child in spawn_container.get_children():
         child.queue_free()
-#    player.is_alive = true
+    # This will reset the player, useful if they died testing an obstacle
     GameManager.start_game()
-    print("Cleared all spawned objects")
 
 func _on_input_mode_changed(mode: String) -> void:
     current_input_mode = mode
-    print("Input mode changed to: ", mode)

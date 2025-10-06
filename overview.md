@@ -123,7 +123,7 @@ Manages infinite tunnel generation:
 - Segments weighted by difficulty match and variety
 
 **Procedural Variation**:
-- Tunnel width: ±10% variance (clamped 180-280px)
+- Tunnel width: Fixed at 250px (no variation)
 - Obstacle positions: ±20px horizontal, ±30px vertical
 - Collectible positions: ±15px horizontal, ±20px vertical
 - 30% chance to add extra obstacle at difficulty >5
@@ -152,7 +152,7 @@ Contains 11 pre-designed segment templates:
 **Complex** (Difficulty 5-10):
 - `s_curve`: 1000px S-shape, 2 pillars, 2 orbs + speed boost
 - `slalom`: 3 alternating pillars forcing weaving, 900px
-- `narrow_passage`: 180px width (vs 250px default), pulse_gate + pillar
+- `narrow_passage`: pulse_gate + pillar, 600px
 
 **Indexing**:
 - By type: straight, curve, s_curve
@@ -289,8 +289,7 @@ Scene instance that renders a segment:
 
 ### Dimensions
 - Viewport: 720×1280 (portrait)
-- Default tunnel width: 250px (125px left/right of center)
-- Narrow tunnel: 180px (in narrow_passage segment)
+- Tunnel width: 250px (125px left/right of center, fixed across all segments)
 - Player collision radius: 12px
 - Pillar radius: 25-35px (varied)
 - Orb radius: 15px

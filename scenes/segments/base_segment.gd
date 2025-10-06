@@ -87,24 +87,12 @@ func _setup_walls() -> void:
     for child in walls_container.get_children():
         child.queue_free()
 
-    var half_width = segment_data.tunnel_width / 2.0
+    var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
     var length = segment_data.segment_length
 
-    # Fixed outer boundary position (based on widest possible tunnel)
-    # Max tunnel width is 280px (with variance), so 140px from center
-    # We want walls to always align at this outer edge
-    var max_tunnel_half_width = 140.0
-
-    # Position wall line at the midpoint between tunnel edge and outer boundary
-    # This makes the inner edge of the wall at the tunnel edge
-    # and the outer edge at the fixed boundary
-    var wall_line_position = (half_width + max_tunnel_half_width) / 2.0
-    var wall_thickness = max_tunnel_half_width - half_width
-
-    # Ensure minimum visibility
-    if wall_thickness < 8.0:
-        wall_thickness = 8.0
-        wall_line_position = half_width + (wall_thickness / 2.0)
+    # All tunnels are now 250px wide, so walls are at fixed positions
+    var wall_line_position = half_width
+    var wall_thickness = 8.0
 
     # Create left wall with collision
     _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness)
@@ -119,8 +107,8 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
     wall_visual.add_point(end_pos)
     wall_visual.width = thickness
     wall_visual.default_color = Color(0.4, 0.7, 1.0, 0.8)
-    wall_visual.begin_cap_mode = Line2D.LINE_CAP_ROUND
-    wall_visual.end_cap_mode = Line2D.LINE_CAP_ROUND
+    wall_visual.begin_cap_mode = Line2D.LINE_CAP_NONE  # No cap at segment boundary (y=0)
+    wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX  # Cap at far end (y=-length)
 
     # Create collision (StaticBody2D with rectangular shape)
     var wall_collision = StaticBody2D.new()

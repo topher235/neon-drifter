@@ -261,7 +261,7 @@ func _create_narrow_passage() -> SegmentData:
     seg.segment_id = "narrow_passage"
     seg.segment_type = "straight"
     seg.segment_length = 600.0
-    seg.tunnel_width = 180.0  # Narrower!
+    seg.tunnel_width = 250.0
     seg.curvature = 0.0
     seg.min_difficulty = 7
     seg.max_difficulty = 10

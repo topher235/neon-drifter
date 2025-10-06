@@ -255,10 +255,8 @@ func _apply_variation(data: SegmentData) -> SegmentData:
     # Clone to avoid modifying original
     var varied = data.duplicate_deep()
 
-    # Randomize tunnel width slightly (±10%)
-    var width_variance = varied.tunnel_width * 0.1
-    varied.tunnel_width += rng.randf_range(-width_variance, width_variance)
-    varied.tunnel_width = clamp(varied.tunnel_width, 180.0, 280.0)
+    # Use consistent tunnel width across all segments
+    varied.tunnel_width = 250.0
 
     # Randomize obstacle positions slightly
     for obs in varied.obstacles:

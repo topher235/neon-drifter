@@ -25,36 +25,36 @@ func _draw_starting_walls() -> void:
     for child in walls_container.get_children():
         child.queue_free()
 
-    var half_width = segment_data.tunnel_width / 2.0
+    var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
     var length = segment_data.segment_length
 
-    # Calculate wall positioning (same as base segment)
-    var max_tunnel_half_width = 140.0
-    var wall_line_position = (half_width + max_tunnel_half_width) / 2.0
-    var wall_thickness = max_tunnel_half_width - half_width
-
-    if wall_thickness < 8.0:
-        wall_thickness = 8.0
-        wall_line_position = half_width + (wall_thickness / 2.0)
+    # All tunnels are now 250px wide, so walls are at fixed positions
+    var wall_line_position = half_width
+    var wall_thickness = 8.0
 
     # Left wall (west) - extends upward from bottom
-    _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness)
+    _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness, false)
 
     # Right wall (east) - extends upward from bottom
-    _create_wall_with_collision(Vector2(wall_line_position, 0), Vector2(wall_line_position, -length), wall_thickness)
+    _create_wall_with_collision(Vector2(wall_line_position, 0), Vector2(wall_line_position, -length), wall_thickness, false)
 
     # Bottom wall (south) - connects left and right at the bottom
-    _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(wall_line_position, 0), wall_thickness)
+    _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(wall_line_position, 0), wall_thickness, true)
 
-func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float) -> void:
+func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float, use_round_caps: bool = false) -> void:
     # Create visual wall (Line2D)
     var wall_visual = Line2D.new()
     wall_visual.add_point(start_pos)
     wall_visual.add_point(end_pos)
     wall_visual.width = thickness
     wall_visual.default_color = Color(0.4, 0.7, 1.0, 0.8)
-    wall_visual.begin_cap_mode = Line2D.LINE_CAP_ROUND
-    wall_visual.end_cap_mode = Line2D.LINE_CAP_ROUND
+
+    if use_round_caps:
+        wall_visual.begin_cap_mode = Line2D.LINE_CAP_ROUND
+        wall_visual.end_cap_mode = Line2D.LINE_CAP_ROUND
+    else:
+        wall_visual.begin_cap_mode = Line2D.LINE_CAP_NONE  # No cap at segment boundary
+        wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX  # Cap at far end
 
     # Create collision (StaticBody2D with rectangular shape)
     var wall_collision = StaticBody2D.new()
