@@ -61,8 +61,9 @@ Don't forget to add these to the sandbox as well.
 
 ## Tunnel Segments
 
-- [ ] Make all tunnel segments the same width (obstacles will be the difficulty)
+- [X] Make all tunnel segments the same width (obstacles will be the difficulty)
 - [ ] Fix player can move outside starting segment if they move fast enough
+- [ ] Procedural generation
 
 ## Stats
 

@@ -38,6 +38,8 @@ func _spawn_obstacles() -> void:
         if obstacle:
             obstacles_container.add_child(obstacle)
             obstacle.position = obs_data.position
+            if obstacle.has_method("setup_position"):
+                obstacle.setup_position(obs_data.position)
 
 func _create_obstacle(data: Dictionary) -> Node2D:
     var obs_type = data.get("type", "pillar")
@@ -71,6 +73,12 @@ func _create_obstacle(data: Dictionary) -> Node2D:
             vwall.wall_height = data.get("wall_height", segment_data.segment_length)
             vwall.thickness = data.get("thickness", 16.0)
             return vwall
+
+        "triangle_spike":
+            var spike = preload("res://scenes/obstacles/triangle_spike.tscn").instantiate()
+            spike.size = data.get("size", 30.0)
+            spike.rotation_degrees = data.get("rotation_degrees", 0.0)
+            return spike
 
         _:
             push_warning("Unknown obstacle type: " + obs_type)

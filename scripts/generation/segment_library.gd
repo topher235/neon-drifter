@@ -11,6 +11,7 @@ func _init() -> void:
 
 func _create_segments() -> void:
     # Basic segments
+    all_segments.append(_create_spike_corridor())
     all_segments.append(_create_split_path())
     all_segments.append(_create_straight_empty())
     all_segments.append(_create_simple_static_wall())
@@ -341,9 +342,9 @@ func _create_split_path() -> SegmentData:
     seg.segment_length = 1600.0
     seg.tunnel_width = 250.0
     seg.curvature = 0.0
-    seg.min_difficulty = 0
+    seg.min_difficulty = 2
     seg.max_difficulty = 8
-    seg.complexity = 0
+    seg.complexity = 1
 
     # Vertical wall down the center forces player to choose left or right
     seg.obstacles = [
@@ -356,6 +357,34 @@ func _create_split_path() -> SegmentData:
         {"type": "orb", "position": Vector2(60, 300), "value": 10},
         {"type": "orb", "position": Vector2(-60, 500), "value": 10},
         {"type": "orb", "position": Vector2(60, 500), "value": 10}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_spike_corridor() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "spike_corridor"
+    seg.segment_type = "straight"
+    seg.segment_length = 900.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 9
+    seg.complexity = 0
+
+    # Triangle spikes on alternating walls pointing inward
+    # Left wall spikes point right (0 degrees), right wall spikes point left (180 degrees)
+    seg.obstacles = [
+        {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 25.0},
+        {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 25.0},
+        {"type": "triangle_spike", "position": Vector2(-125, 550), "rotation_degrees": 0, "size": 25.0},
+        {"type": "triangle_spike", "position": Vector2(125, 700), "rotation_degrees": 180, "size": 25.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(0, 300), "value": 10},
+        {"type": "orb", "position": Vector2(0, 500), "value": 10},
+        {"type": "orb", "position": Vector2(0, 700), "value": 15}
     ] as Array[Dictionary]
 
     return seg
