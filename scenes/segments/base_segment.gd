@@ -113,6 +113,11 @@ func _create_collectible(data: Dictionary) -> Node2D:
             orb.point_value = data.get("value", 10)
             return orb
 
+        "star":
+            var star = preload("res://scenes/collectibles/star.tscn").instantiate()
+            star.invincibility_duration = data.get("duration", 5.0)
+            return star
+
 #        "speed_boost":
 #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
 #            boost.boost_duration = data.get("duration", 3.0)

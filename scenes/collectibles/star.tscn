@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8k3vx7m2dyl"]
+
+[ext_resource type="Script" path="res://scenes/collectibles/star.gd" id="1_star"]
+
+[node name="Star" type="Area2D" node_paths=PackedStringArray("collision_shape")]
+script = ExtResource("1_star")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="StarVisual" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+color = Color(1, 1, 0, 1)
+polygon = PackedVector2Array(0.0000, -20.0000, 4.7023, -6.4721, 19.0211, -6.1803, 7.6085, 2.4721, 11.7557, 16.1803, 0.0000, 8.0000, -11.7557, 16.1803, -7.6085, 2.4721, -19.0211, -6.1803, -4.7023, -6.4721)
+
+[node name="StarGlow" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+color = Color(1, 1, 0, 1)
+energy = 2.0
+range_layer_min = -512
+range_layer_max = 512
+texture_scale = 1.5

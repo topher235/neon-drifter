@@ -32,7 +32,7 @@ var current_position: Vector2 = Vector2.ZERO
 var velocity: Vector2 = Vector2.ZERO
 var is_alive: bool = true
 var invulnerable: bool = false
-var invulnerability_timer: float = 0.0
+var invulnerable_timer: Timer
 
 # Movement bounds
 var tunnel_half_width: float = 125.0  # Half of 250
@@ -42,6 +42,8 @@ var last_trail_point: Vector2 = Vector2.ZERO
 var distance_since_last_point: float = 0.0
 
 func _ready() -> void:
+    add_to_group("player")
+
     _setup_line_renderer()
     _setup_collision()
     _setup_camera()
@@ -70,7 +72,6 @@ func _process(delta: float) -> void:
     if not GameManager.is_playing() or not is_alive:
         return
 
-    _update_invulnerability(delta)
     _handle_input()
     _update_position(delta)
     _update_trail()
@@ -195,16 +196,38 @@ func _trigger_screen_shake() -> void:
 
 # Invulnerability (for powerups/testing)
 func make_invulnerable(duration: float) -> void:
+    print("player IS invulnerable")
     invulnerable = true
-    invulnerability_timer = duration
     modulate = Color(1, 1, 1, 0.5)
 
-func _update_invulnerability(delta: float) -> void:
-    if invulnerable:
-        invulnerability_timer -= delta
-        if invulnerability_timer <= 0:
-            invulnerable = false
-            modulate = Color.WHITE
+    # If already invulnerable, add the new duration to remaining time
+    var time_left := 0.0
+    if invulnerable_timer and invulnerable_timer.time_left > 0.0:
+        time_left = invulnerable_timer.time_left
+        invulnerable_timer.stop()
+        invulnerable_timer.queue_free()
+
+    # Create and start new timer with combined duration
+    invulnerable_timer = Timer.new()
+    invulnerable_timer.wait_time = duration + time_left
+    invulnerable_timer.one_shot = true
+    invulnerable_timer.timeout.connect(_disable_invulnerability)
+    add_child(invulnerable_timer)
+    invulnerable_timer.start()
+
+func activate_invincibility(duration: float) -> void:
+    """Public method called by star collectible"""
+    make_invulnerable(duration)
+
+
+func _disable_invulnerability() -> void:
+    print("player is NOT invulnerable")
+    invulnerable = false
+    modulate = Color.WHITE
+    if invulnerable_timer:
+        invulnerable_timer.queue_free()
+        invulnerable_timer = null
+
 
 # Setup Methods
 func _setup_line_renderer() -> void:
@@ -274,8 +297,7 @@ func _on_game_started() -> void:
     modulate = Color.WHITE
 
     # Give brief invulnerability at start to prevent immediate collision
-    invulnerable = true
-    invulnerability_timer = 0.1  # 100ms grace period
+    make_invulnerable(0.1)  # 100ms grace period
 
     if particle_trail:
         particle_trail.emitting = true

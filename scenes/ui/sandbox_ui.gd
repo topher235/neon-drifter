@@ -3,6 +3,7 @@ class_name SandboxUi extends Control
 signal spawn_pillar_requested(world_pos: Vector2)
 signal spawn_orb_requested(world_pos: Vector2)
 signal spawn_shockwave_requested(world_pos: Vector2)
+signal spawn_star_requested(world_pos: Vector2)
 signal clear_requested
 signal input_mode_changed(mode: String)
 
@@ -10,6 +11,7 @@ signal input_mode_changed(mode: String)
 @onready var pillar_button: Button = %PillarButton
 @onready var orb_button: Button = %OrbButton
 @onready var shockwave_button: Button = %ShockwaveButton
+@onready var star_button: Button = %StarButton
 @onready var clear_button: Button = %ClearButton
 @onready var input_mode_button: Button = %InputModeButton
 @onready var help_label: Label = %HelpLabel
@@ -22,6 +24,7 @@ func _ready() -> void:
 	pillar_button.pressed.connect(_on_pillar_button_pressed)
 	orb_button.pressed.connect(_on_orb_button_pressed)
 	shockwave_button.pressed.connect(_on_shockwave_button_pressed)
+	star_button.pressed.connect(_on_star_button_pressed)
 	clear_button.pressed.connect(_on_clear_button_pressed)
 	input_mode_button.pressed.connect(_on_input_mode_button_pressed)
 
@@ -45,6 +48,8 @@ func _toggle_spawn_mode() -> void:
 		current_spawn_mode = "orb"
 	elif current_spawn_mode == "orb":
 		current_spawn_mode = "shockwave"
+	elif current_spawn_mode == "shockwave":
+		current_spawn_mode = "star"
 	else:
 		current_spawn_mode = "pillar"
 	_update_spawn_mode_display()
@@ -56,6 +61,7 @@ func _update_spawn_mode_display() -> void:
 	pillar_button.button_pressed = (current_spawn_mode == "pillar")
 	orb_button.button_pressed = (current_spawn_mode == "orb")
 	shockwave_button.button_pressed = (current_spawn_mode == "shockwave")
+	star_button.button_pressed = (current_spawn_mode == "star")
 
 func _on_pillar_button_pressed() -> void:
 	current_spawn_mode = "pillar"
@@ -67,6 +73,10 @@ func _on_orb_button_pressed() -> void:
 
 func _on_shockwave_button_pressed() -> void:
 	current_spawn_mode = "shockwave"
+	_update_spawn_mode_display()
+
+func _on_star_button_pressed() -> void:
+	current_spawn_mode = "star"
 	_update_spawn_mode_display()
 
 func _on_clear_button_pressed() -> void:
@@ -101,3 +111,5 @@ func _spawn_at_mouse_position(screen_pos: Vector2) -> void:
 			spawn_orb_requested.emit(world_pos)
 		elif current_spawn_mode == "shockwave":
 			spawn_shockwave_requested.emit(world_pos)
+		elif current_spawn_mode == "star":
+			spawn_star_requested.emit(world_pos)

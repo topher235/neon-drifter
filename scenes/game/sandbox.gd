@@ -7,6 +7,7 @@ extends Node2D
 var pillar_scene := preload("res://scenes/obstacles/pillar.tscn")
 var orb_scene := preload("res://scenes/collectibles/orb.tscn")
 var shockwave_scene := preload("res://scenes/obstacles/shockwave.tscn")
+var star_scene := preload("res://scenes/collectibles/star.tscn")
 
 # Spawn container
 var spawn_container: Node2D
@@ -52,6 +53,7 @@ func _ready() -> void:
         sandbox_ui.spawn_pillar_requested.connect(_on_spawn_pillar)
         sandbox_ui.spawn_orb_requested.connect(_on_spawn_orb)
         sandbox_ui.spawn_shockwave_requested.connect(_on_spawn_shockwave)
+        sandbox_ui.spawn_star_requested.connect(_on_spawn_star)
         sandbox_ui.clear_requested.connect(_on_clear_all)
         sandbox_ui.input_mode_changed.connect(_on_input_mode_changed)
 
@@ -133,6 +135,8 @@ func _spawn_item_at_position(world_pos: Vector2) -> void:
         _create_orb(world_pos)
     elif sandbox_ui and sandbox_ui.current_spawn_mode == "shockwave":
         _create_shockwave(world_pos)
+    elif sandbox_ui and sandbox_ui.current_spawn_mode == "star":
+        _create_star(world_pos)
 
 func _on_spawn_pillar(world_pos: Vector2) -> void:
     _create_pillar(world_pos)
@@ -142,6 +146,9 @@ func _on_spawn_orb(world_pos: Vector2) -> void:
 
 func _on_spawn_shockwave(world_pos: Vector2) -> void:
     _create_shockwave(world_pos)
+
+func _on_spawn_star(world_pos: Vector2) -> void:
+    _create_star(world_pos)
 
 func _create_pillar(world_pos: Vector2) -> void:
     var pillar = pillar_scene.instantiate()
@@ -163,6 +170,13 @@ func _create_shockwave(world_pos: Vector2) -> void:
     shockwave.position = world_pos
     shockwave.visible = true
     shockwave.z_index = 10
+
+func _create_star(world_pos: Vector2) -> void:
+    var star = star_scene.instantiate()
+    spawn_container.add_child(star)
+    star.position = world_pos
+    star.visible = true
+    star.z_index = 10
 
 func _on_clear_all() -> void:
     # Remove all spawned objects
