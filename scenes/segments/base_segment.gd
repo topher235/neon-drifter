@@ -123,6 +123,12 @@ func _create_collectible(data: Dictionary) -> Node2D:
             magnet.magnet_duration = data.get("duration", 5.0)
             return magnet
 
+        "stopwatch":
+            var stopwatch = preload("res://scenes/collectibles/stopwatch.tscn").instantiate()
+            stopwatch.slow_duration = data.get("duration", 5.0)
+            stopwatch.slow_factor = data.get("slow_factor", 0.5)
+            return stopwatch
+
 #        "speed_boost":
 #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
 #            boost.boost_duration = data.get("duration", 3.0)

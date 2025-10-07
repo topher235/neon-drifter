@@ -34,6 +34,7 @@
 - [ ] Create end segment that triggers the completion of the run
 - [ ] Fix points to be calculated based on collectibles only
 - [ ] Award bonus points for time
+- [ ] Add timer to force player to complete in X seconds
 
 ## Collectibles
 
@@ -41,7 +42,8 @@ Don't forget to add these to the sandbox as well.
 
 - [X] Star - grants invincibility for X seconds
 - [X] Magnet - attracts nearby orbs for X seconds
-- [ ] Stopwatch - slows game speed back down (if it increases speed due to distance)
+- [X] Stopwatch - slows game speed back down (if it increases speed due to distance)
+- [ ] Hourglass - adds time to daily challenge
 
 ## Obstacles
 

@@ -11,11 +11,11 @@ func _init() -> void:
 
 func _create_segments() -> void:
     # Basic segments
+    all_segments.append(_create_straight_empty())
     all_segments.append(_create_shockwave_zone())
     all_segments.append(_create_fog_zone())
     all_segments.append(_create_spike_corridor())
     all_segments.append(_create_split_path())
-    all_segments.append(_create_straight_empty())
     all_segments.append(_create_simple_static_wall())
     all_segments.append(_create_straight_single_pillar())
     all_segments.append(_create_straight_double_pillar())
@@ -52,7 +52,8 @@ func _create_straight_empty() -> SegmentData:
     # Just collectibles, no obstacles
     seg.collectibles = [
         {"type": "orb", "position": Vector2(0, 300), "value": 10},
-        {"type": "magnet", "position": Vector2(0, 450), "duration": 5.0}
+        {"type": "magnet", "position": Vector2(0, 450), "duration": 5.0},
+        {"type": "stopwatch", "position": Vector2(0, 150), "duration": 5.0, "slow_factor": 0.5}
     ] as Array[Dictionary]
 
     return seg
@@ -306,7 +307,8 @@ func _create_narrow_passage() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "speed_boost", "position": Vector2(0, 150), "value": 0}
+        {"type": "speed_boost", "position": Vector2(0, 150), "value": 0},
+        {"type": "stopwatch", "position": Vector2(60, 400), "duration": 6.0, "slow_factor": 0.4}
     ] as Array[Dictionary]
 
     return seg

@@ -5,6 +5,7 @@ signal spawn_orb_requested(world_pos: Vector2)
 signal spawn_shockwave_requested(world_pos: Vector2)
 signal spawn_star_requested(world_pos: Vector2)
 signal spawn_magnet_requested(world_pos: Vector2)
+signal spawn_stopwatch_requested(world_pos: Vector2)
 signal clear_requested
 signal input_mode_changed(mode: String)
 
@@ -14,6 +15,7 @@ signal input_mode_changed(mode: String)
 @onready var shockwave_button: Button = %ShockwaveButton
 @onready var star_button: Button = %StarButton
 @onready var magnet_button: Button = %MagnetButton
+@onready var stopwatch_button: Button = %StopwatchButton
 @onready var clear_button: Button = %ClearButton
 @onready var input_mode_button: Button = %InputModeButton
 @onready var help_label: Label = %HelpLabel
@@ -28,6 +30,7 @@ func _ready() -> void:
     shockwave_button.pressed.connect(_on_shockwave_button_pressed)
     star_button.pressed.connect(_on_star_button_pressed)
     magnet_button.pressed.connect(_on_magnet_button_pressed)
+    stopwatch_button.pressed.connect(_on_stopwatch_button_pressed)
     clear_button.pressed.connect(_on_clear_button_pressed)
     input_mode_button.pressed.connect(_on_input_mode_button_pressed)
 
@@ -55,6 +58,8 @@ func _toggle_spawn_mode() -> void:
         current_spawn_mode = "star"
     elif current_spawn_mode == "star":
         current_spawn_mode = "magnet"
+    elif current_spawn_mode == "magnet":
+        current_spawn_mode = "stopwatch"
     else:
         current_spawn_mode = "pillar"
     _update_spawn_mode_display()
@@ -68,6 +73,7 @@ func _update_spawn_mode_display() -> void:
     shockwave_button.button_pressed = (current_spawn_mode == "shockwave")
     star_button.button_pressed = (current_spawn_mode == "star")
     magnet_button.button_pressed = (current_spawn_mode == "magnet")
+    stopwatch_button.button_pressed = (current_spawn_mode == "stopwatch")
 
 func _on_pillar_button_pressed() -> void:
     current_spawn_mode = "pillar"
@@ -87,6 +93,10 @@ func _on_star_button_pressed() -> void:
 
 func _on_magnet_button_pressed() -> void:
     current_spawn_mode = "magnet"
+    _update_spawn_mode_display()
+
+func _on_stopwatch_button_pressed() -> void:
+    current_spawn_mode = "stopwatch"
     _update_spawn_mode_display()
 
 func _on_clear_button_pressed() -> void:
@@ -125,3 +135,5 @@ func _spawn_at_mouse_position(screen_pos: Vector2) -> void:
             spawn_star_requested.emit(world_pos)
         elif current_spawn_mode == "magnet":
             spawn_magnet_requested.emit(world_pos)
+        elif current_spawn_mode == "stopwatch":
+            spawn_stopwatch_requested.emit(world_pos)

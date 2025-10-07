@@ -29,6 +29,8 @@ var max_speed: float = 800.0
 var speed_increase_rate: float = 2.0  # pixels/sec increase per second
 var speed_boost_multiplier: float = 1.5
 var speed_boost_duration: float = 0.0
+var slowdown_multiplier: float = 1.0
+var slowdown_duration: float = 0.0
 
 # Difficulty
 var game_time: float = 0.0
@@ -64,6 +66,8 @@ func start_game() -> void:
     game_time = 0.0
     difficulty = 0.0
     speed_boost_duration = 0.0
+    slowdown_multiplier = 1.0
+    slowdown_duration = 0.0
     game_started.emit()
     print("Game started")
 
@@ -115,6 +119,11 @@ func collect_orb(value: int) -> void:
 func activate_speed_boost(duration: float) -> void:
     speed_boost_duration = duration
 
+func activate_slowdown(duration: float, factor: float) -> void:
+    slowdown_duration = duration
+    slowdown_multiplier = factor
+    print("Slowdown activated: ", factor, "x for ", duration, "s")
+
 # Speed & Distance
 func _update_game_time(delta: float) -> void:
     game_time += delta
@@ -127,6 +136,13 @@ func _update_speed(delta: float) -> void:
     if speed_boost_duration > 0.0:
         speed_boost_duration -= delta
         target_speed *= speed_boost_multiplier
+
+    # Apply slowdown
+    if slowdown_duration > 0.0:
+        slowdown_duration -= delta
+        target_speed *= slowdown_multiplier
+        if slowdown_duration <= 0.0:
+            slowdown_multiplier = 1.0
 
     current_speed = target_speed
     speed_changed.emit(current_speed)
