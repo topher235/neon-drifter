@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://coql3r5d7x8y5"]
+[gd_scene load_steps=6 format=3 uid="uid://coql3r5d7x8y5"]
 
 [ext_resource type="PackedScene" uid="uid://dcvhm68iau6s" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="1_fe2o3"]
@@ -6,6 +6,9 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
 font_size = 72
+
+[sub_resource type="LabelSettings" id="LabelSettings_1g8jr"]
+font_size = 32
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -62,6 +65,22 @@ custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "DAILY CHALLENGE"
+
+[node name="DailyCheckmark" type="Label" parent="VBoxContainer/VBoxContainer/DailyChallengeButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "✓"
+label_settings = SubResource("LabelSettings_1g8jr")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HighScoreLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true

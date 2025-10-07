@@ -2,6 +2,7 @@ extends Control
 
 @onready var play_button: Button = %PlayButton
 @onready var daily_button: Button = %DailyChallengeButton
+@onready var daily_checkmark: Label = %DailyCheckmark
 @onready var quit_button: Button = %QuitButton
 @onready var high_score_label: Label = %HighScoreLabel
 @onready var title_label: Label = %TitleLabel
@@ -12,6 +13,7 @@ func _ready() -> void:
     quit_button.pressed.connect(_on_quit_pressed)
 
     _update_high_score()
+    _update_daily_checkmark()
     _animate_title()
 
     # Play menu music
@@ -19,6 +21,13 @@ func _ready() -> void:
 
 func _update_high_score() -> void:
     high_score_label.text = "High Score: %d" % GameManager.high_score
+
+func _update_daily_checkmark() -> void:
+    # Show checkmark if daily challenge is completed
+    if SaveManager.is_daily_challenge_completed():
+        daily_checkmark.visible = true
+    else:
+        daily_checkmark.visible = false
 
 func _animate_title() -> void:
     # Pulse animation for title

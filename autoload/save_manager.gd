@@ -13,7 +13,9 @@ var save_data = {
                     "selected_trail": "default",
                     "sfx_volume": 0.8,
                     "music_volume": 0.6,
-                    "first_launch": true
+                    "first_launch": true,
+                    "daily_challenge_completed": false,
+                    "last_daily_completion_date": ""
                 }
 
 func _ready() -> void:
@@ -75,6 +77,25 @@ func set_first_launch_complete() -> void:
     save_data.first_launch = false
     _write_save_data()
 
+func mark_daily_challenge_complete() -> void:
+    save_data.daily_challenge_completed = true
+    save_data.last_daily_completion_date = _get_date_string()
+    _write_save_data()
+
+func is_daily_challenge_completed() -> bool:
+    return save_data.daily_challenge_completed
+
+func check_and_reset_daily_challenge() -> void:
+    # Check if it's a new day
+    var today = _get_date_string()
+    if save_data.last_daily_completion_date != today:
+        save_data.daily_challenge_completed = false
+        _write_save_data()
+
+func _get_date_string() -> String:
+    var date = Time.get_date_dict_from_system()
+    return "%d-%02d-%02d" % [date.year, date.month, date.day]
+
 func _load_save_data() -> void:
     if not FileAccess.file_exists(SAVE_PATH):
         print("No save file found, using defaults")
@@ -117,6 +138,8 @@ func reset_save_data() -> void:
         "selected_trail": "default",
         "sfx_volume": 0.8,
         "music_volume": 0.6,
-        "first_launch": false
+        "first_launch": false,
+        "daily_challenge_completed": false,
+        "last_daily_completion_date": ""
     }
     _write_save_data()

@@ -49,6 +49,7 @@ var longest_distance: float = 0.0
 func _ready() -> void:
     daily_seed = _calculate_daily_seed()
     _load_high_scores()
+    SaveManager.check_and_reset_daily_challenge()  # Reset daily challenge flag on new day
     process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta: float) -> void:
@@ -102,6 +103,9 @@ func complete_daily_challenge() -> void:
     if time_bonus > 0:
         add_score(time_bonus)
         print("Time bonus: %d points (%.2f seconds remaining)" % [time_bonus, daily_challenge_time_remaining])
+
+    # Mark daily challenge as completed
+    SaveManager.mark_daily_challenge_complete()
 
     end_game()  # Use the normal end game flow
 
