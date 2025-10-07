@@ -51,7 +51,8 @@ func _create_straight_empty() -> SegmentData:
 
     # Just collectibles, no obstacles
     seg.collectibles = [
-        {"type": "orb", "position": Vector2(0, 300), "value": 10}
+        {"type": "orb", "position": Vector2(0, 300), "value": 10},
+        {"type": "magnet", "position": Vector2(0, 450), "duration": 5.0}
     ] as Array[Dictionary]
 
     return seg
@@ -282,7 +283,8 @@ func _create_slalom() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-60, 250), "value": 15},
         {"type": "orb", "position": Vector2(60, 450), "value": 15},
-        {"type": "orb", "position": Vector2(-60, 650), "value": 15}
+        {"type": "orb", "position": Vector2(-60, 650), "value": 15},
+        {"type": "magnet", "position": Vector2(0, 800), "duration": 5.0}
     ] as Array[Dictionary]
 
     return seg

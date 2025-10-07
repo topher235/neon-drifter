@@ -39,8 +39,8 @@
 
 Don't forget to add these to the sandbox as well.
 
-- [ ] Star - grants invincibility for X seconds
-- [ ] Magnet - attracts nearby orbs for X seconds
+- [X] Star - grants invincibility for X seconds
+- [X] Magnet - attracts nearby orbs for X seconds
 - [ ] Stopwatch - slows game speed back down (if it increases speed due to distance)
 
 ## Obstacles

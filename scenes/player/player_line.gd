@@ -33,6 +33,9 @@ var velocity: Vector2 = Vector2.ZERO
 var is_alive: bool = true
 var invulnerable: bool = false
 var invulnerable_timer: Timer
+var magnet_active: bool = false
+var magnet_timer: Timer
+var magnet_range: float = 200.0  # Range to attract orbs
 
 # Movement bounds
 var tunnel_half_width: float = 125.0  # Half of 250
@@ -76,6 +79,9 @@ func _process(delta: float) -> void:
     _update_position(delta)
     _update_trail()
     _check_bounds()
+
+    if magnet_active:
+        _attract_orbs(delta)
 
 func _physics_process(_delta: float) -> void:
     if not GameManager.is_playing() or not is_alive:
@@ -227,6 +233,58 @@ func _disable_invulnerability() -> void:
     if invulnerable_timer:
         invulnerable_timer.queue_free()
         invulnerable_timer = null
+
+# Magnet Powerup
+func activate_magnet(duration: float) -> void:
+    """Public method called by magnet collectible"""
+    print("Magnet activated for ", duration, " seconds")
+    magnet_active = true
+
+    # If already active, add the new duration to remaining time
+    var time_left := 0.0
+    if magnet_timer and magnet_timer.time_left > 0.0:
+        time_left = magnet_timer.time_left
+        magnet_timer.stop()
+        magnet_timer.queue_free()
+
+    # Create and start new timer with combined duration
+    magnet_timer = Timer.new()
+    magnet_timer.wait_time = duration + time_left
+    magnet_timer.one_shot = true
+    magnet_timer.timeout.connect(_disable_magnet)
+    add_child(magnet_timer)
+    magnet_timer.start()
+
+func _disable_magnet() -> void:
+    print("Magnet deactivated")
+    magnet_active = false
+    if magnet_timer:
+        magnet_timer.queue_free()
+        magnet_timer = null
+
+func _attract_orbs(delta: float) -> void:
+    # Find all collectibles in range and pull orbs toward player
+    var collectibles = get_tree().get_nodes_in_group("collectibles")
+
+    for collectible in collectibles:
+        # Only attract orbs, not other collectibles
+        if not collectible.is_in_group("orb"):
+            continue
+
+        # Check if collectible is already collected
+        if collectible.has_method("is_collected") and collectible.is_collected:
+            continue
+
+        var distance = current_position.distance_to(collectible.global_position)
+
+        # If within range, attract the orb
+        if distance < magnet_range and distance > collision_radius:
+            var direction = (current_position - collectible.global_position).normalized()
+            var attraction_strength = 800.0  # Pixels per second
+            var pull_velocity = direction * attraction_strength * delta
+
+            # Move the orb toward the player
+            collectible.global_position += pull_velocity
 
 
 # Setup Methods

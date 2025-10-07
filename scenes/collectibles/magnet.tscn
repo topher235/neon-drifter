@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1338j2vnub7n"]
+
+[ext_resource type="Script" uid="uid://bkr8llokq4o3i" path="res://scenes/collectibles/magnet.gd" id="1_magnet"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_magnet"]
+size = Vector2(40, 45)
+
+[node name="Magnet" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
+script = ExtResource("1_magnet")
+visual = NodePath("Visual")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="MagnetVisual" type="Polygon2D" parent="Visual"]
+unique_name_in_owner = true
+color = Color(0.2, 0.5, 1, 1)
+polygon = PackedVector2Array(-20, -25, -20, 15, -10, 20, -5, 20, -5, -20, 5, -20, 5, 20, 10, 20, 20, 15, 20, -25)
+
+[node name="PointLight2D" type="PointLight2D" parent="Visual"]
+color = Color(0.2, 0.5, 1, 1)
+energy = 1.2
+texture_scale = 1.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_magnet")

@@ -70,6 +70,12 @@ layout_mode = 2
 toggle_mode = true
 text = "Star Mode"
 
+[node name="MagnetButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "Magnet Mode"
+
 [node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
 layout_mode = 2
 

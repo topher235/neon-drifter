@@ -8,6 +8,7 @@ extends BaseCollectible
 
 func _ready() -> void:
     super._ready()
+    add_to_group("orb")
     _setup_visual()
     _setup_collision()
 
