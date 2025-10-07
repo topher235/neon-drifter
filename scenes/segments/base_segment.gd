@@ -78,6 +78,13 @@ func _create_obstacle(data: Dictionary) -> Node2D:
             spike.rotation_degrees = data.get("rotation_degrees", 0.0)
             return spike
 
+        "smoke_screen":
+            var smoke = preload("res://scenes/obstacles/smoke_screen.tscn").instantiate()
+            smoke.width = data.get("width", 250.0)
+            smoke.height = data.get("height", 300.0)
+            smoke.opacity = data.get("opacity", 0.6)
+            return smoke
+
         _:
             push_warning("Unknown obstacle type: " + obs_type)
             return null

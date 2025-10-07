@@ -256,9 +256,9 @@ func _apply_variation(data: SegmentData) -> SegmentData:
     # Use consistent tunnel width across all segments
     varied.tunnel_width = 250.0
 
-    # Randomize obstacle positions slightly
+    # Randomize obstacle positions slightly (but not smoke screens - they need precise positioning)
     for obs in varied.obstacles:
-        if obs.has("position"):
+        if obs.has("position") and obs.get("type") != "smoke_screen":
             var pos: Vector2 = obs.position
             pos.x += rng.randf_range(-20, 20)  # Left/right variance
             pos.y += rng.randf_range(-30, 30)  # Forward/back variance

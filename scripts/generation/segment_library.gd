@@ -11,6 +11,7 @@ func _init() -> void:
 
 func _create_segments() -> void:
     # Basic segments
+    all_segments.append(_create_fog_zone())
     all_segments.append(_create_spike_corridor())
     all_segments.append(_create_split_path())
     all_segments.append(_create_straight_empty())
@@ -380,7 +381,7 @@ func _create_spike_corridor() -> SegmentData:
         {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 30.0},  # Neg X = right wall
         {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 30.0},  # Pos x = left wall
         {"type": "triangle_spike", "position": Vector2(-125, 550), "rotation_degrees": 0, "size": 30.0},
-        {"type": "triangle_spike", "position": Vector2(50, 700), "rotation_degrees": 180, "size": 50.0}
+        {"type": "triangle_spike", "position": Vector2(75, 700), "rotation_degrees": 180, "size": 50.0}
         # TODO: figure out the forumla for calculating position based on what the triangle size is
         #  e.g. why is x=50 correct for size 50 instead of ~100? Probably geometry
     ] as Array[Dictionary]
@@ -389,6 +390,31 @@ func _create_spike_corridor() -> SegmentData:
         {"type": "orb", "position": Vector2(0, 300), "value": 10},
         {"type": "orb", "position": Vector2(0, 500), "value": 10},
         {"type": "orb", "position": Vector2(0, 700), "value": 15}
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_fog_zone() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "fog_zone"
+    seg.segment_type = "straight"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 9
+    seg.complexity = 0
+
+    # Smoke screen obscures vision, with pillars hidden inside
+    seg.obstacles = [
+        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 250.0, "height": 500.0, "opacity": 0.9},
+        {"type": "pillar", "position": Vector2(-40, 350), "radius": 25.0},
+        {"type": "pillar", "position": Vector2(40, 450), "radius": 25.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(0, 250), "value": 10},
+        {"type": "orb", "position": Vector2(0, 550), "value": 15}
     ] as Array[Dictionary]
 
     return seg

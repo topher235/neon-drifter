@@ -49,15 +49,16 @@ Don't forget to add these to the sandbox as well.
 
 - [X] Wall - horizontal collision that ends the run
 - [X] Pulse wall - horizontal collision that ends the run, pulses on and off
-- [ ] Laser wall - horizontal collision extending from one wall to the other, shoots every X seconds
+- [ ] Laser - horizontal collision extending from one wall to the other, shoots every X seconds
 - [ ] Gravity well - pulls player toward center as they pass, ends the run if in center
 - [ ] Crusher walls - two walls slam together, ends run if crushes player (only for daily challenge)
 - [ ] Shockwave - sends out a small shockwave every X seconds, ends run if touches player
 - [ ] Smoke screen - obscures vision of an area
 - [X] Fork - vertical wall that forces the player to choose a side
-- [ ] Jagged edges - sharp triangles extending from the wall, ends run if player touches
+- [X] Jagged edges - sharp triangles extending from the wall, ends run if player touches
 
 - [ ] Refactor to create a KillsPlayer component that sets up the collision
+- [ ] Refactor to try to use on_area_entered signal instead of checking collisions in _process
 
 ## Tunnel Segments
 
