@@ -53,7 +53,7 @@ Don't forget to add these to the sandbox as well.
 - [ ] Gravity well - pulls player toward center as they pass, ends the run if in center
 - [ ] Crusher walls - two walls slam together, ends run if crushes player (only for daily challenge)
 - [ ] Shockwave - sends out a small shockwave every X seconds, ends run if touches player
-- [ ] Smoke screen - obscures vision of an area
+- [X] Smoke screen - obscures vision of an area
 - [X] Fork - vertical wall that forces the player to choose a side
 - [X] Jagged edges - sharp triangles extending from the wall, ends run if player touches
 

@@ -9,7 +9,7 @@ shader = ExtResource("2_j1nhf")
 shader_parameter/noise_texture = ExtResource("3_noise")
 shader_parameter/time = 0.0
 shader_parameter/scroll_speed = 0.05
-shader_parameter/scroll_direction = Vector2(4, 1)
+shader_parameter/scroll_direction = Vector2(3, 1.5)
 shader_parameter/edge_fade = 0.1
 
 [node name="SmokeScreen" type="Area2D"]
