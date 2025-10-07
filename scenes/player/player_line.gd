@@ -151,13 +151,15 @@ func _check_collisions() -> void:
     if invulnerable:
         return
 
-    # Check Area2D overlaps (obstacles and collectibles)
+    # Check Area2D overlaps (obstacles, collectibles, and triggers)
     var overlapping_areas = collision_area.get_overlapping_areas()
     for area in overlapping_areas:
         if area.is_in_group("obstacles"):
             _handle_obstacle_collision(area)
         elif area.is_in_group("collectibles"):
             _handle_collectible_collision(area)
+        elif area.collision_layer == 16:  # End segment trigger
+            _handle_end_segment_trigger(area)
 
     # Check StaticBody2D overlaps (walls)
     var overlapping_bodies = collision_area.get_overlapping_bodies()
@@ -178,6 +180,12 @@ func _handle_wall_collision(wall: StaticBody2D) -> void:
 func _handle_collectible_collision(collectible: Area2D) -> void:
     if collectible.has_method("collect"):
         collectible.collect()
+
+func _handle_end_segment_trigger(trigger: Area2D) -> void:
+    # Player reached the end segment in daily challenge mode
+    print("Player reached end segment trigger!")
+    if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
+        GameManager.complete_daily_challenge()
 
 func _die() -> void:
     print("Player collision detected!")
@@ -309,7 +317,7 @@ func _setup_collision() -> void:
     collision_shape.shape = shape
 
     collision_area.collision_layer = 1  # Player layer
-    collision_area.collision_mask = 14  # Obstacles (2) + Collectibles (4) + Walls (8)
+    collision_area.collision_mask = 30  # Obstacles (2) + Collectibles (4) + Walls (8) + Triggers (16)
 
 func _setup_camera() -> void:
     camera.position_smoothing_enabled = true

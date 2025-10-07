@@ -8,6 +8,7 @@ signal game_resumed
 signal score_changed(new_score: int)
 signal speed_changed(new_speed: float)
 signal combo_changed(combo: int)
+signal timer_changed(time_remaining: float)
 
 # Game State
 enum GameState { MENU, PLAYING, PAUSED, GAME_OVER }
@@ -38,6 +39,8 @@ var difficulty: float = 0.0
 
 # Daily Challenge
 var daily_seed: int = 0
+var daily_challenge_time_limit: float = 40.0
+var daily_challenge_time_remaining: float = 40.0
 
 # High Scores
 var high_score: int = 0
@@ -54,6 +57,7 @@ func _process(delta: float) -> void:
         _update_speed(delta)
         _update_distance(delta)
         _update_difficulty()
+        _update_daily_challenge_timer(delta)
 
 func start_game() -> void:
     current_state = GameState.PLAYING
@@ -68,6 +72,12 @@ func start_game() -> void:
     speed_boost_duration = 0.0
     slowdown_multiplier = 1.0
     slowdown_duration = 0.0
+
+    # Initialize daily challenge timer
+    if current_game_mode == GameMode.DAILY_CHALLENGE:
+        daily_challenge_time_remaining = daily_challenge_time_limit
+        timer_changed.emit(daily_challenge_time_remaining)
+
     game_started.emit()
     print("Game started")
 
@@ -79,6 +89,42 @@ func end_game() -> void:
     _check_high_scores()
     game_over.emit(current_score, distance_traveled)
     print("Game Over - Score: %d, Distance: %.1f" % [current_score, distance_traveled])
+
+func complete_daily_challenge() -> void:
+    # Called when player reaches the end segment in daily challenge mode
+    if current_state != GameState.PLAYING:
+        return
+
+    print("Daily Challenge Complete!")
+
+    # Calculate time bonus based on remaining time
+    var time_bonus = _calculate_time_bonus(daily_challenge_time_remaining)
+    if time_bonus > 0:
+        add_score(time_bonus)
+        print("Time bonus: %d points (%.2f seconds remaining)" % [time_bonus, daily_challenge_time_remaining])
+
+    end_game()  # Use the normal end game flow
+
+func _calculate_time_bonus(time_remaining: float) -> int:
+    # Time bonus calculation for daily challenge
+    # More time remaining = higher bonus
+    # Base thresholds (with 60s time limit):
+    # - 40s+ remaining: 1000 bonus (completed in under 20s)
+    # - 30s+ remaining: 750 bonus (completed in under 30s)
+    # - 20s+ remaining: 500 bonus (completed in under 40s)
+    # - 10s+ remaining: 250 bonus (completed in under 50s)
+    # - 0s+ remaining: 100 bonus (completed in under 60s)
+
+    if time_remaining >= 40.0:
+        return 1000
+    elif time_remaining >= 30.0:
+        return 750
+    elif time_remaining >= 20.0:
+        return 500
+    elif time_remaining >= 10.0:
+        return 250
+    else:
+        return 100
 
 func pause_game() -> void:
     if current_state == GameState.PLAYING:
@@ -149,16 +195,31 @@ func _update_speed(delta: float) -> void:
 
 func _update_distance(delta: float) -> void:
     distance_traveled += current_speed * delta
-    # Every 100 pixels = 1 point
-    var distance_score = int(distance_traveled / 100.0)
-    if distance_score > int((distance_traveled - current_speed * delta) / 100.0):
-        add_score(1)
+    # Every 100 pixels = 1 point (only in classic mode)
+    if current_game_mode == GameMode.CLASSIC:
+        var distance_score = int(distance_traveled / 100.0)
+        if distance_score > int((distance_traveled - current_speed * delta) / 100.0):
+            add_score(1)
 
 func _update_difficulty() -> void:
     # Difficulty scales from 0 to 10 based on time and speed
     var time_factor = game_time / 60.0  # 0 to ~1 over first minute
     var speed_factor = (current_speed - base_speed) / (max_speed - base_speed)
     difficulty = clamp((time_factor * 5.0) + (speed_factor * 5.0), 0.0, 10.0)
+
+func _update_daily_challenge_timer(delta: float) -> void:
+    # Only update timer in daily challenge mode
+    if current_game_mode != GameMode.DAILY_CHALLENGE:
+        return
+
+    daily_challenge_time_remaining -= delta
+    timer_changed.emit(daily_challenge_time_remaining)
+
+    # Check if time has run out
+    if daily_challenge_time_remaining <= 0.0:
+        daily_challenge_time_remaining = 0.0
+        print("Daily Challenge: Time's up!")
+        end_game()  # Player dies as if they hit an obstacle
 
 # Daily Seed
 func _calculate_daily_seed() -> int:

@@ -27,14 +27,15 @@
 
 - [ ] Redesign UI layout
 - [ ] Fix retry button to fully reload the level, using the same seed
+- [ ] Use different wording for RUSH and daily mode (game over sounds like a lose state, not a win state)
 
 ## Daily Challenge Mode
 
-- [ ] Modify procedural algorithm to use seed and contain X segments
-- [ ] Create end segment that triggers the completion of the run
-- [ ] Fix points to be calculated based on collectibles only
-- [ ] Award bonus points for time
-- [ ] Add timer to force player to complete in X seconds
+- [X] Modify procedural algorithm to use seed and contain X segments
+- [X] Create end segment that triggers the completion of the run
+- [X] Fix points to be calculated based on collectibles only
+- [X] Award bonus points for time
+- [X] Add timer to force player to complete in X seconds
 
 ## Collectibles
 

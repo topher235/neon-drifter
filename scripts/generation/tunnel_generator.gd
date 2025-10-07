@@ -14,10 +14,12 @@ signal segment_despawned(segment: BaseSegment)
 # State
 var active_segments: Array[BaseSegment] = []
 var starting_segment: StartingSegment = null  # Special starting segment (never despawns)
+var end_segment: EndSegment = null  # Special ending segment for daily challenge
 var segment_pool: Array[BaseSegment] = []
 var current_difficulty: float = 0.0
 var segments_generated: int = 0
 var last_segment_y: float = 0.0
+var max_segments: int = -1  # -1 = infinite (classic mode), positive = fixed count (daily challenge)
 
 # Library & RNG
 var segment_library: SegmentLibrary
@@ -32,7 +34,7 @@ func _ready() -> void:
     segment_library = SegmentLibrary.new()
     rng = RandomNumberGenerator.new()
 
-func initialize(seed_value: int = -1) -> void:
+func initialize(seed_value: int = -1, is_daily_challenge: bool = false) -> void:
     if seed_value == -1:
         rng.seed = GameManager.daily_seed
     else:
@@ -45,11 +47,17 @@ func initialize(seed_value: int = -1) -> void:
     segments_since_straight = 0
     segments_since_fork = 0
 
+    # Set max segments for daily challenge mode
+    if is_daily_challenge or GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
+        max_segments = 10  # 10 middle segments (plus start and end)
+    else:
+        max_segments = -1  # Infinite generation for classic mode
+
     _clear_segments()
     _initialize_pool()
     _generate_initial_segments()
 
-    print("Tunnel Generator initialized with seed: %d" % rng.seed)
+    print("Tunnel Generator initialized with seed: %d, max_segments: %d" % [rng.seed, max_segments])
 
 func _initialize_pool() -> void:
     if not use_pooling:
@@ -101,6 +109,40 @@ func _create_starting_segment() -> void:
 
     print("Starting segment created at position 0")
 
+func _spawn_end_segment() -> void:
+    # Create the ending segment for daily challenge
+    var end_segment_scene = preload("res://scenes/segments/base_segment.tscn")
+    end_segment = EndSegment.new()
+
+    # Copy structure from base segment
+    var temp_segment = end_segment_scene.instantiate()
+    get_parent().add_child(temp_segment)
+
+    # Setup the ending segment structure
+    end_segment.obstacles_container = Node2D.new()
+    end_segment.collectibles_container = Node2D.new()
+    end_segment.walls_container = Node2D.new()
+    end_segment.background = Node2D.new()
+
+    get_parent().add_child(end_segment)
+    end_segment.add_child(end_segment.obstacles_container)
+    end_segment.add_child(end_segment.collectibles_container)
+    end_segment.add_child(end_segment.walls_container)
+    end_segment.add_child(end_segment.background)
+
+    # Clean up temp
+    temp_segment.queue_free()
+
+    # Position at the end of the last spawned segment
+    var spawn_y = last_segment_y
+    end_segment.position = Vector2(0, spawn_y)
+    end_segment.initialize_end_segment(250.0, 600.0)
+
+    # Update tracking
+    last_segment_y = spawn_y - 600.0  # End segment length
+
+    print("End segment created at position: ", spawn_y)
+
 func update_generation(player_y: float) -> void:
     # Spawn new segments ahead
     while _should_spawn_segment(player_y):
@@ -113,6 +155,13 @@ func update_generation(player_y: float) -> void:
     _update_difficulty()
 
 func _should_spawn_segment(player_y: float) -> bool:
+    # Check if we've reached max segments for daily challenge
+    if max_segments > 0 and segments_generated >= max_segments:
+        # Stop spawning if we've reached the limit and haven't placed end segment yet
+        if not end_segment:
+            _spawn_end_segment()
+        return false
+
     if active_segments.is_empty():
         return true
 
@@ -397,6 +446,11 @@ func _clear_segments() -> void:
     if starting_segment:
         starting_segment.queue_free()
         starting_segment = null
+
+    # Also clear ending segment
+    if end_segment:
+        end_segment.queue_free()
+        end_segment = null
 
     last_segment_y = 0.0
 
