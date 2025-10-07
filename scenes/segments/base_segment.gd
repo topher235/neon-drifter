@@ -85,6 +85,14 @@ func _create_obstacle(data: Dictionary) -> Node2D:
             smoke.opacity = data.get("opacity", 0.6)
             return smoke
 
+        "shockwave":
+            var shockwave = preload("res://scenes/obstacles/shockwave.tscn").instantiate()
+            shockwave.core_radius = data.get("core_radius", 20.0)
+            shockwave.shockwave_max_radius = data.get("shockwave_max_radius", 100.0)
+            shockwave.shockwave_interval = data.get("shockwave_interval", 2.0)
+            shockwave.shockwave_duration = data.get("shockwave_duration", 1.0)
+            return shockwave
+
         _:
             push_warning("Unknown obstacle type: " + obs_type)
             return null

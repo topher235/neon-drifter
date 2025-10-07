@@ -11,6 +11,7 @@ func _init() -> void:
 
 func _create_segments() -> void:
     # Basic segments
+    all_segments.append(_create_shockwave_zone())
     all_segments.append(_create_fog_zone())
     all_segments.append(_create_spike_corridor())
     all_segments.append(_create_split_path())
@@ -119,6 +120,30 @@ func _create_straight_gate() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(0, 200), "value": 10},
         {"type": "orb", "position": Vector2(0, 600), "value": 20}  # Bonus after gate
+    ] as Array[Dictionary]
+
+    return seg
+
+func _create_shockwave_zone() -> SegmentData:
+    var seg = SegmentData.new()
+    seg.segment_id = "shockwave_zone"
+    seg.segment_type = "straight"
+    seg.segment_length = 800.0
+    seg.tunnel_width = 250.0
+    seg.curvature = 0.0
+    seg.min_difficulty = 0
+    seg.max_difficulty = 10
+    seg.complexity = 0
+
+    seg.obstacles = [
+        {"type": "shockwave", "position": Vector2(0, 400), "core_radius": 20.0, "shockwave_max_radius": 50.0, "shockwave_interval": 2.0, "shockwave_duration": 1.0}
+    ] as Array[Dictionary]
+
+    seg.collectibles = [
+        {"type": "orb", "position": Vector2(60, 250), "value": 10},
+        {"type": "orb", "position": Vector2(-60, 250), "value": 10},
+        {"type": "orb", "position": Vector2(70, 550), "value": 10},
+        {"type": "orb", "position": Vector2(-70, 550), "value": 10}
     ] as Array[Dictionary]
 
     return seg
