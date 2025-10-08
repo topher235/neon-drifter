@@ -10,9 +10,10 @@ void fragment() {
 	// Calculate scrolling offset
 	float scroll_offset = TIME * scroll_speed * time_scale;
 
-	// Adjusted UV with scrolling
+	// Adjusted UV with diagonal scrolling (bottom right to top left)
 	vec2 uv = UV * vec2(1000.0, 1000.0);  // Scale up
-	uv.x += scroll_offset;
+	uv.x += scroll_offset;  // Move left
+	uv.y += scroll_offset;  // Move up
 
 	// Grid lines
 	vec2 grid = abs(fract(uv / grid_size - 0.5) - 0.5) / fwidth(uv / grid_size);
