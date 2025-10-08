@@ -34,7 +34,7 @@ anchor_bottom = 0.5
 offset_left = -200.0
 offset_top = -250.0
 offset_right = 200.0
-offset_bottom = 250.0
+offset_bottom = 400.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -61,7 +61,47 @@ label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
 [node name="Spacer1" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SettingsContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MusicSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer/MusicSetting"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Music:"
+vertical_alignment = 1
+
+[node name="MusicCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer/MusicSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+
+[node name="SoundSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer/SoundSetting"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Sound:"
+vertical_alignment = 1
+
+[node name="SoundCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SettingsContainer/SoundSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+
+[node name="Spacer3" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_vertical = 3
 

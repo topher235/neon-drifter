@@ -1,10 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://coql3r5d7x8y5"]
+[gd_scene load_steps=10 format=3 uid="uid://coql3r5d7x8y5"]
 
 [ext_resource type="PackedScene" uid="uid://dcvhm68iau6s" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="1_fe2o3"]
 [ext_resource type="Script" uid="uid://btfjpmqe56wav" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
 [ext_resource type="Texture2D" uid="uid://cinr0o55lq335" path="res://assets/icons/settings.png" id="4_settings_icon"]
 [ext_resource type="PackedScene" uid="uid://dbp1ulnofsv7n" path="res://scenes/ui/settings_modal.tscn" id="5_settings_modal"]
+
+[sub_resource type="Shader" id="Shader_icon"]
+code = "shader_type canvas_item;
+
+uniform vec4 target_color : source_color = vec4(0.0, 1.0, 1.0, 1.0);
+
+void fragment() {
+	vec4 tex_color = texture(TEXTURE, UV);
+	// Invert black to white, then tint with target color
+	float brightness = 1.0 - tex_color.r;
+	COLOR = vec4(target_color.rgb * brightness, tex_color.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_icon"]
+shader = SubResource("Shader_icon")
+shader_parameter/target_color = Color(0, 1, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
 font_size = 72
@@ -126,6 +143,7 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="TextureRect" type="TextureRect" parent="SettingsButton"]
+material = SubResource("ShaderMaterial_icon")
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = 8

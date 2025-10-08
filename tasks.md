@@ -12,10 +12,10 @@
 
 ## Settings
 
-- [ ] Create settings scene
-- [ ] Toggle music and sfx
-- [ ] Save user choices between games
-- [ ] Allow changing settings from pause menu
+- [X] Create settings scene
+- [X] Toggle music and sfx
+- [X] Save user choices between games
+- [X] Allow changing settings from pause menu
 
 ## Audio
 
@@ -25,7 +25,7 @@
 
 ## Game Over
 
-- [ ] Redesign UI layout
+- [X] Redesign UI layout
 - [ ] Fix retry button to fully reload the level, using the same seed
 - [ ] Use different wording for RUSH and daily mode (game over sounds like a lose state, not a win state)
 
@@ -91,6 +91,8 @@ Players can share seeds and times.
 ## Meta Progression
 
 ### Trail Cosmetics
+
+Can probably be managed through the settings menu with tabs.
 
 - Default Trail (cyan, free)
 - Rainbow Trail (collect 500 orbs total)
