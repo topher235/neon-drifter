@@ -75,8 +75,8 @@ Don't forget to add these to the sandbox as well.
 ## Polish
 
 - [ ] New animation for title
-- [ ] Add explosion particles when player dies
-- [ ] Add particles when player picks up collectible
+- [X] Add explosion particles when player dies
+- [X] Add particles when player picks up collectible
 - [ ] New animations for HUD elements (score, distance, speed, etc.)
 
 ## Rush Mode

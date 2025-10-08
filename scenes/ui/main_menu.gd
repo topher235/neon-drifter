@@ -9,6 +9,9 @@ extends Control
 @onready var settings_button: Button = %SettingsButton
 @onready var settings_modal: Control = $SettingsModal
 
+var title_character_labels: Array[Label] = []
+var title_original_y: float = 0.0
+
 func _ready() -> void:
     play_button.pressed.connect(_on_play_pressed)
     daily_button.pressed.connect(_on_daily_pressed)
@@ -33,10 +36,55 @@ func _update_daily_checkmark() -> void:
         daily_checkmark.visible = false
 
 func _animate_title() -> void:
-    # Pulse animation for title
-    var tween = create_tween().set_loops()
-    tween.tween_property(title_label, "scale", Vector2(1.05, 1.05), 1.0)
-    tween.tween_property(title_label, "scale", Vector2(1.0, 1.0), 1.0)
+    # Create individual labels for each character
+    if not title_label:
+        return
+
+    var title_text = title_label.text
+
+    # Get original label properties
+    var original_font = title_label.get_theme_font("font")
+    var original_font_size = 72 # title_label.get_theme_font_size("font_size")
+    var original_color = title_label.get_theme_color("font_color")
+
+    # Get the title_label's parent (should be a Control wrapper)
+    var wrapper = title_label.get_parent()
+    if not wrapper:
+        return
+
+    # Hide the original label
+    title_label.visible = false
+
+    # Create a container inside the wrapper
+    var container = HBoxContainer.new()
+    container.alignment = BoxContainer.ALIGNMENT_CENTER
+    container.set_anchors_preset(Control.PRESET_FULL_RECT)
+    wrapper.add_child(container)
+
+    # Create a label for each character
+    for i in range(title_text.length()):
+        var char_label = Label.new()
+        char_label.text = title_text[i]
+
+        # Copy styling from original label
+        if original_font:
+            char_label.add_theme_font_override("font", original_font)
+        if original_font_size > 0:
+            char_label.add_theme_font_size_override("font_size", original_font_size)
+        char_label.add_theme_color_override("font_color", original_color)
+
+        container.add_child(char_label)
+        title_character_labels.append(char_label)
+
+func _process(_delta: float) -> void:
+    # Animate each character with a phase offset
+    var time = Time.get_ticks_msec() / 1000.0
+
+    for i in range(title_character_labels.size()):
+        var char_label = title_character_labels[i]
+        var phase_offset = i * 0.3  # Offset each character's wave
+        var wave_offset = sin(time * 2.0 + phase_offset) * 8.0
+        char_label.position.y = wave_offset
 
 func _on_play_pressed() -> void:
     AudioManager.play_sfx("ui_click")
