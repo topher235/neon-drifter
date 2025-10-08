@@ -8,7 +8,7 @@
 
 ## Main Menu
 
-- [ ] Add checkmark to Daily Challenge button that is visible when the daily is completed
+- [X] Add checkmark to Daily Challenge button that is visible when the daily is completed
 
 ## Settings
 

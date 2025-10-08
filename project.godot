@@ -13,7 +13,7 @@ config_version=5
 config/name="NeonDrift"
 config/description="Enter an interesting project description here!"
 run/main_scene="uid://iuascjpmbef1"
-config/features=PackedStringArray("4.4")
+config/features=PackedStringArray("4.5")
 config/icon="res://icon.png"
 
 [autoload]

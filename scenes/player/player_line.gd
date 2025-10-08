@@ -160,6 +160,8 @@ func _check_collisions() -> void:
             _handle_collectible_collision(area)
         elif area.collision_layer == 16:  # End segment trigger
             _handle_end_segment_trigger(area)
+        elif area.is_in_group("boundary_kill_zone"):  # Boundary kill zone
+            _handle_boundary_collision(area)
 
     # Check StaticBody2D overlaps (walls)
     var overlapping_bodies = collision_area.get_overlapping_bodies()
@@ -176,6 +178,11 @@ func _handle_wall_collision(wall: StaticBody2D) -> void:
     if is_alive and not invulnerable:
         is_alive = false
         _die()
+
+func _handle_boundary_collision(_boundary: Area2D) -> void:
+    if is_alive:
+        is_alive = false
+        kill()
 
 func _handle_collectible_collision(collectible: Area2D) -> void:
     if collectible.has_method("collect"):
@@ -317,7 +324,7 @@ func _setup_collision() -> void:
     collision_shape.shape = shape
 
     collision_area.collision_layer = 1  # Player layer
-    collision_area.collision_mask = 30  # Obstacles (2) + Collectibles (4) + Walls (8) + Triggers (16)
+    collision_area.collision_mask = 62  # Obstacles (2) + Collectibles (4) + Walls (8) + Triggers (16) + Boundary (32)
 
 func _setup_camera() -> void:
     camera.position_smoothing_enabled = true
@@ -383,3 +390,7 @@ func reset() -> void:
     trail_points.clear()
     is_alive = true
     invulnerable = false
+
+    
+func kill() -> void:
+    _die()

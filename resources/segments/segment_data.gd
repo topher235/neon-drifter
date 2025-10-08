@@ -35,7 +35,7 @@ class_name SegmentData extends Resource
 func is_valid() -> bool:
     return segment_length > 0 and tunnel_width > 0
 
-func duplicate_deep() -> SegmentData:
+func _duplicate_deep() -> SegmentData:
     var dup = self.duplicate()
     dup.obstacles = obstacles.duplicate(true)
     dup.collectibles = collectibles.duplicate(true)

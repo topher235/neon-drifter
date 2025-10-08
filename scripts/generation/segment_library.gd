@@ -398,9 +398,9 @@ func _create_spike_corridor() -> SegmentData:
     seg.segment_length = 900.0
     seg.tunnel_width = 250.0
     seg.curvature = 0.0
-    seg.min_difficulty = 0
+    seg.min_difficulty = 1
     seg.max_difficulty = 9
-    seg.complexity = 0
+    seg.complexity = 1
 
     # Triangle spikes on alternating walls pointing inward
     # Point is at the position, base extends backward

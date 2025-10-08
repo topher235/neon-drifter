@@ -37,7 +37,9 @@ func _spawn_obstacles() -> void:
         var obstacle = _create_obstacle(obs_data)
         if obstacle:
             obstacles_container.add_child(obstacle)
-            obstacle.position = obs_data.position
+            # Convert positive Y (distance into segment) to negative Y (upward direction)
+            var pos = obs_data.position
+            obstacle.position = Vector2(pos.x, -pos.y)
 
 func _create_obstacle(data: Dictionary) -> Node2D:
     var obs_type = data.get("type", "pillar")
@@ -102,7 +104,9 @@ func _spawn_collectibles() -> void:
         var collectible = _create_collectible(col_data)
         if collectible:
             collectibles_container.add_child(collectible)
-            collectible.position = col_data.position
+            # Convert positive Y (distance into segment) to negative Y (upward direction)
+            var pos = col_data.position
+            collectible.position = Vector2(pos.x, -pos.y)
 
 func _create_collectible(data: Dictionary) -> Node2D:
     var col_type = data.get("type", "orb")

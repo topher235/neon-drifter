@@ -75,6 +75,10 @@ func _generate_initial_segments() -> void:
     # First, create the starting segment at position 0
     _create_starting_segment()
 
+    # Initialize last_segment_y to the top of the starting segment
+    # Starting segment is 600px long at Y=0, so its top is at Y=-600
+    last_segment_y = -600.0
+
     # Then spawn regular segments ahead
     for i in range(segments_ahead + 2):
         _spawn_next_segment()
@@ -300,7 +304,7 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
 
 func _apply_variation(data: SegmentData) -> SegmentData:
     # Clone to avoid modifying original
-    var varied = data.duplicate_deep()
+    var varied = data._duplicate_deep()
 
     # Use consistent tunnel width across all segments
     varied.tunnel_width = 250.0
@@ -391,7 +395,8 @@ func _despawn_old_segments(player_y: float) -> void:
             segment_despawned.emit(first_segment)
             _release_segment(first_segment)
 
-            # Move starting segment to replace the despawned segment's position
+            # Move starting segment to follow behind player
+            # This keeps the player from seeing empty space behind them
             if starting_segment:
                 starting_segment.position.y = despawned_position
         else:
