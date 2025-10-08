@@ -45,6 +45,9 @@ var tunnel_half_width: float = 125.0  # Half of 250
 var last_trail_point: Vector2 = Vector2.ZERO
 var distance_since_last_point: float = 0.0
 
+# Cosmetics
+var current_cosmetic: TrailCosmetic = null
+
 func _ready() -> void:
     add_to_group("player")
 
@@ -69,6 +72,10 @@ func _ready() -> void:
     GameManager.game_started.connect(_on_game_started)
     GameManager.game_over.connect(_on_game_over)
 
+    # Connect to cosmetic system
+    CosmeticManager.cosmetic_changed.connect(_on_cosmetic_changed)
+    _apply_cosmetic(CosmeticManager.get_selected_cosmetic())
+
     # Setup controller after everything else (allows movement_mode to be set first)
     call_deferred("_setup_movement_controller")
 
@@ -79,6 +86,7 @@ func _process(delta: float) -> void:
     _handle_input()
     _update_position(delta)
     _update_trail()
+    _update_trail_colors()  # Update colors every frame for animated cosmetics
     _check_bounds()
 
     if magnet_active:
@@ -310,18 +318,12 @@ func _attract_orbs(delta: float) -> void:
 # Setup Methods
 func _setup_line_renderer() -> void:
     line_renderer.width = line_width
-    line_renderer.default_color = Color(0, 1, 1, 1)  # Cyan
+    line_renderer.default_color = Color(0, 1, 1, 1)  # Cyan (default)
     line_renderer.begin_cap_mode = Line2D.LINE_CAP_ROUND
     line_renderer.end_cap_mode = Line2D.LINE_CAP_ROUND
     line_renderer.joint_mode = Line2D.LINE_JOINT_ROUND
     line_renderer.antialiased = true
-
-    # Set up gradient for trail fade
-    var gradient = Gradient.new()
-    gradient.set_color(0.3, Color(0, 1, 1, 0.0))  # Fully transparent at tail (oldest)
-    gradient.add_point(0.8, Color(0, 1, 1, 0.5))  # Semi-transparent mid-trail
-    gradient.set_color(1, Color(0, 1, 1, 1.0))  # Fully opaque at head (newest)
-    line_renderer.gradient = gradient
+    # Gradient will be set by cosmetic system
 
 func _setup_collision() -> void:
     var shape = CircleShape2D.new()
@@ -399,3 +401,76 @@ func reset() -> void:
     
 func kill() -> void:
     _die()
+
+
+# Cosmetic System
+func _apply_cosmetic(cosmetic: TrailCosmetic) -> void:
+    """Apply a cosmetic to the trail"""
+    current_cosmetic = cosmetic
+    _update_trail_colors()
+
+
+func _update_trail_colors() -> void:
+    """Update trail colors based on current cosmetic"""
+    if not current_cosmetic or not line_renderer:
+        return
+
+    var trail_length = trail_points.size()
+    if trail_length == 0:
+        return
+
+    # For solid colors, use a simple fade gradient
+    if current_cosmetic.cosmetic_type == TrailCosmetic.CosmenticType.SOLID:
+        var fade_gradient = Gradient.new()
+        var color = current_cosmetic.solid_color
+        fade_gradient.set_color(0, Color(color.r, color.g, color.b, 0.0))  # Transparent at tail
+        fade_gradient.add_point(0.5, Color(color.r, color.g, color.b, 0.5))  # Semi-transparent mid
+        fade_gradient.set_color(1, Color(color.r, color.g, color.b, 1.0))  # Opaque at head
+        line_renderer.gradient = fade_gradient
+
+    # For gradients and animated, apply gradient with alpha multiplier
+    else:
+        # Clone the cosmetic's gradient and apply alpha fade
+        var base_gradient = current_cosmetic.gradient
+        if not base_gradient:
+            return
+
+        var custom_gradient = Gradient.new()
+        var time = Time.get_ticks_msec() / 1000.0
+
+        # For animated gradients, we need to offset the sampling
+        var time_offset = 0.0
+        if current_cosmetic.cosmetic_type == TrailCosmetic.CosmenticType.ANIMATED:
+            time_offset = fmod(time * current_cosmetic.animation_speed, 1.0)
+
+        # Sample the gradient at multiple points and apply alpha fade
+        var num_samples = 20
+        for j in range(num_samples + 1):
+            var t = float(j) / float(num_samples)
+
+            # For animated, offset the sample position
+            var sample_pos = t
+            if current_cosmetic.cosmetic_type == TrailCosmetic.CosmenticType.ANIMATED:
+                sample_pos = fmod(t + time_offset, 1.0)
+
+            var color = base_gradient.sample(sample_pos)
+
+            # Apply alpha fade (transparent at tail, opaque at head)
+            var alpha = lerp(0.0, 1.0, t)
+            color.a = alpha
+
+            if j == 0:
+                custom_gradient.set_color(0, color)
+                custom_gradient.set_offset(0, 0.0)
+            elif j == num_samples:
+                custom_gradient.set_color(1, color)
+                custom_gradient.set_offset(1, 1.0)
+            else:
+                custom_gradient.add_point(t, color)
+
+        line_renderer.gradient = custom_gradient
+
+
+func _on_cosmetic_changed(cosmetic: TrailCosmetic) -> void:
+    """Handle cosmetic change signal"""
+    _apply_cosmetic(cosmetic)

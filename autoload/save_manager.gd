@@ -51,6 +51,16 @@ func unlock_trail(trail_id: String) -> void:
 func is_trail_unlocked(trail_id: String) -> bool:
     return trail_id in save_data.unlocked_trails
 
+# Cosmetic system compatibility (forwards to trail methods)
+func unlock_cosmetic(cosmetic_id: String) -> void:
+    unlock_trail(cosmetic_id)
+
+func is_cosmetic_unlocked(cosmetic_id: String) -> bool:
+    return is_trail_unlocked(cosmetic_id)
+
+func save_game() -> void:
+    _write_save_data()
+
 func set_selected_trail(trail_id: String) -> void:
     if is_trail_unlocked(trail_id):
         save_data.selected_trail = trail_id
