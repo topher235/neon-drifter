@@ -44,6 +44,7 @@ Don't forget to add these to the sandbox as well.
 - [X] Star - grants invincibility for X seconds
 - [X] Magnet - attracts nearby orbs for X seconds
 - [X] Stopwatch - slows game speed back down (if it increases speed due to distance)
+  - [ ] Remove from daily challenge since it has no effect there
 - [ ] Hourglass - adds time to daily challenge
 
 ## Obstacles
@@ -61,7 +62,6 @@ Don't forget to add these to the sandbox as well.
 - [X] Jagged edges - sharp triangles extending from the wall, ends run if player touches
 
 - [ ] Refactor to create a KillsPlayer component that sets up the collision
-- [ ] Refactor to try to use on_area_entered signal instead of checking collisions in _process
 
 ## Tunnel Segments
 

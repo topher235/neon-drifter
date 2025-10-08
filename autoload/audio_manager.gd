@@ -136,6 +136,25 @@ func get_music_volume() -> float:
 func get_sfx_volume() -> float:
     return db_to_linear(AudioServer.get_bus_volume_db(sfx_bus_idx))
 
+# Mute/Unmute Control
+func mute_music() -> void:
+    AudioServer.set_bus_mute(music_bus_idx, true)
+
+func unmute_music() -> void:
+    AudioServer.set_bus_mute(music_bus_idx, false)
+
+func mute_sfx() -> void:
+    AudioServer.set_bus_mute(sfx_bus_idx, true)
+
+func unmute_sfx() -> void:
+    AudioServer.set_bus_mute(sfx_bus_idx, false)
+
+func is_music_muted() -> bool:
+    return AudioServer.is_bus_mute(music_bus_idx)
+
+func is_sfx_muted() -> bool:
+    return AudioServer.is_bus_mute(sfx_bus_idx)
+
 # Utility
 func linear_to_db(linear: float) -> float:
     if linear <= 0.0:
