@@ -38,7 +38,12 @@ horizontal_alignment = 1
 [node name="UnlockButton" type="Button" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-text = "Unlock (100 orbs)"
+text = "Unlock"
+
+[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "100 orbs"
+horizontal_alignment = 1
 
 [node name="SelectButton" type="Button" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)

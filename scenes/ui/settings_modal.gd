@@ -4,7 +4,8 @@ class_name SettingsModal extends Control
 ## Can be used in main menu or pause menu
 
 @onready var tab_container: TabContainer = $Panel/MarginContainer/VBoxContainer/TabContainer
-@onready var cosmetics_grid: GridContainer = $Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/ScrollContainer/CosmeticsGrid
+@onready var orb_count_label: Label = $Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/CosmeticsVBox/OrbCountLabel
+@onready var cosmetics_grid: GridContainer = $Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/CosmeticsVBox/ScrollContainer/CosmeticsGrid
 @onready var music_check: CheckButton = $Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/MusicSetting/MusicCheckButton
 @onready var sound_check: CheckButton = $Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting/SoundCheckButton
 @onready var close_button: Button = $Panel/MarginContainer/VBoxContainer/CloseButton
@@ -44,6 +45,9 @@ func _load_settings_to_ui() -> void:
     # Set button states without triggering signals
     music_check.set_pressed_no_signal(settings_data.music_enabled)
     sound_check.set_pressed_no_signal(settings_data.sound_enabled)
+
+    # Update orb count
+    _update_orb_count()
 
 func _on_music_toggled(button_pressed: bool) -> void:
     settings_data.set_music_enabled(button_pressed)
@@ -144,3 +148,9 @@ func _refresh_all_previews() -> void:
     """Refresh all cosmetic preview button states"""
     for preview in cosmetic_previews:
         preview.refresh()
+
+
+func _update_orb_count() -> void:
+    """Update the orb count label"""
+    var total_orbs = SaveManager.save_data.total_orbs_collected
+    orb_count_label.text = "Orbs: %d" % total_orbs

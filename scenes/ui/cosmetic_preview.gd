@@ -9,6 +9,7 @@ signal select_requested(cosmetic_id: String)
 @onready var preview_line: Line2D = $MarginContainer/VBoxContainer/PreviewContainer/PreviewLine
 @onready var cosmetic_name_label: Label = $MarginContainer/VBoxContainer/NameLabel
 @onready var unlock_button: Button = $MarginContainer/VBoxContainer/UnlockButton
+@onready var cost_label: Label = $MarginContainer/VBoxContainer/CostLabel
 @onready var select_button: Button = $MarginContainer/VBoxContainer/SelectButton
 @onready var selected_label: Label = $MarginContainer/VBoxContainer/SelectedLabel
 
@@ -123,12 +124,13 @@ func _update_button_states() -> void:
 	var is_selected = CosmeticManager.selected_cosmetic_id == cosmetic_id
 
 	unlock_button.visible = not is_unlocked
+	cost_label.visible = not is_unlocked
 	select_button.visible = is_unlocked and not is_selected
 	selected_label.visible = is_selected
 
-	# Update unlock button text with cost
+	# Update cost label text
 	if not is_unlocked and cosmetic:
-		unlock_button.text = "Unlock (%d orbs)" % cosmetic.orb_cost
+		cost_label.text = "%d orbs" % cosmetic.orb_cost
 
 
 func refresh() -> void:
