@@ -5,6 +5,9 @@ extends Node2D
 @onready var hud: CanvasLayer = $UI/Hud
 @onready var pause_screen: PauseScreen = $UI/PauseLayer/PauseScreen
 @onready var game_over_screen: Control = $UI/GameOverLayer/GameOver
+@onready var crt_overlay: ColorRect = $UI/CanvasLayer/CRTOverlay
+
+var crt_shader: ShaderMaterial
 
 func _ready() -> void:
     player.add_to_group("player")
@@ -18,6 +21,10 @@ func _ready() -> void:
     # Connect to GameManager signals
     GameManager.game_paused.connect(_on_game_paused)
     GameManager.game_resumed.connect(_on_game_resumed)
+    
+    # Connect to global signals
+    Events.crt_enabled.connect(enable_crt_effect)
+    Events.crt_disabled.connect(disable_crt_effect)
 
     # Initialize systems
     tunnel_generator.initialize()
@@ -51,3 +58,12 @@ func _on_game_resumed() -> void:
         pause_screen.hide_pause_screen()
     else:
         pause_screen.visible = false
+
+
+func enable_crt_effect() -> void:
+    if crt_overlay:
+        crt_overlay.visible = true
+
+func disable_crt_effect() -> void:
+    if crt_overlay:
+        crt_overlay.visible = false

@@ -193,6 +193,7 @@ func _update_speed(delta: float) -> void:
         target_speed *= slowdown_multiplier
         if slowdown_duration <= 0.0:
             slowdown_multiplier = 1.0
+            Events.crt_disabled.emit()
 
     current_speed = target_speed
     speed_changed.emit(current_speed)

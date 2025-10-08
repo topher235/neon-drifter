@@ -21,5 +21,8 @@ func _on_collected() -> void:
     if GameManager.has_method("activate_slowdown"):
         GameManager.activate_slowdown(slow_duration, slow_factor)
 
+    # Enable CRT effect
+    Events.crt_enabled.emit()
+
     AudioManager.play_sfx("orb_collect", -0.5)  # Even lower pitch for stopwatch
     _spawn_particles()
