@@ -129,6 +129,12 @@ Skill Milestones:
 ## IAPs
 
 - [ ] Purchase ad removal
+- [ ] Purchase credits for unlocking cosmetics
+
+## Review Prompt
+
+- [ ] Every X games/sessions, prompt the user to review the app
+  - [ ] Maybe offer a cosmetic for completing
 
 ## Ghost system
 

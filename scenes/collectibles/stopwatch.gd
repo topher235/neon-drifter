@@ -7,18 +7,19 @@ extends BaseCollectible
 @onready var stopwatch_visual: Polygon2D = %StopwatchVisual
 
 func _ready() -> void:
-	super._ready()
+    super._ready()
 
 func _animate(delta: float) -> void:
-	super._animate(delta)
+    super._animate(delta)
 
-	# Add gentle rotation animation (like a ticking watch)
-	if stopwatch_visual:
-		stopwatch_visual.rotation = sin(bob_offset * 2.0) * 0.15
+    # Add gentle rotation animation (like a ticking watch)
+    if stopwatch_visual:
+        stopwatch_visual.rotation = sin(bob_offset * 2.0) * 0.15
 
 func _on_collected() -> void:
-	# Activate slow effect on player/game
-	if GameManager.has_method("activate_slowdown"):
-		GameManager.activate_slowdown(slow_duration, slow_factor)
+    # Activate slow effect on player/game
+    if GameManager.has_method("activate_slowdown"):
+        GameManager.activate_slowdown(slow_duration, slow_factor)
 
-	AudioManager.play_sfx("orb_collect", -0.5)  # Even lower pitch for stopwatch
+    AudioManager.play_sfx("orb_collect", -0.5)  # Even lower pitch for stopwatch
+    _spawn_particles()

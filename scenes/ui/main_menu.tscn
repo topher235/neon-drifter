@@ -6,6 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://cinr0o55lq335" path="res://assets/icons/settings.png" id="4_settings_icon"]
 [ext_resource type="PackedScene" uid="uid://dbp1ulnofsv7n" path="res://scenes/ui/settings_modal.tscn" id="5_settings_modal"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
+font_size = 72
+
+[sub_resource type="LabelSettings" id="LabelSettings_1g8jr"]
+font_size = 32
+
 [sub_resource type="Shader" id="Shader_icon"]
 code = "shader_type canvas_item;
 
@@ -22,12 +28,6 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icon"]
 shader = SubResource("Shader_icon")
 shader_parameter/target_color = Color(0, 1, 1, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
-font_size = 72
-
-[sub_resource type="LabelSettings" id="LabelSettings_1g8jr"]
-font_size = 32
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3

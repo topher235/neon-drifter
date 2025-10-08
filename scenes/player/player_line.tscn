@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdsbvjxj0643x"]
+[gd_scene load_steps=6 format=3 uid="uid://bdsbvjxj0643x"]
 
 [ext_resource type="Script" uid="uid://du3ixkxg5d36g" path="res://scenes/player/player_line.gd" id="1_s0jvp"]
 [ext_resource type="Material" uid="uid://dkcmuwyyh4a63" path="res://resources/materials/trail_glow.tres" id="2_ny1d7"]
 [ext_resource type="Script" path="res://scripts/utilities/camera_controller.gd" id="2_wgtdx"]
+[ext_resource type="PackedScene" uid="uid://c8y2vx5n4m7pq" path="res://scenes/player/death_particles.tscn" id="4_wh8at"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s0jvp"]
 radius = 2.0
@@ -29,3 +30,6 @@ unique_name_in_owner = true
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_wgtdx")
+
+[node name="DeathParticles" parent="." instance=ExtResource("4_wh8at")]
+amount = 2

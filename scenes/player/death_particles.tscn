@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8y2vx5n4m7pq"]
+
+[ext_resource type="Texture2D" uid="uid://bf72c0elxr6e4" path="res://assets/particles/explosion-animation.png" id="1_1"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1"]
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 15.0
+direction = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.8
+scale_max = 1.5
+anim_speed_min = 1.0
+anim_speed_max = 1.5
+anim_offset_max = 1.0
+
+[node name="DeathParticles" type="GPUParticles2D"]
+z_index = 50
+material = SubResource("CanvasItemMaterial_1")
+emitting = false
+amount = 10
+texture = ExtResource("1_1")
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_1")

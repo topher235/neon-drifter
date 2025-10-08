@@ -8,6 +8,7 @@ signal collected(collectible: BaseCollectible)
 var is_collected: bool = false
 var bob_offset: float = 0.0
 var spawn_position: Vector2 = Vector2.ZERO
+var particles: Node
 
 # Visual
 @export var visual: ColorRect
@@ -20,6 +21,13 @@ func _ready() -> void:
 
     spawn_position = position
     bob_offset = randf() * TAU  # Random phase for bobbing
+
+    # Spawn particle effect at orb position
+    var particles_scene = preload("res://scenes/collectibles/collect_particles.tscn")
+    particles = particles_scene.instantiate()
+    var parent = get_parent()
+    if parent:
+        parent.add_child(particles)
 
     area_entered.connect(_on_area_entered)
 
@@ -59,3 +67,14 @@ func _play_collect_animation() -> void:
     tween.tween_property(self, "scale", Vector2(2, 2), 0.3)
     tween.tween_property(self, "modulate:a", 0.0, 0.3)
     tween.chain().tween_callback(queue_free)
+
+
+func _spawn_particles() -> void:
+    # Set global position to this collectible's position, then emit
+    particles.global_position = global_position
+    particles.emitting = true
+
+    # Clean up particles after they finish
+    await get_tree().create_timer(particles.lifetime).timeout
+    if is_instance_valid(particles):
+        particles.queue_free()

@@ -27,8 +27,3 @@ func _on_collected() -> void:
     GameManager.collect_orb(point_value)
     AudioManager.play_sfx("orb_collect", 0.1)
     _spawn_particles()
-
-func _spawn_particles() -> void:
-    # Simple particle effect for collection
-    # Could create a dedicated particle scene
-    pass

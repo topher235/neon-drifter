@@ -21,6 +21,7 @@ extends Node2D
 @onready var collision_shape: CollisionShape2D = $CollisionArea/CollisionShape2D
 @onready var camera: PlayerCamera = $Camera2D
 @onready var particle_trail: GPUParticles2D = $ParticleTrail
+@onready var death_particles: GPUParticles2D = $DeathParticles
 
 # Movement controller
 var movement_controller: PlayerController
@@ -199,18 +200,22 @@ func _die() -> void:
     AudioManager.play_sfx("collision")
     _spawn_death_particles()
     _trigger_screen_shake()
-    GameManager.end_game()
+    await get_tree().create_timer(death_particles.lifetime * 0.7).timeout
+    GameManager.end_game.call_deferred()
 
     # Visual feedback
     modulate = Color(1, 0.2, 0.2, 0.5)
 
 func _spawn_death_particles() -> void:
-    # Create explosion effect
+    # Stop trail particles
     if particle_trail:
         particle_trail.emitting = false
 
-# Could spawn a separate explosion particle system here
+    # Add to parent so it persists after player is removed
+    death_particles.global_position = global_position
+    death_particles.emitting = true
 
+    
 func _trigger_screen_shake() -> void:
     if camera:
         camera.apply_shake(0.3, 20.0)  # We'll implement this in camera

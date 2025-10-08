@@ -23,3 +23,4 @@ func _on_collected() -> void:
         player.activate_magnet(magnet_duration)
 
     AudioManager.play_sfx("orb_collect", -0.3)  # Lower pitch for magnet
+    _spawn_particles()

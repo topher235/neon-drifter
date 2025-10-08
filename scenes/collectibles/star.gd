@@ -60,7 +60,3 @@ func _on_collected() -> void:
 
 	AudioManager.play_sfx("orb_collect", 0.2)  # Using orb sound for now
 	_spawn_particles()
-
-func _spawn_particles() -> void:
-	# Could add star particles here
-	pass
