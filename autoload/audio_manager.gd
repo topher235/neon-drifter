@@ -24,7 +24,7 @@ var sfx_library = {
 
 var music_tracks = {
                        "gameplay": "res://assets/audio/music/gameplay_loop.ogg",
-                       "menu": "res://assets/audio/music/menu_theme.ogg"
+                       "menu": "res://assets/music/atmosphere-loop.wav"
                    }
 
 func _ready() -> void:

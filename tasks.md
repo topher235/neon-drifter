@@ -61,12 +61,10 @@ Don't forget to add these to the sandbox as well.
 - [X] Fork - vertical wall that forces the player to choose a side
 - [X] Jagged edges - sharp triangles extending from the wall, ends run if player touches
 
-- [ ] Refactor to create a KillsPlayer component that sets up the collision
-
 ## Tunnel Segments
 
 - [X] Make all tunnel segments the same width (obstacles will be the difficulty)
-- [ ] Fix player can move outside starting segment if they move fast enough
+- [X] Fix player can move outside starting segment if they move fast enough
 - [ ] Procedural generation
 
 ## Stats
