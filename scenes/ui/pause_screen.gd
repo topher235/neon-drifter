@@ -4,6 +4,7 @@ class_name PauseScreen extends Control
 @onready var menu_button: Button = %MenuButton
 @onready var music_check: CheckButton = %MusicCheckButton
 @onready var sound_check: CheckButton = %SoundCheckButton
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var settings_data: SettingsData
 
@@ -31,18 +32,23 @@ func _on_menu_pressed() -> void:
 	await SceneManager.goto_main_menu()
 
 func show_pause_screen() -> void:
-	visible = true
-	modulate = Color(1, 1, 1, 0)
-
 	# Reload settings in case they changed elsewhere
 	_load_settings_to_ui()
 
-	# Create a tween that works when paused
-	var tween = create_tween()
-	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tween.tween_property(self, "modulate", Color.WHITE, 0.2)
+	visible = true
+
+	# Reset and play animation
+	animation_player.stop()
+	animation_player.play("RESET")
+	await get_tree().process_frame
+
+	# Play open animation
+	animation_player.play("open")
 
 func hide_pause_screen() -> void:
+	if animation_player.has_animation("open"):
+		animation_player.play_backwards("open")
+		await animation_player.animation_finished
 	visible = false
 
 func _load_settings_to_ui() -> void:

@@ -7,7 +7,7 @@ extends Control
 @onready var high_score_label: Label = %HighScoreLabel
 @onready var title_label: Label = %TitleLabel
 @onready var settings_button: Button = %SettingsButton
-@onready var settings_modal: Control = $SettingsModal
+@onready var settings_modal: SettingsModal = $SettingsModal
 
 var title_character_labels: Array[Label] = []
 var title_original_y: float = 0.0
@@ -99,10 +99,7 @@ func _on_quit_pressed() -> void:
 
 func _on_settings_pressed() -> void:
     AudioManager.play_sfx("ui_click")
-    if settings_modal.has_method("open_settings"):
-        settings_modal.open_settings()
-    else:
-        settings_modal.visible = true
+    settings_modal.open_settings()
 
 func _start_game(daily_challenge: bool) -> void:
     # Set game mode in GameManager
