@@ -43,7 +43,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(200, 200)]
+"values": [Vector2(300, 400)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -106,14 +106,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
+offset_left = -300.0
+offset_top = -400.0
+offset_right = 300.0
+offset_bottom = 400.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1e-05, 1e-05)
-pivot_offset = Vector2(200, 200)
+pivot_offset = Vector2(300, 400)
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1
@@ -129,11 +129,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 30
-
-[node name="Spacer2" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -141,36 +137,67 @@ text = "SETTINGS"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="Spacer1" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+[node name="TabContainer" type="TabContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
 
-[node name="MusicSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Cosmetics" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="CosmeticsGrid" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Settings" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="SettingsVBox" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="MusicSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MusicSetting"]
+[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/MusicSetting"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Music:"
 vertical_alignment = 1
 
-[node name="MusicCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/MusicSetting"]
+[node name="MusicCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/MusicSetting"]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 
-[node name="SoundSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="SoundSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SoundSetting"]
+[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Sound:"
 vertical_alignment = 1
 
-[node name="SoundCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SoundSetting"]
+[node name="SoundCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting"]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true

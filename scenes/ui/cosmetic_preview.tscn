@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpxwm3yxbh2n4"]
+
+[ext_resource type="Script" path="res://scenes/ui/cosmetic_preview.gd" id="1_preview"]
+
+[node name="CosmeticPreview" type="PanelContainer"]
+custom_minimum_size = Vector2(180, 220)
+script = ExtResource("1_preview")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PreviewContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="PreviewLine" type="Line2D" parent="MarginContainer/VBoxContainer/PreviewContainer"]
+position = Vector2(80, 40)
+width = 6.0
+default_color = Color(0, 1, 1, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+joint_mode = 2
+antialiased = true
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Cosmetic Name"
+horizontal_alignment = 1
+
+[node name="UnlockButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Unlock (100 orbs)"
+
+[node name="SelectButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Select"
+
+[node name="SelectedLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "SELECTED"
+horizontal_alignment = 1
+vertical_alignment = 1
