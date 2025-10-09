@@ -84,28 +84,10 @@ func _generate_initial_segments() -> void:
         _spawn_next_segment()
 
 func _create_starting_segment() -> void:
-    # Create the permanent starting segment
-    var start_segment_scene = preload("res://scenes/segments/base_segment.tscn")
-    starting_segment = StartingSegment.new()
-
-    # Copy structure from base segment
-    var temp_segment = start_segment_scene.instantiate()
-    get_parent().add_child(temp_segment)
-
-    # Setup the starting segment structure
-    starting_segment.obstacles_container = Node2D.new()
-    starting_segment.collectibles_container = Node2D.new()
-    starting_segment.walls_container = Node2D.new()
-    starting_segment.background = Node2D.new()
-
+    # Create the permanent starting segment using the scene directly
+    var start_segment_scene = preload("res://scenes/segments/starting_segment.tscn")
+    starting_segment = start_segment_scene.instantiate()
     get_parent().add_child(starting_segment)
-    starting_segment.add_child(starting_segment.obstacles_container)
-    starting_segment.add_child(starting_segment.collectibles_container)
-    starting_segment.add_child(starting_segment.walls_container)
-    starting_segment.add_child(starting_segment.background)
-
-    # Clean up temp
-    temp_segment.queue_free()
 
     # Initialize at position 0
     starting_segment.position = Vector2(0, 0)
@@ -114,28 +96,10 @@ func _create_starting_segment() -> void:
     print("Starting segment created at position 0")
 
 func _spawn_end_segment() -> void:
-    # Create the ending segment for daily challenge
-    var end_segment_scene = preload("res://scenes/segments/base_segment.tscn")
-    end_segment = EndSegment.new()
-
-    # Copy structure from base segment
-    var temp_segment = end_segment_scene.instantiate()
-    get_parent().add_child(temp_segment)
-
-    # Setup the ending segment structure
-    end_segment.obstacles_container = Node2D.new()
-    end_segment.collectibles_container = Node2D.new()
-    end_segment.walls_container = Node2D.new()
-    end_segment.background = Node2D.new()
-
+    # Create the ending segment for daily challenge using the scene directly
+    var end_segment_scene = preload("res://scenes/segments/end_segment.tscn")
+    end_segment = end_segment_scene.instantiate()
     get_parent().add_child(end_segment)
-    end_segment.add_child(end_segment.obstacles_container)
-    end_segment.add_child(end_segment.collectibles_container)
-    end_segment.add_child(end_segment.walls_container)
-    end_segment.add_child(end_segment.background)
-
-    # Clean up temp
-    temp_segment.queue_free()
 
     # Position at the end of the last spawned segment
     var spawn_y = last_segment_y
@@ -169,9 +133,35 @@ func _should_spawn_segment(player_y: float) -> bool:
     if active_segments.is_empty():
         return true
 
-    var spawn_distance = segments_ahead * 800.0  # Average segment length
+    var spawn_distance = _calculate_lookahead_distance()
     # Changed: spawn ahead (negative Y direction = upward)
     return last_segment_y > player_y - spawn_distance
+
+func _calculate_lookahead_distance() -> float:
+    # Base on actual active segment lengths for more accurate spawning
+    if active_segments.is_empty():
+        return segments_ahead * 800.0  # Default fallback
+
+    var total_length = 0.0
+    for seg in active_segments:
+        if seg.segment_data:
+            total_length += seg.segment_data.segment_length
+
+    var avg_length = total_length / active_segments.size()
+    return segments_ahead * avg_length
+
+func _calculate_despawn_distance() -> float:
+    # Base on actual active segment lengths for more accurate despawning
+    if active_segments.is_empty():
+        return segments_behind * 800.0  # Default fallback
+
+    var total_length = 0.0
+    for seg in active_segments:
+        if seg.segment_data:
+            total_length += seg.segment_data.segment_length
+
+    var avg_length = total_length / active_segments.size()
+    return segments_behind * avg_length
 
 func _spawn_next_segment() -> BaseSegment:
     # Get valid segment options
@@ -392,7 +382,8 @@ func _add_random_collectible(data: SegmentData) -> void:
     data.collectibles.append(new_collectible)
 
 func _despawn_old_segments(player_y: float) -> void:
-    var despawn_distance = segments_behind * 800.0
+    # Calculate adaptive despawn distance based on actual segment lengths
+    var despawn_distance = _calculate_despawn_distance()
 
     # Keep at least segments_behind number of segments
     while active_segments.size() > segments_behind:
