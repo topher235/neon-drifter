@@ -34,7 +34,7 @@ func _ready() -> void:
     segment_library = SegmentLibrary.new()
     rng = RandomNumberGenerator.new()
 
-func initialize(seed_value: int = -1, is_daily_challenge: bool = false) -> void:
+func initialize(seed_value: int = -1, is_daily_challenge: bool = false, is_rush: bool = false) -> void:
     if seed_value == -1:
         rng.seed = GameManager.daily_seed
     else:
@@ -47,9 +47,11 @@ func initialize(seed_value: int = -1, is_daily_challenge: bool = false) -> void:
     segments_since_straight = 0
     segments_since_fork = 0
 
-    # Set max segments for daily challenge mode
+    # Set max segments for limited modes (daily challenge and rush)
     if is_daily_challenge or GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
         max_segments = 10  # 10 middle segments (plus start and end)
+    elif is_rush or GameManager.current_game_mode == GameManager.GameMode.RUSH:
+        max_segments = 15  # 15 middle segments (plus start and end) for RUSH mode
     else:
         max_segments = -1  # Infinite generation for classic mode
 

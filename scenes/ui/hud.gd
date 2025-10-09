@@ -39,6 +39,10 @@ func _update_display() -> void:
         timer_label.visible = true
         distance_label.visible = false
         _update_timer_display(GameManager.daily_challenge_time_remaining)
+    elif GameManager.current_game_mode == GameManager.GameMode.RUSH:
+        timer_label.visible = true
+        distance_label.visible = false
+        _update_timer_display(GameManager.rush_time_remaining)
     else:
         timer_label.visible = false
         distance_label.visible = true

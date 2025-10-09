@@ -16,7 +16,7 @@
 - [X] Toggle music and sfx
 - [X] Save user choices between games
 - [X] Allow changing settings from pause menu
-- [ ] Display "Not enough Orbs" error message, or disable button
+- [ ] Disable buy button if not enough orbs
 
 ## Audio
 
@@ -27,8 +27,10 @@
 ## Game Over
 
 - [X] Redesign UI layout
-- [ ] Fix retry button to fully reload the level, using the same seed
+- [X] Fix retry button to fully reload the level, using the same seed
 - [ ] Use different wording for RUSH and daily mode (game over sounds like a lose state, not a win state)
+- [ ] Save stats (distance, score, etc.)
+- [ ] Save orb count
 
 ## Daily Challenge Mode
 
@@ -42,11 +44,19 @@
 
 Don't forget to add these to the sandbox as well.
 
+- [ ] Brainstorm new collectibles
+- [ ] Add to shop to unlock using orbs in a new tab
+
 - [X] Star - grants invincibility for X seconds
 - [X] Magnet - attracts nearby orbs for X seconds
 - [X] Stopwatch - slows game speed back down (if it increases speed due to distance)
     - [ ] Remove from daily challenge since it has no effect there
 - [ ] Hourglass - adds time to daily challenge
+- [ ] Multiplier - orbs count as double for X seconds (diamond shape)
+- [ ] Size - double the player size for X seconds
+- [ ] Bomb - destroys obstacles in this segment (and the next?)
+    - [ ] Add screen shake when collected
+    - [ ] Emit particles from destroyed obstacles when collected
 
 ## Obstacles
 
@@ -66,12 +76,13 @@ Don't forget to add these to the sandbox as well.
 
 - [X] Make all tunnel segments the same width (obstacles will be the difficulty)
 - [X] Fix player can move outside starting segment if they move fast enough
-- [ ] Procedural generation
+- [X] Procedural generation
 
 ## Stats
 
 - [ ] Track number of dailies completed
-- [ ] Show top speed for today's daily
+- [ ] Distance traveled
+- [ ] Orbs collected
 
 ## Polish
 
@@ -84,8 +95,11 @@ Don't forget to add these to the sandbox as well.
 
 Players can share seeds and times.
 
-- [ ] Add mode that functions like the daily but you can use any seed
-- [ ] Display seed on HUD
+- [X] Add mode that functions like the daily but you can use any seed
+- [X] Display seed on game over
+- [ ] Refine styling of the modal
+- [X] Update player movement to match daily mode
+- [X] Set a max number of segments, similar to daily mode
 
 ## Meta Progression
 
@@ -93,8 +107,8 @@ Players can share seeds and times.
 
 Can probably be managed through the settings menu with tabs.
 
-- [ ] Add flag for purchasable (to separate achievement or rewarded cosmetics)
-    - [ ] Don't list non-purchasable in settings until they are unlocked
+- [X] Add flag for purchasable (to separate achievement or rewarded cosmetics)
+    - [X] Don't list non-purchasable in settings until they are unlocked
 - [ ] Add global modal that will accept global event (cosmetic_id, message) to display "congrats message" and execute
   unlock
 
@@ -140,7 +154,7 @@ Skill Milestones:
 ## IAPs
 
 - [ ] Purchase ad removal
-- [ ] Purchase credits for unlocking cosmetics
+- [ ] Purchase orbs for unlocking cosmetics
 
 ## Review Prompt
 

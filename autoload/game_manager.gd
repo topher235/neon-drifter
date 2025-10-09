@@ -38,6 +38,8 @@ var rush_seed: int                        = 0  # User-specified seed for RUSH mo
 var current_run_seed: int                 = 0  # The actual seed used for the current run (for retry)
 var daily_challenge_time_limit: float     = 40.0
 var daily_challenge_time_remaining: float = 40.0
+var rush_time_limit: float                = 60.0  # RUSH mode has 60 seconds
+var rush_time_remaining: float            = 60.0
 # High Scores
 var high_score: int         = 0
 var longest_distance: float = 0.0
@@ -73,10 +75,13 @@ func start_game() -> void:
     slowdown_multiplier = 1.0
     slowdown_duration = 0.0
 
-    # Initialize daily challenge timer
+    # Initialize timers for timed modes
     if current_game_mode == GameMode.DAILY_CHALLENGE:
         daily_challenge_time_remaining = daily_challenge_time_limit
         timer_changed.emit(daily_challenge_time_remaining)
+    elif current_game_mode == GameMode.RUSH:
+        rush_time_remaining = rush_time_limit
+        timer_changed.emit(rush_time_remaining)
 
     game_started.emit()
     print("Game started")
@@ -107,6 +112,22 @@ func complete_daily_challenge() -> void:
 
     # Mark daily challenge as completed
     SaveManager.mark_daily_challenge_complete()
+
+    end_game()  # Use the normal end game flow
+
+
+func complete_rush_challenge() -> void:
+    # Called when player reaches the end segment in RUSH mode
+    if current_state != GameState.PLAYING:
+        return
+
+    print("RUSH Challenge Complete!")
+
+    # Calculate time bonus based on remaining time
+    var time_bonus = _calculate_time_bonus(rush_time_remaining)
+    if time_bonus > 0:
+        add_score(time_bonus)
+        print("Time bonus: %d points (%.2f seconds remaining)" % [time_bonus, rush_time_remaining])
 
     end_game()  # Use the normal end game flow
 
@@ -232,18 +253,25 @@ func _update_difficulty() -> void:
 
 
 func _update_daily_challenge_timer(delta: float) -> void:
-    # Only update timer in daily challenge mode
-    if current_game_mode != GameMode.DAILY_CHALLENGE:
-        return
+    # Update timer for both daily challenge and rush modes
+    if current_game_mode == GameMode.DAILY_CHALLENGE:
+        daily_challenge_time_remaining -= delta
+        timer_changed.emit(daily_challenge_time_remaining)
 
-    daily_challenge_time_remaining -= delta
-    timer_changed.emit(daily_challenge_time_remaining)
+        # Check if time has run out
+        if daily_challenge_time_remaining <= 0.0:
+            daily_challenge_time_remaining = 0.0
+            print("Daily Challenge: Time's up!")
+            end_game()  # Player dies as if they hit an obstacle
+    elif current_game_mode == GameMode.RUSH:
+        rush_time_remaining -= delta
+        timer_changed.emit(rush_time_remaining)
 
-    # Check if time has run out
-    if daily_challenge_time_remaining <= 0.0:
-        daily_challenge_time_remaining = 0.0
-        print("Daily Challenge: Time's up!")
-        end_game()  # Player dies as if they hit an obstacle
+        # Check if time has run out
+        if rush_time_remaining <= 0.0:
+            rush_time_remaining = 0.0
+            print("RUSH Mode: Time's up!")
+            end_game()  # Player dies as if they hit an obstacle
 
 
 # Seed Management

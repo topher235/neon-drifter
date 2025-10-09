@@ -4,6 +4,8 @@ extends Control
 @onready var distance_label: Label = %DistanceLabel
 @onready var max_combo_label: Label = %MaxComboLabel
 @onready var high_score_label: Label = %HighScoreLabel
+@onready var seed_label: Label = %SeedLabel
+@onready var time_taken_label: Label = %TimeTakenLabel
 @onready var retry_button: Button = %RetryButton
 @onready var menu_button: Button = %MenuButton
 
@@ -35,6 +37,25 @@ func _display_stats() -> void:
     else:
         high_score_label.text = "High Score: %d" % GameManager.high_score
         high_score_label.modulate = Color.WHITE
+
+    # Show seed if in RUSH mode
+    if GameManager.current_game_mode == GameManager.GameMode.RUSH:
+        seed_label.visible = true
+        seed_label.text = "Seed: %d" % GameManager.current_run_seed
+    else:
+        seed_label.visible = false
+
+    # Show time taken for DAILY and RUSH modes
+    if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
+        time_taken_label.visible = true
+        var time_taken = GameManager.daily_challenge_time_limit - GameManager.daily_challenge_time_remaining
+        time_taken_label.text = "Time: %.2fs" % time_taken
+    elif GameManager.current_game_mode == GameManager.GameMode.RUSH:
+        time_taken_label.visible = true
+        var time_taken = GameManager.rush_time_limit - GameManager.rush_time_remaining
+        time_taken_label.text = "Time: %.2fs" % time_taken
+    else:
+        time_taken_label.visible = false
 
 func _show_screen() -> void:
     visible = true

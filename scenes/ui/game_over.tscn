@@ -87,6 +87,18 @@ unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1
 
+[node name="SeedLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="TimeTakenLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/StatsContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+
 [node name="Spacer2" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2

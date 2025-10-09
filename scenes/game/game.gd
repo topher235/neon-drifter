@@ -13,7 +13,8 @@ func _ready() -> void:
     player.add_to_group("player")
 
     # Set player movement mode based on game mode
-    if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
+    if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE or \
+       GameManager.current_game_mode == GameManager.GameMode.RUSH:
         player.movement_mode = "FreeMovement"
     else:
         player.movement_mode = "AutoRun"
@@ -29,7 +30,8 @@ func _ready() -> void:
     # Initialize systems with appropriate seed based on game mode
     var seed_value = GameManager.get_current_seed()
     var is_daily = GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE
-    tunnel_generator.initialize(seed_value, is_daily)
+    var is_rush = GameManager.current_game_mode == GameManager.GameMode.RUSH
+    tunnel_generator.initialize(seed_value, is_daily, is_rush)
 
     print("Game initialized with seed: %d, mode: %s" % [seed_value, _get_mode_name()])
 

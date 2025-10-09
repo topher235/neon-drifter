@@ -198,10 +198,12 @@ func _handle_collectible_collision(collectible: Area2D) -> void:
         collectible.collect()
 
 func _handle_end_segment_trigger(trigger: Area2D) -> void:
-    # Player reached the end segment in daily challenge mode
+    # Player reached the end segment in daily challenge or rush mode
     print("Player reached end segment trigger!")
     if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
         GameManager.complete_daily_challenge()
+    elif GameManager.current_game_mode == GameManager.GameMode.RUSH:
+        GameManager.complete_rush_challenge()
 
 func _die() -> void:
     print("Player collision detected!")
