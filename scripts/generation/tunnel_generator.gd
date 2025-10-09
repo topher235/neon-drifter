@@ -9,7 +9,7 @@ signal segment_despawned(segment: BaseSegment)
 @export var segments_ahead: int = 4
 @export var segments_behind: int = 2  # Keep 2 behind (plus starting segment)
 @export var use_pooling: bool = true
-@export var pool_size: int = 10
+@export var pool_size: int = 15  # Increased from 10 for buffer
 
 # State
 var active_segments: Array[BaseSegment] = []
@@ -26,7 +26,7 @@ var segment_library: SegmentLibrary
 var rng: RandomNumberGenerator
 
 # Segment tracking for rules
-var recent_segment_types: Array[String] = []
+var recent_segments: Array[SegmentData] = []  # Store full data instead of just types
 var segments_since_straight: int = 0
 var segments_since_fork: int = 0
 
@@ -43,7 +43,7 @@ func initialize(seed_value: int = -1, is_daily_challenge: bool = false) -> void:
     segments_generated = 0
     current_difficulty = 0.0
     last_segment_y = 0.0
-    recent_segment_types.clear()
+    recent_segments.clear()
     segments_since_straight = 0
     segments_since_fork = 0
 
@@ -205,9 +205,9 @@ func _spawn_next_segment() -> BaseSegment:
     segments_generated += 1
 
     # Track for generation rules
-    recent_segment_types.append(chosen_data.segment_type)
-    if recent_segment_types.size() > 5:
-        recent_segment_types.pop_front()
+    recent_segments.append(chosen_data)
+    if recent_segments.size() > 5:
+        recent_segments.pop_front()
 
     if abs(chosen_data.curvature) < 5.0:
         segments_since_straight = 0
@@ -234,14 +234,13 @@ func _validate_segment_rules(seg_data: SegmentData) -> bool:
     # Rule 1: No more than 2 sharp turns in a row
     if abs(seg_data.curvature) > 45:
         var sharp_count = 0
-        for i in range(max(0, recent_segment_types.size() - 2), recent_segment_types.size()):
-            # We'd need to store curvature info, simplified for now
-            if recent_segment_types[i] == "curve":
+        # Check last 2 segments for sharp turns
+        for recent in recent_segments:
+            if abs(recent.curvature) > 45:
                 sharp_count += 1
 
         if sharp_count >= 2:
-            push_warning("No more than 2 sharp turns in a row")
-            return false
+            return false  # Already have 2 sharp turns, don't add another
 
     # Rule 2: Must have straight segment every 5-6 segments
     if segments_since_straight >= 5:
@@ -283,9 +282,15 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
         # Weight decreases with distance from ideal difficulty
         var weight = 1.0 / (1.0 + diff_distance * 0.5)
 
-        # Boost weight for variety (penalize recently used types)
-        if not seg.segment_type in recent_segment_types:
-            weight *= 1.5
+        # Boost weight for variety (check segment_id for true variety)
+        var was_used_recently = false
+        for recent in recent_segments:
+            if recent.segment_id == seg.segment_id:
+                was_used_recently = true
+                break
+
+        if not was_used_recently:
+            weight *= 2.0  # Increased bonus for unused segments
 
         weights.append(weight)
         total_weight += weight
@@ -403,13 +408,8 @@ func _despawn_old_segments(player_y: float) -> void:
             break  # All remaining segments are still in range
 
 func _update_difficulty() -> void:
-    # Difficulty ramps up over time
-    var time_factor = GameManager.game_time / 60.0  # 0 to ~1 over first minute
-    var speed_factor = (GameManager.current_speed - GameManager.base_speed) / \
-                      (GameManager.max_speed - GameManager.base_speed)
-
-    # Combine factors
-    var base_difficulty = (time_factor * 4.0) + (speed_factor * 6.0)
+    # Use GameManager's difficulty directly for consistency
+    var base_difficulty = GameManager.get_difficulty()
 
     # Add some randomness for variety
     var variation = rng.randf_range(-0.5, 0.5)
