@@ -6,7 +6,7 @@ extends Node
 signal cosmetic_changed(cosmetic: TrailCosmetic)
 signal cosmetic_unlocked(cosmetic_id: String)
 var cosmetics: Dictionary        = {}  # cosmetic_id -> TrailCosmetic
-var selected_cosmetic_id: String = "white_default"
+var selected_cosmetic_id: String = "default"
 
 
 func _ready() -> void:
@@ -19,14 +19,14 @@ func _initialize_cosmetics() -> void:
 
     # Default White Trail
     var white_cosmetic = TrailCosmetic.new()
-    white_cosmetic.cosmetic_id = "white_default"
+    white_cosmetic.cosmetic_id = "default"
     white_cosmetic.cosmetic_name = "White"
     white_cosmetic.cosmetic_type = TrailCosmetic.CosmenticType.SOLID
     white_cosmetic.solid_color = Color(1, 1, 1)  # White
     white_cosmetic.unlocked_by_default = true
     white_cosmetic.buyable = false  # Default cosmetic, not purchasable
     white_cosmetic.orb_cost = 0
-    cosmetics["white_default"] = white_cosmetic
+    cosmetics["default"] = white_cosmetic
 
     # Cyan Trail
     var cyan_cosmetic = TrailCosmetic.new()
@@ -67,7 +67,7 @@ func _initialize_cosmetics() -> void:
 
 func get_cosmetic(cosmetic_id: String) -> TrailCosmetic:
     """Get a cosmetic by ID"""
-    return cosmetics.get(cosmetic_id, cosmetics["cyan_default"])
+    return cosmetics.get(cosmetic_id, cosmetics["default"])
 
 
 func get_selected_cosmetic() -> TrailCosmetic:

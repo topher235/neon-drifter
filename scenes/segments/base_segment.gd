@@ -149,16 +149,94 @@ func _setup_walls() -> void:
 
     var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
     var length = segment_data.segment_length
-
-    # All tunnels are now 250px wide, so walls are at fixed positions
-    var wall_line_position = half_width
     var wall_thickness = 16.0
 
-    # Create left wall with collision
-    _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness)
+    # Check if this is a curved segment
+    if abs(segment_data.curvature) < 0.1:
+        # Straight tunnel - use simple line
+        _create_wall_with_collision(Vector2(-half_width, 0), Vector2(-half_width, -length), wall_thickness)
+        _create_wall_with_collision(Vector2(half_width, 0), Vector2(half_width, -length), wall_thickness)
+    else:
+        # Curved tunnel - use smooth curve
+        _create_curved_walls(half_width, length, segment_data.curvature, wall_thickness)
 
-    # Create right wall with collision
-    _create_wall_with_collision(Vector2(wall_line_position, 0), Vector2(wall_line_position, -length), wall_thickness)
+func _create_curved_walls(half_width: float, length: float, curvature_degrees: float, thickness: float) -> void:
+    # Generate smooth curved walls using a sine-based curve
+    # Negative curvature = curve left, positive = curve right
+
+    var num_points = max(int(length / 20.0), 10)  # Point every ~20px, minimum 10 points
+    var left_points: PackedVector2Array = []
+    var right_points: PackedVector2Array = []
+
+    # Calculate curve intensity based on curvature
+    # Use sine wave for smooth S-curve effect
+    var curve_intensity = curvature_degrees / 60.0  # Normalize to -1 to 1 range
+
+    for i in range(num_points + 1):
+        var t = float(i) / float(num_points)
+        var y = -length * t  # Negative Y = upward
+
+        # Smooth curve using sine wave
+        # sin(t * PI) creates a smooth bulge from 0 to 1 (starts at 0, peaks at 0.5, ends at 0)
+        var curve_offset = sin(t * PI) * half_width * 0.4 * curve_intensity
+
+        left_points.append(Vector2(-half_width + curve_offset, y))
+        right_points.append(Vector2(half_width + curve_offset, y))
+
+    # Create curved walls with Line2D and collision
+    _create_curved_wall_line(left_points, thickness)
+    _create_curved_wall_line(right_points, thickness)
+
+func _create_curved_wall_line(points: PackedVector2Array, thickness: float) -> void:
+    # Create visual curved wall using Line2D
+    var wall_visual = Line2D.new()
+    for point in points:
+        wall_visual.add_point(point)
+
+    wall_visual.width = thickness
+    wall_visual.default_color = Color(0.4, 0.7, 1.0, 0.8)
+    wall_visual.begin_cap_mode = Line2D.LINE_CAP_NONE  # No cap at segment boundary
+    wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX     # Cap at far end
+    wall_visual.joint_mode = Line2D.LINE_JOINT_ROUND   # Smooth joints for curves
+    wall_visual.antialiased = true
+
+    walls_container.add_child(wall_visual)
+
+    # Create collision along the curved path
+    # Use multiple small segments for accurate collision
+    var num_collision_segments = max(int(points.size() / 3), 3)  # Fewer collision segments than visual points
+
+    for i in range(num_collision_segments):
+        var segment_start_idx = int(float(i) / float(num_collision_segments) * (points.size() - 1))
+        var segment_end_idx = int(float(i + 1) / float(num_collision_segments) * (points.size() - 1))
+
+        var start_pos = points[segment_start_idx]
+        var end_pos = points[segment_end_idx]
+
+        # Create StaticBody2D for this segment
+        var wall_collision = StaticBody2D.new()
+        var collision_shape = CollisionShape2D.new()
+        var shape = RectangleShape2D.new()
+
+        # Calculate segment dimensions and position
+        var segment_length = start_pos.distance_to(end_pos)
+        var segment_angle = start_pos.angle_to_point(end_pos)
+
+        shape.size = Vector2(thickness, segment_length)
+
+        # Position at midpoint and rotate to match segment direction
+        var midpoint = (start_pos + end_pos) / 2.0
+        wall_collision.position = midpoint
+        wall_collision.rotation = segment_angle + PI / 2.0  # Rotate to align with segment
+
+        collision_shape.shape = shape
+        wall_collision.add_child(collision_shape)
+
+        # Set collision layers: walls on layer 8
+        wall_collision.collision_layer = 8
+        wall_collision.collision_mask = 0  # Walls don't detect anything, just block
+
+        walls_container.add_child(wall_collision)
 
 func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float) -> void:
     # Create visual wall (Line2D)
