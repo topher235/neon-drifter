@@ -16,6 +16,7 @@
 - [X] Toggle music and sfx
 - [X] Save user choices between games
 - [X] Allow changing settings from pause menu
+- [ ] Display "Not enough Orbs" error message, or disable button
 
 ## Audio
 
@@ -44,7 +45,7 @@ Don't forget to add these to the sandbox as well.
 - [X] Star - grants invincibility for X seconds
 - [X] Magnet - attracts nearby orbs for X seconds
 - [X] Stopwatch - slows game speed back down (if it increases speed due to distance)
-  - [ ] Remove from daily challenge since it has no effect there
+    - [ ] Remove from daily challenge since it has no effect there
 - [ ] Hourglass - adds time to daily challenge
 
 ## Obstacles
@@ -92,6 +93,11 @@ Players can share seeds and times.
 
 Can probably be managed through the settings menu with tabs.
 
+- [ ] Add flag for purchasable (to separate achievement or rewarded cosmetics)
+    - [ ] Don't list non-purchasable in settings until they are unlocked
+- [ ] Add global modal that will accept global event (cosmetic_id, message) to display "congrats message" and execute
+  unlock
+
 - Default Trail (cyan, free)
 - Rainbow Trail (collect 500 orbs total)
 - Fire Trail (reach 50,000 score in one run)
@@ -103,17 +109,22 @@ Can probably be managed through the settings menu with tabs.
 
 ### Achievements
 
+- [ ] Decide between GooglePlay/AppStore or just internal achievements
+
 Distance Milestones:
+
 - 🏃 Sprinter: 1,000m total → Unlock "Speed Trail"
 - 🚀 Marathon: 10,000m total → Unlock "Endurance Trail"
 - 🌟 Ultra Runner: 50,000m total → Unlock "Champion Trail"
 
 Score Milestones:
+
 - 🥉 Bronze Scorer: 10,000 career points
 - 🥈 Silver Scorer: 100,000 career points
 - 🥇 Gold Scorer: 500,000 career points
 
 Skill Milestones:
+
 - 🎯 Perfectionist: Collect 100% collectibles in daily run
 - 💨 Speed Demon: Complete daily in under 60s
 - 🔥 Combo Master: Achieve 20x combo
@@ -134,7 +145,7 @@ Skill Milestones:
 ## Review Prompt
 
 - [ ] Every X games/sessions, prompt the user to review the app
-  - [ ] Maybe offer a cosmetic for completing
+    - [ ] Maybe offer a cosmetic for completing
 
 ## Ghost system
 

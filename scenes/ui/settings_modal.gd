@@ -92,15 +92,20 @@ func _populate_cosmetics_grid() -> void:
 
     # Create preview for each cosmetic
     for cosmetic in all_cosmetics:
-        var preview = CosmeticPreviewScene.instantiate()
-        cosmetics_grid.add_child(preview)
-
         # Find the cosmetic ID
         var cosmetic_id = ""
         for id in CosmeticManager.cosmetics.keys():
             if CosmeticManager.cosmetics[id] == cosmetic:
                 cosmetic_id = id
                 break
+
+        # Only show cosmetics that are buyable OR already unlocked
+        var is_unlocked = CosmeticManager.is_cosmetic_unlocked(cosmetic_id)
+        if not cosmetic.buyable and not is_unlocked:
+            continue  # Skip non-buyable cosmetics that aren't unlocked yet
+
+        var preview = CosmeticPreviewScene.instantiate()
+        cosmetics_grid.add_child(preview)
 
         # Setup preview
         preview.setup(cosmetic, cosmetic_id)

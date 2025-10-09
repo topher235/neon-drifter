@@ -123,13 +123,16 @@ func _update_button_states() -> void:
 	var is_unlocked = CosmeticManager.is_cosmetic_unlocked(cosmetic_id)
 	var is_selected = CosmeticManager.selected_cosmetic_id == cosmetic_id
 
-	unlock_button.visible = not is_unlocked
-	cost_label.visible = not is_unlocked
+	# Non-buyable cosmetics should never show unlock button
+	var can_be_purchased = cosmetic.buyable if cosmetic else true
+
+	unlock_button.visible = not is_unlocked and can_be_purchased
+	cost_label.visible = not is_unlocked and can_be_purchased
 	select_button.visible = is_unlocked and not is_selected
 	selected_label.visible = is_selected
 
 	# Update cost label text
-	if not is_unlocked and cosmetic:
+	if not is_unlocked and cosmetic and can_be_purchased:
 		cost_label.text = "%d orbs" % cosmetic.orb_cost
 
 

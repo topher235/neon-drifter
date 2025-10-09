@@ -24,6 +24,7 @@ func _initialize_cosmetics() -> void:
     white_cosmetic.cosmetic_type = TrailCosmetic.CosmenticType.SOLID
     white_cosmetic.solid_color = Color(1, 1, 1)  # White
     white_cosmetic.unlocked_by_default = true
+    white_cosmetic.buyable = false  # Default cosmetic, not purchasable
     white_cosmetic.orb_cost = 0
     cosmetics["white_default"] = white_cosmetic
 
@@ -34,6 +35,7 @@ func _initialize_cosmetics() -> void:
     cyan_cosmetic.cosmetic_type = TrailCosmetic.CosmenticType.SOLID
     cyan_cosmetic.solid_color = Color(0, 1, 1)  # Cyan
     cyan_cosmetic.unlocked_by_default = false
+    cyan_cosmetic.buyable = true  # Can be purchased with orbs
     cyan_cosmetic.orb_cost = 50
     cosmetics["cyan"] = cyan_cosmetic
 
@@ -44,6 +46,7 @@ func _initialize_cosmetics() -> void:
     rainbow_cosmetic.cosmetic_type = TrailCosmetic.CosmenticType.ANIMATED
     rainbow_cosmetic.animation_speed = 0.5  # Slow, smooth animation
     rainbow_cosmetic.unlocked_by_default = true  # Set to false to require unlock
+    rainbow_cosmetic.buyable = true  # Can be purchased with orbs
     rainbow_cosmetic.orb_cost = 100  # Cost if locked
 
     # Create rainbow gradient

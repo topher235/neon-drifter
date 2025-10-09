@@ -26,6 +26,10 @@ enum CosmenticType {
 ## Whether this cosmetic is unlocked by default
 @export var unlocked_by_default: bool = false
 
+## Whether this cosmetic can be purchased with orbs
+## If false, cosmetic must be awarded through achievements, reviews, etc.
+@export var buyable: bool = true
+
 ## Price in orbs (0 = free/default)
 @export var orb_cost: int = 0
 
