@@ -282,15 +282,19 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
         # Weight decreases with distance from ideal difficulty
         var weight = 1.0 / (1.0 + diff_distance * 0.5)
 
-        # Boost weight for variety (check segment_id for true variety)
-        var was_used_recently = false
+        # Apply variety penalty/bonus based on recent usage
+        var times_used = 0
         for recent in recent_segments:
             if recent.segment_id == seg.segment_id:
-                was_used_recently = true
-                break
+                times_used += 1
 
-        if not was_used_recently:
-            weight *= 2.0  # Increased bonus for unused segments
+        if times_used == 0:
+            # Big bonus for segments not used recently
+            weight *= 2.0
+        else:
+            # Exponential penalty for repeated segments
+            # 1 use = 0.5x, 2 uses = 0.25x, 3 uses = 0.125x, etc.
+            weight *= pow(0.5, times_used)
 
         weights.append(weight)
         total_weight += weight
@@ -314,13 +318,18 @@ func _apply_variation(data: SegmentData) -> SegmentData:
     # Use consistent tunnel width across all segments
     varied.tunnel_width = 250.0
 
-    # Randomize obstacle positions slightly (but not smoke screens - they need precise positioning)
+    # Scale variation with difficulty (1.0x to 1.5x)
+    var variance_scale = 1.0 + (current_difficulty / 10.0) * 0.5
+
+    # Randomize obstacle positions (but not precision obstacles)
+    var precision_obstacles = ["smoke_screen", "pulsing_wall", "shockwave"]
     for obs in varied.obstacles:
-        if obs.has("position") and obs.get("type") != "smoke_screen":
+        if obs.has("position") and not obs.get("type") in precision_obstacles:
             var pos: Vector2 = obs.position
-            pos.x += rng.randf_range(-20, 20)  # Left/right variance
-            pos.y += rng.randf_range(-30, 30)  # Forward/back variance
-            # Keep within bounds (X is left/right)
+            # Increased variance with difficulty scaling
+            pos.x += rng.randf_range(-30, 30) * variance_scale  # Up from ±20
+            pos.y += rng.randf_range(-50, 50) * variance_scale  # Up from ±30
+            # Keep within bounds
             pos.x = clamp(pos.x, -varied.tunnel_width/2 + 40, varied.tunnel_width/2 - 40)
             obs.position = pos
 
@@ -328,16 +337,16 @@ func _apply_variation(data: SegmentData) -> SegmentData:
     for col in varied.collectibles:
         if col.has("position"):
             var pos: Vector2 = col.position
-            pos.x += rng.randf_range(-15, 15)  # Left/right variance
-            pos.y += rng.randf_range(-20, 20)  # Forward/back variance
+            pos.x += rng.randf_range(-20, 20) * variance_scale  # Up from ±15
+            pos.y += rng.randf_range(-30, 30) * variance_scale  # Up from ±20
             col.position = pos
 
-    # Add extra obstacles at higher difficulty
-    if current_difficulty > 5.0 and rng.randf() < 0.3:  # 30% chance
+    # Add extra obstacles at higher difficulty (increased from 30% to 50%)
+    if current_difficulty > 5.0 and rng.randf() < 0.5:
         _add_random_obstacle(varied)
 
-    # Add extra collectibles randomly
-    if rng.randf() < 0.2:  # 20% chance
+    # Add extra collectibles randomly (increased from 20% to 35%)
+    if rng.randf() < 0.35:
         _add_random_collectible(varied)
 
     return varied
