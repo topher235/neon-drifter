@@ -7,11 +7,12 @@ extends Control
 signal seed_confirmed(seed_value: int)
 signal cancelled
 
-@export var seed_input: LineEdit
-@export var confirm_button: Button
-@export var cancel_button: Button
-@export var random_button: Button
-@export var seed_label: Label
+@onready var seed_input: LineEdit = %SeedInput
+@onready var confirm_button: Button = %ConfirmButton
+@onready var cancel_button: Button = %CancelButton
+@onready var random_button: Button = %RandomButton
+@onready var seed_label: Label = %SeedLabel
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
     # Connect button signals
@@ -30,15 +31,21 @@ func _ready() -> void:
     visible = false
 
 func open_seed_input() -> void:
-    """Show the seed input dialog"""
+    """Show the seed input dialog with animation"""
     visible = true
+    if animation_player:
+        animation_player.play("open")
     if seed_input:
+        # Delay focus grab to after animation starts
+        await get_tree().create_timer(0.1).timeout
         seed_input.grab_focus()
         seed_input.select_all()
 
 func close_seed_input() -> void:
     """Hide the seed input dialog"""
     visible = false
+    if animation_player:
+        animation_player.play("RESET")
 
 func _on_confirm_pressed() -> void:
     if not seed_input:

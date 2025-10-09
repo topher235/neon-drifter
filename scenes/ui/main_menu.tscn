@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://coql3r5d7x8y5"]
+[gd_scene load_steps=11 format=3 uid="uid://coql3r5d7x8y5"]
 
 [ext_resource type="PackedScene" uid="uid://dcvhm68iau6s" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="1_fe2o3"]
 [ext_resource type="Script" uid="uid://btfjpmqe56wav" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
 [ext_resource type="Texture2D" uid="uid://cinr0o55lq335" path="res://assets/icons/settings.png" id="4_settings_icon"]
 [ext_resource type="PackedScene" uid="uid://dbp1ulnofsv7n" path="res://scenes/ui/settings_modal.tscn" id="5_settings_modal"]
+[ext_resource type="PackedScene" uid="uid://dq8h5x7k2m9pv" path="res://scenes/ui/rush_seed_input.tscn" id="6_rush_seed_input"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
 font_size = 72
@@ -112,6 +113,13 @@ label_settings = SubResource("LabelSettings_1g8jr")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="RushButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "RUSH MODE"
+
 [node name="HighScoreLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -169,4 +177,7 @@ expand_mode = 1
 
 [node name="SettingsModal" parent="." instance=ExtResource("5_settings_modal")]
 visible = false
+layout_mode = 1
+
+[node name="RushSeedInput" parent="." instance=ExtResource("6_rush_seed_input")]
 layout_mode = 1
