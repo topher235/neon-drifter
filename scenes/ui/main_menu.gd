@@ -2,12 +2,14 @@ extends Control
 
 @onready var play_button: Button = %PlayButton
 @onready var daily_button: Button = %DailyChallengeButton
+@onready var rush_button: Button = %RushButton
 @onready var daily_checkmark: Label = %DailyCheckmark
 @onready var quit_button: Button = %QuitButton
 @onready var high_score_label: Label = %HighScoreLabel
 @onready var title_label: Label = %TitleLabel
 @onready var settings_button: Button = %SettingsButton
 @onready var settings_modal: SettingsModal = $SettingsModal
+@onready var rush_seed_input: RushSeedInput = $RushSeedInput
 
 var title_character_labels: Array[Label] = []
 var title_original_y: float = 0.0
@@ -15,8 +17,15 @@ var title_original_y: float = 0.0
 func _ready() -> void:
     play_button.pressed.connect(_on_play_pressed)
     daily_button.pressed.connect(_on_daily_pressed)
+    if rush_button:
+        rush_button.pressed.connect(_on_rush_pressed)
     quit_button.pressed.connect(_on_quit_pressed)
     settings_button.pressed.connect(_on_settings_pressed)
+
+    # Connect RUSH seed input signals
+    if rush_seed_input:
+        rush_seed_input.seed_confirmed.connect(_on_rush_seed_confirmed)
+        rush_seed_input.cancelled.connect(_on_rush_seed_cancelled)
 
     _update_high_score()
     _update_daily_checkmark()
@@ -94,6 +103,22 @@ func _on_daily_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     _start_game(true)
 
+func _on_rush_pressed() -> void:
+    """Open seed input dialog for RUSH mode"""
+    AudioManager.play_sfx("ui_click")
+    if rush_seed_input:
+        rush_seed_input.open_seed_input()
+
+func _on_rush_seed_confirmed(seed_value: int) -> void:
+    """Start RUSH mode with the specified seed"""
+    print("Starting RUSH mode with seed: %d" % seed_value)
+    GameManager.set_rush_seed(seed_value)
+    _start_game_rush()
+
+func _on_rush_seed_cancelled() -> void:
+    """User cancelled seed input"""
+    print("RUSH mode cancelled")
+
 func _on_quit_pressed() -> void:
     get_tree().quit()
 
@@ -107,6 +132,17 @@ func _start_game(daily_challenge: bool) -> void:
         GameManager.current_game_mode = GameManager.GameMode.DAILY_CHALLENGE
     else:
         GameManager.current_game_mode = GameManager.GameMode.CLASSIC
+
+    # Transition to game scene
+    AudioManager.stop_music(true)
+
+    # Use SceneManager for smooth transition
+    await SceneManager.goto_game()
+
+func _start_game_rush() -> void:
+    """Start RUSH mode (seeded run)"""
+    # Set game mode in GameManager
+    GameManager.current_game_mode = GameManager.GameMode.RUSH
 
     # Transition to game scene
     AudioManager.stop_music(true)

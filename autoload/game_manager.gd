@@ -12,7 +12,7 @@ signal timer_changed(time_remaining: float)
 
 # Game State
 enum GameState { MENU, PLAYING, PAUSED, GAME_OVER }
-enum GameMode { CLASSIC, DAILY_CHALLENGE }
+enum GameMode { CLASSIC, DAILY_CHALLENGE, RUSH }
 var current_state: GameState = GameState.MENU
 var current_game_mode: GameMode = GameMode.CLASSIC
 
@@ -37,8 +37,9 @@ var slowdown_duration: float = 0.0
 var game_time: float = 0.0
 var difficulty: float = 0.0
 
-# Daily Challenge
+# Seeds & Challenges
 var daily_seed: int = 0
+var rush_seed: int = 0  # User-specified seed for RUSH mode
 var daily_challenge_time_limit: float = 40.0
 var daily_challenge_time_remaining: float = 40.0
 
@@ -226,10 +227,28 @@ func _update_daily_challenge_timer(delta: float) -> void:
         print("Daily Challenge: Time's up!")
         end_game()  # Player dies as if they hit an obstacle
 
-# Daily Seed
+# Seed Management
 func _calculate_daily_seed() -> int:
     var date = Time.get_date_dict_from_system()
     return date.year * 10000 + date.month * 100 + date.day
+
+func get_current_seed() -> int:
+    """Returns the appropriate seed based on current game mode"""
+    match current_game_mode:
+        GameMode.DAILY_CHALLENGE:
+            return daily_seed
+        GameMode.RUSH:
+            return rush_seed
+        GameMode.CLASSIC:
+            # Generate a random seed for classic mode
+            return randi()
+        _:
+            return randi()
+
+func set_rush_seed(seed_value: int) -> void:
+    """Set the seed to be used for RUSH mode"""
+    rush_seed = seed_value
+    print("RUSH seed set to: %d" % rush_seed)
 
 # High Scores
 func _check_high_scores() -> void:

@@ -26,11 +26,26 @@ func _ready() -> void:
     Events.crt_enabled.connect(enable_crt_effect)
     Events.crt_disabled.connect(disable_crt_effect)
 
-    # Initialize systems
-    tunnel_generator.initialize()
+    # Initialize systems with appropriate seed based on game mode
+    var seed_value = GameManager.get_current_seed()
+    var is_daily = GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE
+    tunnel_generator.initialize(seed_value, is_daily)
+
+    print("Game initialized with seed: %d, mode: %s" % [seed_value, _get_mode_name()])
 
     # Start game
     call_deferred("_start_game")
+
+func _get_mode_name() -> String:
+    match GameManager.current_game_mode:
+        GameManager.GameMode.CLASSIC:
+            return "CLASSIC"
+        GameManager.GameMode.DAILY_CHALLENGE:
+            return "DAILY_CHALLENGE"
+        GameManager.GameMode.RUSH:
+            return "RUSH"
+        _:
+            return "UNKNOWN"
 
 func _start_game() -> void:
     GameManager.start_game()
