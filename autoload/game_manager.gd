@@ -40,6 +40,7 @@ var difficulty: float = 0.0
 # Seeds & Challenges
 var daily_seed: int = 0
 var rush_seed: int = 0  # User-specified seed for RUSH mode
+var current_run_seed: int = 0  # The actual seed used for the current run (for retry)
 var daily_challenge_time_limit: float = 40.0
 var daily_challenge_time_remaining: float = 40.0
 
@@ -146,6 +147,8 @@ func resume_game() -> void:
 func return_to_menu() -> void:
     get_tree().paused = false
     current_state = GameState.MENU
+    # Clear the current run seed so next game gets a fresh seed
+    current_run_seed = 0
 
 # Score Management
 func add_score(points: int) -> void:
@@ -234,21 +237,34 @@ func _calculate_daily_seed() -> int:
 
 func get_current_seed() -> int:
     """Returns the appropriate seed based on current game mode"""
+    var seed_value: int
+
     match current_game_mode:
         GameMode.DAILY_CHALLENGE:
-            return daily_seed
+            seed_value = daily_seed
         GameMode.RUSH:
-            return rush_seed
+            seed_value = rush_seed
         GameMode.CLASSIC:
-            # Generate a random seed for classic mode
-            return randi()
+            # For classic mode, use stored seed if retrying, otherwise generate new
+            if current_run_seed != 0:
+                seed_value = current_run_seed
+            else:
+                seed_value = randi()
         _:
-            return randi()
+            seed_value = randi()
+
+    # Store the seed for retry functionality
+    current_run_seed = seed_value
+    return seed_value
 
 func set_rush_seed(seed_value: int) -> void:
     """Set the seed to be used for RUSH mode"""
     rush_seed = seed_value
     print("RUSH seed set to: %d" % rush_seed)
+
+func get_current_run_seed() -> int:
+    """Returns the seed being used for the current run (useful for displaying to player)"""
+    return current_run_seed
 
 # High Scores
 func _check_high_scores() -> void:

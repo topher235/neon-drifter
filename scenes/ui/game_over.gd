@@ -46,7 +46,9 @@ func _show_screen() -> void:
 func _on_retry_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     visible = false
-    GameManager.start_game()
+    # Reload the scene completely to reset everything with the same seed
+    # The seed is preserved in GameManager.current_run_seed
+    await SceneManager.reload_current_scene()
 
 func _on_menu_pressed() -> void:
     AudioManager.play_sfx("ui_click")
