@@ -293,7 +293,7 @@ func _create_s_curve() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-50, 350), "value": 15},
         {"type": "orb", "position": Vector2(50, 650), "value": 15},
-        {"type": "orb", "position": Vector2(0, 850), "value": 20}  # Bonus orb instead
+        {"type": "multiplier", "position": Vector2(0, 850), "duration": 5.0}  # Reward for completing S-curve
     ] as Array[Dictionary]
 
     return seg
@@ -794,7 +794,7 @@ func _create_double_helix() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(45, 300), "value": 15},
         {"type": "orb", "position": Vector2(-45, 500), "value": 15},
-        {"type": "orb", "position": Vector2(45, 750), "value": 20}
+        {"type": "multiplier", "position": Vector2(45, 750), "duration": 6.0}  # Reward for navigating helix
     ] as Array[Dictionary]
 
     return seg
@@ -851,7 +851,7 @@ func _create_pulse_corridor() -> SegmentData:
         {"type": "orb", "position": Vector2(0, 100), "value": 12},
         {"type": "orb", "position": Vector2(0, 350), "value": 15},
         {"type": "orb", "position": Vector2(0, 575), "value": 15},
-        {"type": "orb", "position": Vector2(0, 850), "value": 20}
+        {"type": "multiplier", "position": Vector2(0, 850), "duration": 7.0}  # Big reward for clearing pulse corridor
     ] as Array[Dictionary]
 
     return seg
@@ -1178,13 +1178,14 @@ func _create_treasure_room() -> SegmentData:
     seg.max_difficulty = 6
     seg.complexity = 2
 
-    # Magnet collectible surrounded by ring of orbs
+    # Multiplier and magnet collectibles surrounded by ring of orbs
     seg.obstacles = [
         {"type": "pillar", "position": Vector2(0, 200), "radius": 25.0}
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "magnet", "position": Vector2(0, 350), "duration": 6.0},
+        {"type": "multiplier", "position": Vector2(-40, 350), "duration": 5.0},  # Multiplier collectible
+        {"type": "magnet", "position": Vector2(40, 350), "duration": 6.0},
         {"type": "orb", "position": Vector2(-60, 300), "value": 15},
         {"type": "orb", "position": Vector2(60, 300), "value": 15},
         {"type": "orb", "position": Vector2(-60, 400), "value": 15},

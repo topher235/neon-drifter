@@ -133,6 +133,11 @@ func _create_collectible(data: Dictionary) -> Node2D:
             stopwatch.slow_factor = data.get("slow_factor", 0.5)
             return stopwatch
 
+        "multiplier":
+            var multiplier = preload("res://scenes/collectibles/multiplier.tscn").instantiate()
+            multiplier.multiplier_duration = data.get("duration", 5.0)
+            return multiplier
+
 #        "speed_boost":
 #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
 #            boost.boost_duration = data.get("duration", 3.0)

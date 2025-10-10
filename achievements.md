@@ -16,17 +16,22 @@ All achievement progress saved to JSON via SaveManager.
 
 ## Example Usage
 
-# Get all achievements
+### Get all achievements
+
 var all_achievements = AchievementManager.get_all_achievements()
 
-# Check progress on specific achievement
+### Check progress on specific achievement
+
 var progress = AchievementManager.get_achievement_progress("speed_demon")
 
-# Get completion percentage
+### Get completion percentage
+
 var percent = AchievementManager.get_completion_percentage()
 
-# Debug: Force unlock
+### Debug: Force unlock
+
 AchievementManager.unlock_achievement_debug("speed_bump")
 
-# Debug: Print all achievements and status
+### Debug: Print all achievements and status
+
 AchievementManager.print_achievements()

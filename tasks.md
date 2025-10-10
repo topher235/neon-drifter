@@ -28,7 +28,7 @@
 - [X] Redesign UI layout
 - [X] Fix retry button to fully reload the level, using the same seed
 - [ ] Use different wording for RUSH and daily mode (game over sounds like a lose state, not a win state)
-- [ ] Save stats (distance, score, etc.)
+- [X] Save stats (distance, score, etc.)
 - [X] Save orb count
 
 ## Daily Challenge Mode
@@ -57,6 +57,14 @@ Don't forget to add these to the sandbox as well.
     - [ ] Add screen shake when collected
     - [ ] Emit particles from destroyed obstacles when collected
 
+### Todo:
+
+- Implement hourglass, multiplier, and bomb collectible
+- Remove stopwatch from spawning in daily challenge
+- Implement shop modal (move cosmetics to shop)
+- Make non-orb collectibles buyables and add to shop (new tab)
+- Add solid colored trails, gradient colored trails, fire trail, lightning trail, starfield trail
+
 ## Obstacles
 
 Don't forget to add these to the sandbox as well.
@@ -79,9 +87,9 @@ Don't forget to add these to the sandbox as well.
 
 ## Stats
 
-- [ ] Track number of dailies completed
-- [ ] Distance traveled
-- [ ] Orbs collected
+- [X] Track number of dailies completed
+- [X] Distance traveled
+- [X] Orbs collected
 
 ## Polish
 
@@ -121,8 +129,6 @@ Can probably be managed through the settings menu with tabs.
 - Golden Trail (beat your high score 5 times)
 
 ### Achievements
-
-- [ ] Decide between GooglePlay/AppStore or just internal achievements
 
 Stats:
 
@@ -171,7 +177,7 @@ Skill Milestones:
 ## Review Prompt
 
 - [ ] Every X games/sessions, prompt the user to review the app
-    - [ ] Maybe offer a cosmetic for completing
+    - [ ] Maybe offer a cosmetic for completing (star particle trail)
 
 ## Ghost system
 

@@ -9,6 +9,7 @@ signal score_changed(new_score: int)
 signal speed_changed(new_speed: float)
 signal combo_changed(combo: int)
 signal timer_changed(time_remaining: float)
+signal orb_multiplier_changed(active: bool, time_remaining: float)
 # Game State
 enum GameState { MENU, PLAYING, PAUSED, GAME_OVER }
 enum GameMode { CLASSIC, DAILY_CHALLENGE, RUSH }
@@ -29,6 +30,9 @@ var speed_boost_multiplier: float = 1.5
 var speed_boost_duration: float   = 0.0
 var slowdown_multiplier: float    = 1.0
 var slowdown_duration: float      = 0.0
+var orb_multiplier_active: bool   = false
+var orb_multiplier_duration: float = 0.0
+var orb_point_multiplier: int     = 2  # Doubles orb value
 # Difficulty
 var game_time: float  = 0.0
 var difficulty: float = 0.0
@@ -64,6 +68,7 @@ func _process(delta: float) -> void:
         _update_distance(delta)
         _update_difficulty()
         _update_daily_challenge_timer(delta)
+        _update_orb_multiplier(delta)
 
 
 func start_game() -> void:
@@ -79,6 +84,8 @@ func start_game() -> void:
     speed_boost_duration = 0.0
     slowdown_multiplier = 1.0
     slowdown_duration = 0.0
+    orb_multiplier_active = false
+    orb_multiplier_duration = 0.0
     death_cause = ""  # Reset death cause
     total_collectibles_in_run = 0
     collectibles_collected_in_run = 0
@@ -231,7 +238,11 @@ func reset_combo() -> void:
 
 func collect_orb(value: int) -> void:
     orbs_collected += 1
-    add_score(value)
+    # Apply orb multiplier if active
+    var actual_value = value
+    if orb_multiplier_active:
+        actual_value = value * orb_point_multiplier
+    add_score(actual_value)
     increase_combo()
 
 
@@ -243,6 +254,13 @@ func activate_slowdown(duration: float, factor: float) -> void:
     slowdown_duration = duration
     slowdown_multiplier = factor
     print("Slowdown activated: ", factor, "x for ", duration, "s")
+
+
+func activate_orb_multiplier(duration: float) -> void:
+    orb_multiplier_active = true
+    orb_multiplier_duration = duration
+    orb_multiplier_changed.emit(true, duration)
+    print("Orb multiplier activated: %dx for %.1fs" % [orb_point_multiplier, duration])
 
 
 # Speed & Distance
@@ -310,6 +328,18 @@ func _update_daily_challenge_timer(delta: float) -> void:
             print("RUSH Mode: Time's up!")
             death_cause = "timeout"
             end_game()  # Player dies as if they hit an obstacle
+
+
+func _update_orb_multiplier(delta: float) -> void:
+    if orb_multiplier_active:
+        orb_multiplier_duration -= delta
+        orb_multiplier_changed.emit(true, orb_multiplier_duration)
+
+        if orb_multiplier_duration <= 0.0:
+            orb_multiplier_active = false
+            orb_multiplier_duration = 0.0
+            orb_multiplier_changed.emit(false, 0.0)
+            print("Orb multiplier expired")
 
 
 # Seed Management

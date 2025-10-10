@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7y8q2r3x4m5n"]
+
+[ext_resource type="Script" uid="uid://0jqbtrhxv0nx" path="res://scenes/collectibles/multiplier.gd" id="1_multiplier"]
+
+[node name="Multiplier" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
+script = ExtResource("1_multiplier")
+visual = NodePath("Visual")
+collision_shape = NodePath("CollisionShape2D")
+metadata/_edit_horizontal_guides_ = [-97.0]
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
