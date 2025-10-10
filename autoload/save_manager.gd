@@ -12,6 +12,7 @@ var save_data = {
                     "current_orbs": 0,
                     "unlocked_trails": ["default"],
                     "selected_trail": "default",
+                    "unlocked_collectibles": ["orb"],  # Orbs always unlocked by default
                     "sfx_volume": 0.8,
                     "music_volume": 0.6,
                     "first_launch": true,
@@ -132,6 +133,21 @@ func is_cosmetic_unlocked(cosmetic_id: String) -> bool:
     return is_trail_unlocked(cosmetic_id)
 
 
+# Collectible system
+func unlock_collectible(collectible_id: String) -> void:
+    if not save_data.has("unlocked_collectibles"):
+        save_data.unlocked_collectibles = ["orb"]  # Ensure orb is always there
+    if not collectible_id in save_data.unlocked_collectibles:
+        save_data.unlocked_collectibles.append(collectible_id)
+        _write_save_data()
+
+
+func is_collectible_unlocked(collectible_id: String) -> bool:
+    if not save_data.has("unlocked_collectibles"):
+        return collectible_id == "orb"  # Orb always unlocked
+    return collectible_id in save_data.unlocked_collectibles
+
+
 func save_game() -> void:
     _write_save_data()
 
@@ -239,6 +255,7 @@ func reset_save_data() -> void:
         "current_orbs": 0,
         "unlocked_trails": ["default"],
         "selected_trail": "default",
+        "unlocked_collectibles": ["orb"],
         "sfx_volume": 0.8,
         "music_volume": 0.6,
         "first_launch": false,

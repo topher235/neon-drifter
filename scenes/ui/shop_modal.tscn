@@ -172,6 +172,55 @@ theme_override_constants/h_separation = 80
 theme_override_constants/v_separation = 20
 columns = 2
 
+[node name="Collectibles" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 1
+
+[node name="CollectiblesVBox" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OrbCountLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox"]
+layout_mode = 2
+text = "Orbs: 0"
+horizontal_alignment = 2
+
+[node name="DescriptionPanel" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox/DescriptionPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="DescriptionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox/DescriptionPanel/MarginContainer"]
+layout_mode = 2
+text = "Select a collectible to view its description"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="CollectiblesGrid" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 80
+theme_override_constants/v_separation = 20
+columns = 2
+
 [node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2

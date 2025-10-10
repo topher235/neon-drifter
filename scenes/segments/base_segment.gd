@@ -111,6 +111,13 @@ func _spawn_collectibles() -> void:
 func _create_collectible(data: Dictionary) -> Node2D:
     var col_type = data.get("type", "orb")
 
+    # Check if collectible type is unlocked (orbs are always unlocked)
+    if not CollectibleManager.can_spawn_collectible(col_type):
+        # Replace with orb if not unlocked
+        var orb = preload("res://scenes/collectibles/orb.tscn").instantiate()
+        orb.point_value = data.get("value", 10)
+        return orb
+
     match col_type:
         "orb":
             var orb = preload("res://scenes/collectibles/orb.tscn").instantiate()

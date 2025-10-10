@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpq8m5n7k4sat"]
+
+[ext_resource type="Script" path="res://scenes/ui/collectible_shop_item.gd" id="1_collectible_item"]
+
+[node name="CollectibleShopItem" type="PanelContainer"]
+custom_minimum_size = Vector2(180, 250)
+script = ExtResource("1_collectible_item")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PreviewContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="PreviewIcon" type="ColorRect" parent="MarginContainer/VBoxContainer/PreviewContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+color = Color(0, 1, 1, 1)
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Collectible Name"
+horizontal_alignment = 1
+
+[node name="UnlockButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Unlock"
+
+[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "100 orbs"
+horizontal_alignment = 1
+
+[node name="UnlockedLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "UNLOCKED"
+horizontal_alignment = 1
+vertical_alignment = 1
