@@ -16,7 +16,8 @@ var save_data = {
                     "music_volume": 0.6,
                     "first_launch": true,
                     "daily_challenge_completed": false,
-                    "last_daily_completion_date": ""
+                    "last_daily_completion_date": "",
+                    "stats": {}  # StatsManager data
                 }
 
 
@@ -81,6 +82,20 @@ func get_current_orbs() -> int:
 func get_total_orbs_collected() -> int:
     """Get the total orbs collected over all time"""
     return save_data.total_orbs_collected
+
+
+# Stats persistence
+func save_stats(stats: Dictionary) -> void:
+    """Save stats data from StatsManager"""
+    save_data.stats = stats
+    _write_save_data()
+
+
+func load_stats() -> Dictionary:
+    """Load stats data for StatsManager"""
+    if save_data.has("stats"):
+        return save_data.stats
+    return {}
 
 
 func unlock_trail(trail_id: String) -> void:
@@ -213,6 +228,7 @@ func reset_save_data() -> void:
         "music_volume": 0.6,
         "first_launch": false,
         "daily_challenge_completed": false,
-        "last_daily_completion_date": ""
+        "last_daily_completion_date": "",
+        "stats": {}
     }
     _write_save_data()

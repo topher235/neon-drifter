@@ -4,13 +4,12 @@ extends Node2D
 # Configuration
 @export_group("Movement")
 @export var movement_smoothing: float = 15.0  # Higher = snappier (lerp speed)
-@export_enum("AutoRun", "FreeMovement") var movement_mode: String = "AutoRun"
 
+@export_enum("AutoRun", "FreeMovement") var movement_mode: String = "AutoRun"
 @export_group("Trail")
 @export var line_width: float = 8.0
 @export var max_trail_points: int = 50
 @export var trail_point_distance: float = 5.0  # Minimum distance between points
-
 @export_group("Collision")
 @export var collision_radius: float = 12.0
 @export var invulnerability_time: float = 0.0  # For testing/powerups
@@ -25,28 +24,25 @@ extends Node2D
 
 # Movement controller
 var movement_controller: PlayerController
-
 # State
 var trail_points: Array[Vector2] = []
-var target_position: Vector2 = Vector2.ZERO
-var current_position: Vector2 = Vector2.ZERO
-var velocity: Vector2 = Vector2.ZERO
-var is_alive: bool = true
-var invulnerable: bool = false
+var target_position: Vector2     = Vector2.ZERO
+var current_position: Vector2    = Vector2.ZERO
+var velocity: Vector2            = Vector2.ZERO
+var is_alive: bool               = true
+var invulnerable: bool           = false
 var invulnerable_timer: Timer
-var magnet_active: bool = false
+var magnet_active: bool          = false
 var magnet_timer: Timer
-var magnet_range: float = 200.0  # Range to attract orbs
-
+var magnet_range: float          = 200.0  # Range to attract orbs
 # Movement bounds
 var tunnel_half_width: float = 125.0  # Half of 250
-
 # Trail optimization
-var last_trail_point: Vector2 = Vector2.ZERO
+var last_trail_point: Vector2        = Vector2.ZERO
 var distance_since_last_point: float = 0.0
-
 # Cosmetics
 var current_cosmetic: TrailCosmetic = null
+
 
 func _ready() -> void:
     add_to_group("player")
@@ -79,6 +75,7 @@ func _ready() -> void:
     # Setup controller after everything else (allows movement_mode to be set first)
     call_deferred("_setup_movement_controller")
 
+
 func _process(delta: float) -> void:
     if not GameManager.is_playing() or not is_alive:
         return
@@ -92,16 +89,19 @@ func _process(delta: float) -> void:
     if magnet_active:
         _attract_orbs(delta)
 
+
 func _physics_process(_delta: float) -> void:
     if not GameManager.is_playing() or not is_alive:
         return
 
     _check_collisions()
 
+
 # Input Handling
 func _handle_input() -> void:
     if movement_controller:
         movement_controller.handle_input()
+
 
 # Position Updates
 func _update_position(delta: float) -> void:
@@ -124,11 +124,13 @@ func _update_position(delta: float) -> void:
 
     position = current_position
 
+
 func _check_bounds() -> void:
     # Hard clamp if somehow outside bounds
     if abs(current_position.x) > tunnel_half_width:
         current_position.x = clamp(current_position.x, -tunnel_half_width, tunnel_half_width)
         position = current_position
+
 
 # Trail Rendering
 func _update_trail() -> void:
@@ -146,6 +148,7 @@ func _update_trail() -> void:
     # Update Line2D
     _render_trail()
 
+
 func _render_trail() -> void:
     line_renderer.clear_points()
 
@@ -154,6 +157,7 @@ func _render_trail() -> void:
         # Convert to local space
         var local_point = point - current_position
         line_renderer.add_point(local_point)
+
 
 # Collision Detection
 func _check_collisions() -> void:
@@ -167,35 +171,62 @@ func _check_collisions() -> void:
             _handle_obstacle_collision(area)
         elif area.is_in_group("collectibles"):
             _handle_collectible_collision(area)
-        elif area.collision_layer == 16:  # End segment trigger
+        elif area.collision_layer == 16: # End segment trigger
             _handle_end_segment_trigger(area)
-        elif area.is_in_group("boundary_kill_zone"):  # Boundary kill zone
+        elif area.is_in_group("boundary_kill_zone"): # Boundary kill zone
             _handle_boundary_collision(area)
 
     # Check StaticBody2D overlaps (walls)
     var overlapping_bodies = collision_area.get_overlapping_bodies()
     for body in overlapping_bodies:
-        if body is StaticBody2D and body.collision_layer == 8:  # Wall collision
+        if body is StaticBody2D and body.collision_layer == 8: # Wall collision
             _handle_wall_collision(body)
+
+    # Track proximity to obstacles (for "Near Miss" achievement)
+    if GameManager.is_playing():
+        _track_obstacle_proximity()
+
 
 func _handle_obstacle_collision(obstacle: Area2D) -> void:
     if is_alive and not invulnerable:
         is_alive = false
+        # Determine obstacle type for stats tracking
+        var obstacle_type = "pillar"
+        if obstacle.is_in_group("pulse_gate"):
+            obstacle_type = "pulse_gate"
+        GameManager.record_obstacle_death(obstacle_type)
         _die()
+
 
 func _handle_wall_collision(wall: StaticBody2D) -> void:
     if is_alive and not invulnerable:
         is_alive = false
+        GameManager.record_obstacle_death("pillar")  # Walls count as pillar deaths
         _die()
+
 
 func _handle_boundary_collision(_boundary: Area2D) -> void:
     if is_alive:
         is_alive = false
         kill()
 
+
 func _handle_collectible_collision(collectible: Area2D) -> void:
     if collectible.has_method("collect"):
+        GameManager.record_collectible_collected()
         collectible.collect()
+
+
+func _track_obstacle_proximity() -> void:
+    """Track how close player passes to obstacles for "Near Miss" achievement"""
+    var obstacles = get_tree().get_nodes_in_group("obstacles")
+    for obstacle in obstacles:
+        if obstacle is Area2D:
+            var distance = current_position.distance_to(obstacle.global_position)
+            # Only track if within reasonable "near miss" range (not too far away)
+            if distance < 10.0 and distance > collision_radius:
+                StatsManager.record_obstacle_proximity(distance)
+
 
 func _handle_end_segment_trigger(trigger: Area2D) -> void:
     # Player reached the end segment in daily challenge or rush mode
@@ -204,6 +235,7 @@ func _handle_end_segment_trigger(trigger: Area2D) -> void:
         GameManager.complete_daily_challenge()
     elif GameManager.current_game_mode == GameManager.GameMode.RUSH:
         GameManager.complete_rush_challenge()
+
 
 func _die() -> void:
     print("Player collision detected!")
@@ -216,6 +248,7 @@ func _die() -> void:
     # Visual feedback
     modulate = Color(1, 0.2, 0.2, 0.5)
 
+
 func _spawn_death_particles() -> void:
     # Stop trail particles
     if particle_trail:
@@ -225,10 +258,11 @@ func _spawn_death_particles() -> void:
     death_particles.global_position = global_position
     death_particles.emitting = true
 
-    
+
 func _trigger_screen_shake() -> void:
     if camera:
         camera.apply_shake(0.3, 20.0)  # We'll implement this in camera
+
 
 # Invulnerability (for powerups/testing)
 func make_invulnerable(duration: float) -> void:
@@ -251,6 +285,7 @@ func make_invulnerable(duration: float) -> void:
     add_child(invulnerable_timer)
     invulnerable_timer.start()
 
+
 func activate_invincibility(duration: float) -> void:
     """Public method called by star collectible"""
     make_invulnerable(duration)
@@ -263,6 +298,7 @@ func _disable_invulnerability() -> void:
     if invulnerable_timer:
         invulnerable_timer.queue_free()
         invulnerable_timer = null
+
 
 # Magnet Powerup
 func activate_magnet(duration: float) -> void:
@@ -285,12 +321,14 @@ func activate_magnet(duration: float) -> void:
     add_child(magnet_timer)
     magnet_timer.start()
 
+
 func _disable_magnet() -> void:
     print("Magnet deactivated")
     magnet_active = false
     if magnet_timer:
         magnet_timer.queue_free()
         magnet_timer = null
+
 
 func _attract_orbs(delta: float) -> void:
     # Find all collectibles in range and pull orbs toward player
@@ -309,9 +347,9 @@ func _attract_orbs(delta: float) -> void:
 
         # If within range, attract the orb
         if distance < magnet_range and distance > collision_radius:
-            var direction = (current_position - collectible.global_position).normalized()
+            var direction           = (current_position - collectible.global_position).normalized()
             var attraction_strength = 800.0  # Pixels per second
-            var pull_velocity = direction * attraction_strength * delta
+            var pull_velocity       = direction * attraction_strength * delta
 
             # Move the orb toward the player
             collectible.global_position += pull_velocity
@@ -325,7 +363,9 @@ func _setup_line_renderer() -> void:
     line_renderer.end_cap_mode = Line2D.LINE_CAP_ROUND
     line_renderer.joint_mode = Line2D.LINE_JOINT_ROUND
     line_renderer.antialiased = true
-    # Gradient will be set by cosmetic system
+
+
+# Gradient will be set by cosmetic system
 
 func _setup_collision() -> void:
     var shape = CircleShape2D.new()
@@ -335,12 +375,14 @@ func _setup_collision() -> void:
     collision_area.collision_layer = 1  # Player layer
     collision_area.collision_mask = 62  # Obstacles (2) + Collectibles (4) + Walls (8) + Triggers (16) + Boundary (32)
 
+
 func _setup_camera() -> void:
     camera.position_smoothing_enabled = true
     camera.position_smoothing_speed = 5.0
     # Offset camera so player appears lower on screen (positive Y offset = camera looks up)
     # This shows more tunnel ahead (upward/negative Y direction)
     camera.offset = Vector2(0, -300)  # Negative offset = camera positioned above player
+
 
 func _setup_particles() -> void:
     if particle_trail:
@@ -349,19 +391,22 @@ func _setup_particles() -> void:
         particle_trail.amount = 50
         particle_trail.lifetime = 0.5
         particle_trail.local_coords = false
+
+
 # We'll set up the particle material later
 
 func _setup_movement_controller() -> void:
     # Create appropriate controller based on movement mode
     if movement_mode == "FreeMovement":
         movement_controller = FreeMovementController.new()
-    else:  # AutoRun (default)
+    else: # AutoRun (default)
         movement_controller = AutoRunController.new()
 
     add_child(movement_controller)
     movement_controller.tunnel_half_width = tunnel_half_width
     movement_controller.movement_smoothing = movement_smoothing
     movement_controller.initialize(self, camera)
+
 
 # Signal Handlers
 func _on_game_started() -> void:
@@ -384,13 +429,16 @@ func _on_game_started() -> void:
     if particle_trail:
         particle_trail.emitting = true
 
+
 func _on_game_over(_score: int, _distance: float) -> void:
     if particle_trail:
         particle_trail.emitting = false
 
+
 # Public Methods
 func get_world_position() -> Vector2:
     return current_position
+
 
 func reset() -> void:
     current_position = Vector2.ZERO
@@ -400,7 +448,7 @@ func reset() -> void:
     is_alive = true
     invulnerable = false
 
-    
+
 func kill() -> void:
     _die()
 
@@ -424,13 +472,13 @@ func _update_trail_colors() -> void:
     # For solid colors, use a simple fade gradient
     if current_cosmetic.cosmetic_type == TrailCosmetic.CosmenticType.SOLID:
         var fade_gradient = Gradient.new()
-        var color = current_cosmetic.solid_color
+        var color         = current_cosmetic.solid_color
         fade_gradient.set_color(0, Color(color.r, color.g, color.b, 0.0))  # Transparent at tail
         fade_gradient.add_point(0.5, Color(color.r, color.g, color.b, 0.5))  # Semi-transparent mid
         fade_gradient.set_color(1, Color(color.r, color.g, color.b, 1.0))  # Opaque at head
         line_renderer.gradient = fade_gradient
 
-    # For gradients and animated, apply gradient with alpha multiplier
+        # For gradients and animated, apply gradient with alpha multiplier
     else:
         # Clone the cosmetic's gradient and apply alpha fade
         var base_gradient = current_cosmetic.gradient
@@ -438,7 +486,7 @@ func _update_trail_colors() -> void:
             return
 
         var custom_gradient = Gradient.new()
-        var time = Time.get_ticks_msec() / 1000.0
+        var time            = Time.get_ticks_msec() / 1000.0
 
         # For animated gradients, we need to offset the sampling
         var time_offset = 0.0

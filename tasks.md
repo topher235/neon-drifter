@@ -124,25 +124,38 @@ Can probably be managed through the settings menu with tabs.
 
 - [ ] Decide between GooglePlay/AppStore or just internal achievements
 
+Stats:
+
+- number of deaths by obstacle type
+- longest classic run
+
+Milestones:
+
+- speed bump - die in 5 seconds
+- untouchable - complete 10 daily challenges without dying
+- daily grind - 10 day streak
+- collector - unlock 5 trails
+- getting better - break personal record 10 times
+- anxious - pause 100 times
+
 Distance Milestones:
 
-- 🏃 Sprinter: 1,000m total → Unlock "Speed Trail"
-- 🚀 Marathon: 10,000m total → Unlock "Endurance Trail"
-- 🌟 Ultra Runner: 50,000m total → Unlock "Champion Trail"
+- Sprinter: 1,000m total
+- Marathon: 10,000m total
+- Ultra Runner: 50,000m total
 
 Score Milestones:
 
-- 🥉 Bronze Scorer: 10,000 career points
-- 🥈 Silver Scorer: 100,000 career points
-- 🥇 Gold Scorer: 500,000 career points
+- Bronze Scorer: 25,000 total points
+- Silver Scorer: 125,000 total points
+- Gold Scorer: 500,000 total points
+- Platinum Scorer: 1,000,000 total points
 
 Skill Milestones:
 
-- 🎯 Perfectionist: Collect 100% collectibles in daily run
-- 💨 Speed Demon: Complete daily in under 60s
-- 🔥 Combo Master: Achieve 20x combo
-- 👻 Near Miss: Pass within 5px of 100 obstacles
-- ⚡ No Boost: Complete daily without speed boosts
+- Perfectionist: Collect 100% collectibles in daily run
+- Speed Demon: Complete daily in under 10s
+- Near Miss: Pass within 5px of 1 obstacle
 
 ## Ads
 

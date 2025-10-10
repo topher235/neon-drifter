@@ -43,6 +43,11 @@ var rush_time_remaining: float            = 60.0
 # High Scores
 var high_score: int         = 0
 var longest_distance: float = 0.0
+# Death tracking
+var death_cause: String = ""  # "pillar", "pulse_gate", "timeout"
+# Collectible tracking (for daily challenge stats)
+var total_collectibles_in_run: int = 0
+var collectibles_collected_in_run: int = 0
 
 
 func _ready() -> void:
@@ -74,6 +79,9 @@ func start_game() -> void:
     speed_boost_duration = 0.0
     slowdown_multiplier = 1.0
     slowdown_duration = 0.0
+    death_cause = ""  # Reset death cause
+    total_collectibles_in_run = 0
+    collectibles_collected_in_run = 0
 
     # Initialize timers for timed modes
     if current_game_mode == GameMode.DAILY_CHALLENGE:
@@ -92,6 +100,15 @@ func end_game() -> void:
         return
 
     current_state = GameState.GAME_OVER
+
+    # Record stats before checking high scores
+    StatsManager.add_distance(distance_traveled)
+    StatsManager.add_score(current_score)
+
+    # Record death if there was one
+    if death_cause != "":
+        StatsManager.record_death(death_cause, game_time)
+
     _check_high_scores()
 
     # Add collected orbs to player's totals
@@ -115,6 +132,15 @@ func complete_daily_challenge() -> void:
         add_score(time_bonus)
         print("Time bonus: %d points (%.2f seconds remaining)" % [time_bonus, daily_challenge_time_remaining])
 
+    # Calculate collectible percentage
+    var collectible_percent = 0.0
+    if total_collectibles_in_run > 0:
+        collectible_percent = (float(collectibles_collected_in_run) / float(total_collectibles_in_run)) * 100.0
+
+    # Record stats
+    var completion_time = daily_challenge_time_limit - daily_challenge_time_remaining
+    StatsManager.record_daily_challenge_complete(false, completion_time, collectible_percent)
+
     # Mark daily challenge as completed
     SaveManager.mark_daily_challenge_complete()
 
@@ -133,6 +159,10 @@ func complete_rush_challenge() -> void:
     if time_bonus > 0:
         add_score(time_bonus)
         print("Time bonus: %d points (%.2f seconds remaining)" % [time_bonus, rush_time_remaining])
+
+    # Record stats
+    var completion_time = rush_time_limit - rush_time_remaining
+    StatsManager.record_rush_challenge_complete(false, completion_time)
 
     end_game()  # Use the normal end game flow
 
@@ -163,6 +193,7 @@ func pause_game() -> void:
     if current_state == GameState.PLAYING:
         current_state = GameState.PAUSED
         get_tree().paused = true
+        StatsManager.record_pause()
         game_paused.emit()
 
 
@@ -267,6 +298,7 @@ func _update_daily_challenge_timer(delta: float) -> void:
         if daily_challenge_time_remaining <= 0.0:
             daily_challenge_time_remaining = 0.0
             print("Daily Challenge: Time's up!")
+            death_cause = "timeout"
             end_game()  # Player dies as if they hit an obstacle
     elif current_game_mode == GameMode.RUSH:
         rush_time_remaining -= delta
@@ -276,6 +308,7 @@ func _update_daily_challenge_timer(delta: float) -> void:
         if rush_time_remaining <= 0.0:
             rush_time_remaining = 0.0
             print("RUSH Mode: Time's up!")
+            death_cause = "timeout"
             end_game()  # Player dies as if they hit an obstacle
 
 
@@ -321,13 +354,20 @@ func get_current_run_seed() -> int:
 
 # High Scores
 func _check_high_scores() -> void:
+    var broke_record = false
+
     if current_score > high_score:
         high_score = current_score
         SaveManager.save_high_score(high_score)
+        broke_record = true
 
     if distance_traveled > longest_distance:
         longest_distance = distance_traveled
         SaveManager.save_longest_distance(longest_distance)
+        broke_record = true
+
+    if broke_record:
+        StatsManager.record_personal_record_broken()
 
 
 func _load_high_scores() -> void:
@@ -342,3 +382,20 @@ func get_difficulty() -> float:
 
 func is_playing() -> bool:
     return current_state == GameState.PLAYING
+
+
+# Death tracking
+func record_obstacle_death(obstacle_type: String) -> void:
+    """Called by player when they hit an obstacle"""
+    death_cause = obstacle_type
+
+
+# Collectible tracking
+func register_collectible() -> void:
+    """Called when a collectible is spawned in the level"""
+    total_collectibles_in_run += 1
+
+
+func record_collectible_collected() -> void:
+    """Called when player collects a collectible"""
+    collectibles_collected_in_run += 1

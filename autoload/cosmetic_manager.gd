@@ -131,6 +131,7 @@ func unlock_cosmetic(cosmetic_id: String) -> bool:
 
     # Unlock the cosmetic
     SaveManager.unlock_cosmetic(cosmetic_id)
+    StatsManager.record_cosmetic_unlocked()
     cosmetic_unlocked.emit(cosmetic_id)
     return true
 
