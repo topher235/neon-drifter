@@ -138,6 +138,19 @@ func _create_collectible(data: Dictionary) -> Node2D:
             multiplier.multiplier_duration = data.get("duration", 5.0)
             return multiplier
 
+        "hourglass":
+            # Only spawn hourglass in DAILY_CHALLENGE or RUSH mode
+            if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE or \
+               GameManager.current_game_mode == GameManager.GameMode.RUSH:
+                var hourglass = preload("res://scenes/collectibles/hourglass.tscn").instantiate()
+                hourglass.time_bonus = data.get("time_bonus", 10.0)
+                return hourglass
+            else:
+                # Replace with orb in other game modes
+                var orb = preload("res://scenes/collectibles/orb.tscn").instantiate()
+                orb.point_value = data.get("value", 20)  # Higher value to compensate
+                return orb
+
 #        "speed_boost":
 #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
 #            boost.boost_duration = data.get("duration", 3.0)

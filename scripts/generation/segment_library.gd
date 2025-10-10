@@ -603,6 +603,7 @@ func _create_breathing_room() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-50, 200), "value": 10},
         {"type": "orb", "position": Vector2(50, 200), "value": 10},
+        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 5.0},  # Time bonus in breathing room
         {"type": "orb", "position": Vector2(-50, 700), "value": 10},
         {"type": "orb", "position": Vector2(50, 700), "value": 10},
         {"type": "orb", "position": Vector2(0, 900), "value": 15}
@@ -824,7 +825,7 @@ func _create_gauntlet_run() -> SegmentData:
         {"type": "orb", "position": Vector2(50, 250), "value": 15},
         {"type": "orb", "position": Vector2(-40, 350), "value": 15},
         {"type": "orb", "position": Vector2(40, 550), "value": 20},
-        {"type": "orb", "position": Vector2(50, 800), "value": 20}
+        {"type": "hourglass", "position": Vector2(50, 800), "time_bonus": 12.0}  # Big time bonus for surviving gauntlet
     ] as Array[Dictionary]
 
     return seg
@@ -1130,7 +1131,7 @@ func _create_rest_zone() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-50, 300), "value": 10},
         {"type": "orb", "position": Vector2(50, 300), "value": 10},
-        {"type": "orb", "position": Vector2(0, 500), "value": 10},
+        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 8.0},  # Time bonus in rest zone
         {"type": "orb", "position": Vector2(-50, 700), "value": 10},
         {"type": "orb", "position": Vector2(50, 700), "value": 10},
         {"type": "orb", "position": Vector2(0, 900), "value": 12},

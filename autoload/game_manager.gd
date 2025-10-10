@@ -263,6 +263,21 @@ func activate_orb_multiplier(duration: float) -> void:
     print("Orb multiplier activated: %dx for %.1fs" % [orb_point_multiplier, duration])
 
 
+func add_daily_challenge_time(bonus_time: float) -> void:
+    if current_game_mode == GameMode.DAILY_CHALLENGE:
+        daily_challenge_time_remaining += bonus_time
+        # Cap at the original time limit
+        daily_challenge_time_remaining = min(daily_challenge_time_remaining, daily_challenge_time_limit)
+        timer_changed.emit(daily_challenge_time_remaining)
+        print("Time bonus collected: +%.1fs (now: %.1fs)" % [bonus_time, daily_challenge_time_remaining])
+    elif current_game_mode == GameMode.RUSH:
+        rush_time_remaining += bonus_time
+        # Cap at the original time limit
+        rush_time_remaining = min(rush_time_remaining, rush_time_limit)
+        timer_changed.emit(rush_time_remaining)
+        print("Time bonus collected: +%.1fs (now: %.1fs)" % [bonus_time, rush_time_remaining])
+
+
 # Speed & Distance
 func _update_game_time(delta: float) -> void:
     game_time += delta
