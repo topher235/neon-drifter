@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://k7l8m9n0o1p2q"]
+
+[ext_resource type="Script" path="res://scenes/collectibles/bomb.gd" id="1_bomb"]
+
+[node name="Bomb" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
+script = ExtResource("1_bomb")
+visual = NodePath("Visual")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

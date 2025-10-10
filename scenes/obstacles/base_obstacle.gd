@@ -59,3 +59,33 @@ func update_obstacle(_delta: float) -> void:
 func deactivate() -> void:
     is_active = false
     queue_free()
+
+func destroy_with_effect() -> void:
+    # Spawn destroy particles
+    _spawn_destroy_particles()
+
+    # Play destruction sound
+    AudioManager.play_sfx("orb_collect", -0.3)  # Lower pitch for explosion
+
+    # Deactivate and remove
+    is_active = false
+    queue_free()
+
+func _spawn_destroy_particles() -> void:
+    # Create particle effect at obstacle position
+    var particles_scene = preload("res://scenes/obstacles/destroy_particles.tscn")
+    var particles = particles_scene.instantiate()
+
+    # Add to world (not as child, since this obstacle is being destroyed)
+    var world = get_tree().root
+    if get_parent():
+        world = get_parent()
+
+    world.add_child(particles)
+    particles.global_position = global_position
+    particles.emitting = true
+
+    # Auto-cleanup after particles finish
+    await get_tree().create_timer(2.0).timeout
+    if is_instance_valid(particles):
+        particles.queue_free()

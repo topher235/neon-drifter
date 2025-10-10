@@ -11,6 +11,7 @@ var crt_shader: ShaderMaterial
 
 func _ready() -> void:
     player.add_to_group("player")
+    tunnel_generator.add_to_group("tunnel_generator")
 
     # Set player movement mode based on game mode
     if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE or \

@@ -151,6 +151,10 @@ func _create_collectible(data: Dictionary) -> Node2D:
                 orb.point_value = data.get("value", 20)  # Higher value to compensate
                 return orb
 
+        "bomb":
+            var bomb = preload("res://scenes/collectibles/bomb.tscn").instantiate()
+            return bomb
+
 #        "speed_boost":
 #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
 #            boost.boost_duration = data.get("duration", 3.0)

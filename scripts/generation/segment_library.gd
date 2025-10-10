@@ -317,6 +317,7 @@ func _create_slalom() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
+        {"type": "bomb", "position": Vector2(0, 150)},  # Bomb before the slalom
         {"type": "orb", "position": Vector2(-60, 250), "value": 15},
         {"type": "orb", "position": Vector2(60, 450), "value": 15},
         {"type": "orb", "position": Vector2(-60, 650), "value": 15},
@@ -342,7 +343,7 @@ func _create_narrow_passage() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "orb", "position": Vector2(0, 150), "value": 20},  # Bonus orb instead of speed_boost
+        {"type": "bomb", "position": Vector2(-60, 150)},  # Bomb to clear the narrow passage
         {"type": "stopwatch", "position": Vector2(60, 400), "duration": 6.0, "slow_factor": 0.4}
     ] as Array[Dictionary]
 
@@ -1024,6 +1025,7 @@ func _create_bullet_hell() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
+        {"type": "bomb", "position": Vector2(0, 100)},  # Bomb at start of bullet hell
         {"type": "orb", "position": Vector2(0, 1000), "value": 50}  # Massive reward at end
     ] as Array[Dictionary]
 
@@ -1050,6 +1052,7 @@ func _create_the_grinder() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
+        {"type": "bomb", "position": Vector2(0, 150)},  # Bomb to clear the grinder
         {"type": "orb", "position": Vector2(40, 300), "value": 20},
         {"type": "orb", "position": Vector2(-40, 650), "value": 20},
         {"type": "orb", "position": Vector2(0, 950), "value": 30}
