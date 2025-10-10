@@ -1,4 +1,5 @@
-class_name SettingsModal extends Control
+class_name SettingsModal
+extends Control
 
 ## Settings modal for configuring game audio settings and cosmetics
 ## Can be used in main menu or pause menu
@@ -10,11 +11,10 @@ class_name SettingsModal extends Control
 @onready var sound_check: CheckButton = $Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting/SoundCheckButton
 @onready var close_button: Button = $Panel/MarginContainer/VBoxContainer/CloseButton
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-
-const CosmeticPreviewScene = preload("res://scenes/ui/cosmetic_preview.tscn")
-
+const CosmeticPreviewScene                     = preload("res://scenes/ui/cosmetic_preview.tscn")
 var settings_data: SettingsData
-var cosmetic_previews: Array[CosmeticPreview] = []
+var cosmetic_previews: Array[CosmeticPreview]  = []
+
 
 func _ready() -> void:
     settings_data = SettingsData.new()
@@ -41,22 +41,29 @@ func _ready() -> void:
     # Apply settings to AudioManager
     settings_data.apply_settings()
 
+
 func _load_settings_to_ui() -> void:
     # Set button states without triggering signals
     music_check.set_pressed_no_signal(settings_data.music_enabled)
     sound_check.set_pressed_no_signal(settings_data.sound_enabled)
 
     # Update orb count
+    if not Events.orb_count_updated.is_connected(_update_orb_count):
+        Events.orb_count_updated.connect(_update_orb_count)
     _update_orb_count()
+
 
 func _on_music_toggled(button_pressed: bool) -> void:
     settings_data.set_music_enabled(button_pressed)
 
+
 func _on_sound_toggled(button_pressed: bool) -> void:
     settings_data.set_sound_enabled(button_pressed)
 
+
 func _on_close_button_pressed() -> void:
     close_settings()
+
 
 ## Public method to open the settings modal
 func open_settings() -> void:
@@ -71,6 +78,7 @@ func open_settings() -> void:
 
     # Play open animation
     animation_player.play("open")
+
 
 ## Public method to close the settings modal
 func close_settings() -> void:
@@ -157,5 +165,5 @@ func _refresh_all_previews() -> void:
 
 func _update_orb_count() -> void:
     """Update the orb count label"""
-    var total_orbs = SaveManager.save_data.total_orbs_collected
+    var total_orbs = SaveManager.get_current_orbs()
     orb_count_label.text = "Orbs: %d" % total_orbs

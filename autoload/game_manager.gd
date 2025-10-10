@@ -93,8 +93,13 @@ func end_game() -> void:
 
     current_state = GameState.GAME_OVER
     _check_high_scores()
+
+    # Add collected orbs to player's totals
+    if orbs_collected > 0:
+        SaveManager.add_orbs(orbs_collected)
+
     game_over.emit(current_score, distance_traveled)
-    print("Game Over - Score: %d, Distance: %.1f" % [current_score, distance_traveled])
+    print("Game Over - Score: %d, Distance: %.1f, Orbs: %d" % [current_score, distance_traveled, orbs_collected])
 
 
 func complete_daily_challenge() -> void:

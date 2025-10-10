@@ -114,7 +114,7 @@ func is_cosmetic_unlocked(cosmetic_id: String) -> bool:
 
 func unlock_cosmetic(cosmetic_id: String) -> bool:
     """
-    Unlock a cosmetic (typically by spending orbs)
+    Unlock a cosmetic by spending orbs from current_orbs
     Returns true if unlock succeeded
     """
     if not cosmetics.has(cosmetic_id):
@@ -125,8 +125,8 @@ func unlock_cosmetic(cosmetic_id: String) -> bool:
 
     var cosmetic = cosmetics[cosmetic_id]
 
-    # Check if player has enough orbs
-    if SaveManager.save_data.total_orbs_collected < cosmetic.orb_cost:
+    # Check if player has enough current orbs and spend them
+    if not SaveManager.spend_orbs(cosmetic.orb_cost):
         return false
 
     # Unlock the cosmetic

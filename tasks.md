@@ -4,7 +4,6 @@
 
 - [X] Create a Paused scene that gets displayed when the game is paused
 - [X] Fix player movement so that it does not follow when player clicks Pause button
-- [ ] Fix scene unpausing instead of immediately going to main menu
 
 ## Main Menu
 
@@ -16,7 +15,7 @@
 - [X] Toggle music and sfx
 - [X] Save user choices between games
 - [X] Allow changing settings from pause menu
-- [ ] Disable buy button if not enough orbs
+- [X] Disable buy button if not enough orbs
 
 ## Audio
 
@@ -30,7 +29,7 @@
 - [X] Fix retry button to fully reload the level, using the same seed
 - [ ] Use different wording for RUSH and daily mode (game over sounds like a lose state, not a win state)
 - [ ] Save stats (distance, score, etc.)
-- [ ] Save orb count
+- [X] Save orb count
 
 ## Daily Challenge Mode
 
