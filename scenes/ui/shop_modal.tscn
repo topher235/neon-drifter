@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dbp1ulnofsv7n"]
+[gd_scene load_steps=6 format=3 uid="uid://cqk7y8n3h5nap"]
 
-[ext_resource type="Script" uid="uid://c6jdvesjitgvv" path="res://scenes/ui/settings_modal.gd" id="1_settings"]
+[ext_resource type="Script" uid="uid://bv3x9m2k4n8wp" path="res://scenes/ui/shop_modal.gd" id="1_shop"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 48
@@ -79,7 +79,7 @@ _data = {
 &"open": SubResource("Animation_hx8ht")
 }
 
-[node name="SettingsModal" type="Control"]
+[node name="ShopModal" type="Control"]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -87,7 +87,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_settings")
+script = ExtResource("1_shop")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -133,7 +133,7 @@ theme_override_constants/separation = 20
 
 [node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "SETTINGS"
+text = "SHOP"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
@@ -142,47 +142,35 @@ layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Settings" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer"]
+[node name="Cosmetics" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 0
 
-[node name="SettingsVBox" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings"]
+[node name="CosmeticsVBox" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 10
 
-[node name="MusicSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox"]
+[node name="OrbCountLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/CosmeticsVBox"]
 layout_mode = 2
-theme_override_constants/separation = 20
+text = "Orbs: 0"
+horizontal_alignment = 2
 
-[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/MusicSetting"]
-custom_minimum_size = Vector2(150, 0)
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/CosmeticsVBox"]
 layout_mode = 2
-text = "Music:"
-vertical_alignment = 1
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
-[node name="MusicCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/MusicSetting"]
+[node name="CosmeticsGrid" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Cosmetics/CosmeticsVBox/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-button_pressed = true
-
-[node name="SoundSetting" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-text = "Sound:"
-vertical_alignment = 1
-
-[node name="SoundCheckButton" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting"]
-layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
+theme_override_constants/h_separation = 80
+theme_override_constants/v_separation = 20
+columns = 2
 
 [node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)

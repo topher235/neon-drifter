@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8d9e1f2g3h4i"]
+[gd_scene load_steps=2 format=3 uid="uid://c8eae1f2g3h4i"]
 
 [ext_resource type="Script" path="res://scenes/collectibles/hourglass.gd" id="1_hourglass"]
 

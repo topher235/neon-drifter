@@ -8,7 +8,9 @@ extends Control
 @onready var high_score_label: Label = %HighScoreLabel
 @onready var title_label: Label = %TitleLabel
 @onready var settings_button: Button = %SettingsButton
+@onready var shop_button: Button = %ShopButton
 @onready var settings_modal: SettingsModal = $SettingsModal
+@onready var shop_modal: ShopModal = $ShopModal
 @onready var rush_seed_input: RushSeedInput = $RushSeedInput
 
 var title_character_labels: Array[Label] = []
@@ -21,6 +23,7 @@ func _ready() -> void:
         rush_button.pressed.connect(_on_rush_pressed)
     quit_button.pressed.connect(_on_quit_pressed)
     settings_button.pressed.connect(_on_settings_pressed)
+    shop_button.pressed.connect(_on_shop_pressed)
 
     # Connect RUSH seed input signals
     if rush_seed_input:
@@ -125,6 +128,10 @@ func _on_quit_pressed() -> void:
 func _on_settings_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     settings_modal.open_settings()
+
+func _on_shop_pressed() -> void:
+    AudioManager.play_sfx("ui_click")
+    shop_modal.open_shop()
 
 func _start_game(daily_challenge: bool) -> void:
     # Set game mode in GameManager

@@ -49,7 +49,6 @@ Don't forget to add these to the sandbox as well.
 - [X] Star - grants invincibility for X seconds
 - [X] Magnet - attracts nearby orbs for X seconds
 - [X] Stopwatch - slows game speed back down (if it increases speed due to distance)
-    - [ ] Remove from daily challenge since it has no effect there
 - [ ] Hourglass - adds time to daily challenge
 - [ ] Multiplier - orbs count as double for X seconds (diamond shape)
 - [ ] Size - double the player size for X seconds
@@ -60,7 +59,6 @@ Don't forget to add these to the sandbox as well.
 ### Todo:
 
 - Implement hourglass, multiplier, and bomb collectible
-- Remove stopwatch from spawning in daily challenge
 - Implement shop modal (move cosmetics to shop)
 - Make non-orb collectibles buyables and add to shop (new tab)
 - Add solid colored trails, gradient colored trails, fire trail, lightning trail, starfield trail
