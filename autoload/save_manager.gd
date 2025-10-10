@@ -17,7 +17,8 @@ var save_data = {
                     "first_launch": true,
                     "daily_challenge_completed": false,
                     "last_daily_completion_date": "",
-                    "stats": {}  # StatsManager data
+                    "stats": {},  # StatsManager data
+                    "achievements": {}  # AchievementManager data
                 }
 
 
@@ -95,6 +96,20 @@ func load_stats() -> Dictionary:
     """Load stats data for StatsManager"""
     if save_data.has("stats"):
         return save_data.stats
+    return {}
+
+
+# Achievement persistence
+func save_achievements(achievements: Dictionary) -> void:
+    """Save achievements data from AchievementManager"""
+    save_data.achievements = achievements
+    _write_save_data()
+
+
+func load_achievements() -> Dictionary:
+    """Load achievements data for AchievementManager"""
+    if save_data.has("achievements"):
+        return save_data.achievements
     return {}
 
 
@@ -229,6 +244,7 @@ func reset_save_data() -> void:
         "first_launch": false,
         "daily_challenge_completed": false,
         "last_daily_completion_date": "",
-        "stats": {}
+        "stats": {},
+        "achievements": {}
     }
     _write_save_data()
