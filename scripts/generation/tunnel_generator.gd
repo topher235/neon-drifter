@@ -4,7 +4,6 @@ extends Node
 # Signals
 signal segment_spawned(segment: BaseSegment)
 signal segment_despawned(segment: BaseSegment)
-
 # Configuration
 @export var segments_ahead: int = 4
 @export var segments_behind: int = 2  # Keep 2 behind (plus starting segment)
@@ -13,28 +12,28 @@ signal segment_despawned(segment: BaseSegment)
 
 # State
 var active_segments: Array[BaseSegment] = []
-var starting_segment: StartingSegment = null  # Special starting segment (never despawns)
-var end_segment: EndSegment = null  # Special ending segment for daily challenge
-var segment_pool: Array[BaseSegment] = []
-var current_difficulty: float = 0.0
-var segments_generated: int = 0
-var last_segment_y: float = 0.0
-var max_segments: int = -1  # -1 = infinite (classic mode), positive = fixed count (daily challenge)
-var is_seeded_mode: bool = false  # True for DAILY_CHALLENGE and RUSH (deterministic generation)
-
+var starting_segment: StartingSegment   = null  # Special starting segment (never despawns)
+var end_segment: EndSegment             = null  # Special ending segment for daily challenge
+var segment_pool: Array[BaseSegment]    = []
+var current_difficulty: float           = 0.0
+var segments_generated: int             = 0
+var last_segment_y: float               = 0.0
+var max_segments: int                   = -1  # -1 = infinite (classic mode), positive = fixed count (daily challenge)
+var is_seeded_mode: bool                = false  # True for DAILY_CHALLENGE and RUSH (deterministic generation)
 # Library & RNG
 var segment_library: SegmentLibrary
 var rng: RandomNumberGenerator
-
 # Segment tracking for rules
 var recent_segments: Array[SegmentData] = []  # Store full data instead of just types
-var segments_since_straight: int = 0
-var segments_since_fork: int = 0
-var has_spike_corridor: bool = false  # Track if spike corridor has been generated (for seeded modes)
+var segments_since_straight: int        = 0
+var segments_since_fork: int            = 0
+var has_spike_corridor: bool            = false  # Track if spike corridor has been generated (for seeded modes)
+
 
 func _ready() -> void:
     segment_library = SegmentLibrary.new()
     rng = RandomNumberGenerator.new()
+
 
 func initialize(seed_value: int = -1, is_daily_challenge: bool = false, is_rush: bool = false) -> void:
     if seed_value == -1:
@@ -67,6 +66,7 @@ func initialize(seed_value: int = -1, is_daily_challenge: bool = false, is_rush:
 
     print("Tunnel Generator initialized with seed: %d, max_segments: %d, seeded_mode: %s" % [rng.seed, max_segments, is_seeded_mode])
 
+
 func _initialize_pool() -> void:
     if not use_pooling:
         return
@@ -78,6 +78,7 @@ func _initialize_pool() -> void:
         segment.visible = false
         segment.process_mode = Node.PROCESS_MODE_DISABLED
         segment_pool.append(segment)
+
 
 func _generate_initial_segments() -> void:
     # First, create the starting segment at position 0
@@ -91,6 +92,7 @@ func _generate_initial_segments() -> void:
     for i in range(segments_ahead + 2):
         _spawn_next_segment()
 
+
 func _create_starting_segment() -> void:
     # Create the permanent starting segment using the scene directly
     var start_segment_scene = preload("res://scenes/segments/starting_segment.tscn")
@@ -99,9 +101,10 @@ func _create_starting_segment() -> void:
 
     # Initialize at position 0
     starting_segment.position = Vector2(0, 0)
-    starting_segment.initialize_starting_segment(250.0, 600.0)
+    starting_segment.initialize_starting_segment(300.0, 600.0)
 
     print("Starting segment created at position 0")
+
 
 func _spawn_end_segment() -> void:
     # Create the ending segment for daily challenge using the scene directly
@@ -112,12 +115,13 @@ func _spawn_end_segment() -> void:
     # Position at the end of the last spawned segment
     var spawn_y = last_segment_y
     end_segment.position = Vector2(0, spawn_y)
-    end_segment.initialize_end_segment(250.0, 600.0)
+    end_segment.initialize_end_segment(300.0, 600.0)
 
     # Update tracking
     last_segment_y = spawn_y - 600.0  # End segment length
 
     print("End segment created at position: ", spawn_y)
+
 
 func update_generation(player_y: float) -> void:
     # Spawn new segments ahead
@@ -129,6 +133,7 @@ func update_generation(player_y: float) -> void:
 
     # Update difficulty
     _update_difficulty()
+
 
 func _should_spawn_segment(player_y: float) -> bool:
     # Check if we've reached max segments for daily challenge
@@ -145,6 +150,7 @@ func _should_spawn_segment(player_y: float) -> bool:
     # Changed: spawn ahead (negative Y direction = upward)
     return last_segment_y > player_y - spawn_distance
 
+
 func _calculate_lookahead_distance() -> float:
     # Base on actual active segment lengths for more accurate spawning
     if active_segments.is_empty():
@@ -158,6 +164,7 @@ func _calculate_lookahead_distance() -> float:
     var avg_length = total_length / active_segments.size()
     return segments_ahead * avg_length
 
+
 func _calculate_despawn_distance() -> float:
     # Base on actual active segment lengths for more accurate despawning
     if active_segments.is_empty():
@@ -170,6 +177,7 @@ func _calculate_despawn_distance() -> float:
 
     var avg_length = total_length / active_segments.size()
     return segments_behind * avg_length
+
 
 func _spawn_next_segment() -> BaseSegment:
     # Get valid segment options
@@ -221,6 +229,7 @@ func _spawn_next_segment() -> BaseSegment:
     segment_spawned.emit(segment)
     return segment
 
+
 func _get_valid_segments() -> Array[SegmentData]:
     # In seeded modes, use all segments regardless of difficulty (just filter by complexity)
     # In classic mode, use difficulty-appropriate segments
@@ -241,6 +250,7 @@ func _get_valid_segments() -> Array[SegmentData]:
             valid.append(seg_data)
 
     return valid
+
 
 func _validate_segment_rules(seg_data: SegmentData) -> bool:
     # Seeded mode rule: Force spike corridor if not yet generated and approaching midpoint
@@ -274,13 +284,13 @@ func _validate_segment_rules(seg_data: SegmentData) -> bool:
         return abs(seg_data.curvature) < 5.0
 
     # Rule 3: Limit consecutive similar types
-#    if recent_segment_types.size() >= 3:
-#        var last_three = recent_segment_types.slice(recent_segment_types.size() - 3)
-#        if last_three[0] == seg_data.segment_type and \
-#        last_three[1] == seg_data.segment_type and \
-#        last_three[2] == seg_data.segment_type:
-#            push_warning("Limit consecutive similar types")
-#            return false  # Don't allow 4 in a row
+    #    if recent_segment_types.size() >= 3:
+    #        var last_three = recent_segment_types.slice(recent_segment_types.size() - 3)
+    #        if last_three[0] == seg_data.segment_type and \
+    #        last_three[1] == seg_data.segment_type and \
+    #        last_three[2] == seg_data.segment_type:
+    #            push_warning("Limit consecutive similar types")
+    #            return false  # Don't allow 4 in a row
 
     # Rule 4: Early game should be easier (disabled in seeded modes since we filter complexity 0-1)
     if not is_seeded_mode and segments_generated < 5:
@@ -290,13 +300,14 @@ func _validate_segment_rules(seg_data: SegmentData) -> bool:
 
     return true
 
+
 func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
     if segments.is_empty():
         return segment_library.get_fallback_segment()
 
     # Calculate weights based on difficulty match
     var weights: Array[float] = []
-    var total_weight: float = 0.0
+    var total_weight: float   = 0.0
 
     for seg in segments:
         var weight = 1.0
@@ -306,7 +317,7 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
         if not is_seeded_mode:
             # Calculate how well this segment matches current difficulty
             var seg_mid_difficulty = (seg.min_difficulty + seg.max_difficulty) / 2.0
-            var diff_distance = abs(seg_mid_difficulty - current_difficulty)
+            var diff_distance      = abs(seg_mid_difficulty - current_difficulty)
             # Weight decreases with distance from ideal difficulty
             weight = 1.0 / (1.0 + diff_distance * 0.5)
 
@@ -339,12 +350,13 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
     # Fallback (shouldn't reach here)
     return segments[-1]
 
+
 func _apply_variation(data: SegmentData) -> SegmentData:
     # Clone to avoid modifying original
     var varied = data._duplicate_deep()
 
     # Use consistent tunnel width across all segments
-    varied.tunnel_width = 250.0
+    varied.tunnel_width = 300.0
 
     # Skip random variation in seeded modes (DAILY_CHALLENGE and RUSH)
     # This ensures deterministic, reproducible tunnel layouts
@@ -384,6 +396,7 @@ func _apply_variation(data: SegmentData) -> SegmentData:
 
     return varied
 
+
 func _add_random_obstacle(data: SegmentData) -> void:
     var obstacle_types = ["pillar"]
     if current_difficulty > 4.0:
@@ -392,12 +405,12 @@ func _add_random_obstacle(data: SegmentData) -> void:
     var obs_type = obstacle_types[rng.randi_range(0, obstacle_types.size() - 1)]
 
     var new_obstacle = {
-        "type": obs_type,
-        "position": Vector2(
-            rng.randf_range(-data.tunnel_width/2 + 50, data.tunnel_width/2 - 50),
-            rng.randf_range(200, data.segment_length - 200)
-        )
-    }
+                           "type": obs_type,
+                           "position": Vector2(
+                               rng.randf_range(-data.tunnel_width/2 + 50, data.tunnel_width/2 - 50),
+                               rng.randf_range(200, data.segment_length - 200)
+                           )
+                       }
 
     if obs_type == "pillar":
         new_obstacle["radius"] = rng.randf_range(25.0, 35.0)
@@ -406,23 +419,25 @@ func _add_random_obstacle(data: SegmentData) -> void:
 
     data.obstacles.append(new_obstacle)
 
+
 func _add_random_collectible(data: SegmentData) -> void:
     var col_type = "orb"
-    if current_difficulty > 6.0 and rng.randf() < 0.15:  # Rare speed boosts
+    if current_difficulty > 6.0 and rng.randf() < 0.15: # Rare speed boosts
         col_type = "speed_boost"
 
     var new_collectible = {
-        "type": col_type,
-        "position": Vector2(
-            rng.randf_range(-data.tunnel_width/2 + 30, data.tunnel_width/2 - 30),
-            rng.randf_range(150, data.segment_length - 150)
-        )
-    }
+                              "type": col_type,
+                              "position": Vector2(
+                                  rng.randf_range(-data.tunnel_width/2 + 30, data.tunnel_width/2 - 30),
+                                  rng.randf_range(150, data.segment_length - 150)
+                              )
+                          }
 
     if col_type == "orb":
         new_collectible["value"] = 10 if rng.randf() < 0.8 else 20  # 80% normal, 20% bonus
 
     data.collectibles.append(new_collectible)
+
 
 func _despawn_old_segments(player_y: float) -> void:
     # Calculate adaptive despawn distance based on actual segment lengths
@@ -450,6 +465,7 @@ func _despawn_old_segments(player_y: float) -> void:
         else:
             break  # All remaining segments are still in range
 
+
 func _update_difficulty() -> void:
     # Use GameManager's difficulty directly for consistency
     var base_difficulty = GameManager.get_difficulty()
@@ -461,6 +477,7 @@ func _update_difficulty() -> void:
 
     current_difficulty = clamp(base_difficulty + variation, 0.0, 10.0)
 
+
 # ===== OBJECT POOLING =====
 
 func _acquire_segment() -> BaseSegment:
@@ -470,6 +487,7 @@ func _acquire_segment() -> BaseSegment:
         var segment = _create_segment_instance()
         get_parent().add_child(segment)
         return segment
+
 
 func _release_segment(segment: BaseSegment) -> void:
     segment.deactivate()
@@ -481,9 +499,11 @@ func _release_segment(segment: BaseSegment) -> void:
     else:
         segment.queue_free()
 
+
 func _create_segment_instance() -> BaseSegment:
     var segment_scene = preload("res://scenes/segments/base_segment.tscn")
     return segment_scene.instantiate()
+
 
 # ===== CLEANUP =====
 
@@ -503,6 +523,7 @@ func _clear_segments() -> void:
         end_segment = null
 
     last_segment_y = 0.0
+
 
 func cleanup() -> void:
     _clear_segments()

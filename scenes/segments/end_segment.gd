@@ -6,15 +6,15 @@ extends BaseSegment
 ## Features a checkerboard pattern visual and trigger area to end the run
 
 signal run_completed
-
 @export var trigger_area: Area2D
+
 
 func _ready() -> void:
     initialize_end_segment()
     position = Vector2(250, 700)
 
 
-func initialize_end_segment(tunnel_width: float = 250.0, length: float = 600.0) -> void:
+func initialize_end_segment(tunnel_width: float = 300.0, length: float = 600.0) -> void:
     # Create minimal segment data
     var data = SegmentData.new()
     data.segment_id = "end_segment"
@@ -35,17 +35,18 @@ func initialize_end_segment(tunnel_width: float = 250.0, length: float = 600.0) 
     # Setup the trigger area
     _setup_trigger_area()
 
+
 func _draw_ending_walls() -> void:
     # Clear any existing walls first
     for child in walls_container.get_children():
         child.queue_free()
 
-    var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
-    var length = segment_data.segment_length
+    var half_width = segment_data.tunnel_width / 2.0  # Always 150.0
+    var length     = segment_data.segment_length
 
     # All tunnels are now 250px wide, so walls are at fixed positions
     var wall_line_position = half_width
-    var wall_thickness = 8.0
+    var wall_thickness     = 8.0
 
     # Left wall (west) - extends downward from top
     _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness, false)
@@ -56,11 +57,12 @@ func _draw_ending_walls() -> void:
     # Top wall (north) - connects left and right at the top (far end)
     _create_wall_with_collision(Vector2(-wall_line_position, -length), Vector2(wall_line_position, -length), wall_thickness, true)
 
+
 func _draw_checkerboard_pattern() -> void:
     # Create a checkerboard pattern in the background as a visual cue
     var checker_size = 50.0  # Size of each checker square
-    var half_width = segment_data.tunnel_width / 2.0
-    var length = segment_data.segment_length
+    var half_width   = segment_data.tunnel_width / 2.0
+    var length       = segment_data.segment_length
 
     # Calculate how many checkers we need
     var cols = int(segment_data.tunnel_width / checker_size)
@@ -81,6 +83,7 @@ func _draw_checkerboard_pattern() -> void:
                 )
                 background.add_child(checker)
 
+
 func _setup_trigger_area() -> void:
     # Create the trigger area if it doesn't exist
     if not trigger_area:
@@ -88,7 +91,7 @@ func _setup_trigger_area() -> void:
         add_child(trigger_area)
 
         var collision = CollisionShape2D.new()
-        var shape = RectangleShape2D.new()
+        var shape     = RectangleShape2D.new()
 
         # Make the trigger area span the full width and be at the end
         var thickness := segment_data.segment_length
@@ -108,11 +111,13 @@ func _setup_trigger_area() -> void:
         trigger_area.body_entered.connect(_on_trigger_entered)
         trigger_area.area_entered.connect(_on_trigger_area_entered)
 
+
 func _on_trigger_entered(body: Node2D) -> void:
     # Check if it's the player
     if body.is_in_group("player"):
         run_completed.emit()
         _complete_run()
+
 
 func _on_trigger_area_entered(area: Area2D) -> void:
     # Alternative check in case player uses Area2D
@@ -120,10 +125,12 @@ func _on_trigger_area_entered(area: Area2D) -> void:
         run_completed.emit()
         _complete_run()
 
+
 func _complete_run() -> void:
     # Notify GameManager that the run is complete
     if GameManager:
         GameManager.complete_daily_challenge()
+
 
 func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float, use_round_caps: bool = false) -> void:
     # Create visual wall (Line2D)
@@ -141,14 +148,14 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
         wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX  # Cap at far end
 
     # Create collision (StaticBody2D with rectangular shape)
-    var wall_collision = StaticBody2D.new()
+    var wall_collision  = StaticBody2D.new()
     var collision_shape = CollisionShape2D.new()
-    var shape = RectangleShape2D.new()
+    var shape           = RectangleShape2D.new()
 
     # Calculate rectangle dimensions and position
-    var wall_length = start_pos.distance_to(end_pos)
+    var wall_length    = start_pos.distance_to(end_pos)
     var wall_direction = (end_pos - start_pos).normalized()
-    var wall_angle = wall_direction.angle()
+    var wall_angle     = wall_direction.angle()
 
     shape.size = Vector2(thickness, wall_length)
 

@@ -1,13 +1,15 @@
 class_name SegmentLibrary
 extends RefCounted
 
-var all_segments: Array[SegmentData] = []
-var segments_by_type: Dictionary = {}
+var all_segments: Array[SegmentData]   = []
+var segments_by_type: Dictionary       = {}
 var segments_by_difficulty: Dictionary = {}
+
 
 func _init() -> void:
     _create_segments()
     _index_segments()
+
 
 func _create_segments() -> void:
     # Basic segments
@@ -71,6 +73,7 @@ func _create_segments() -> void:
 
     print("Loaded %d segment templates" % all_segments.size())
 
+
 # ===== BASIC STRAIGHT SEGMENTS =====
 
 func _create_straight_empty() -> SegmentData:
@@ -78,7 +81,7 @@ func _create_straight_empty() -> SegmentData:
     seg.segment_id = "straight_empty"
     seg.segment_type = "straight"
     seg.segment_length = 600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 2
@@ -93,12 +96,13 @@ func _create_straight_empty() -> SegmentData:
 
     return seg
 
+
 func _create_straight_single_pillar() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "straight_single_pillar"
     seg.segment_type = "straight"
     seg.segment_length = 700.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 1
     seg.max_difficulty = 8
@@ -116,12 +120,13 @@ func _create_straight_single_pillar() -> SegmentData:
 
     return seg
 
+
 func _create_straight_double_pillar() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "straight_double_pillar"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 2
     seg.max_difficulty = 10
@@ -139,12 +144,13 @@ func _create_straight_double_pillar() -> SegmentData:
 
     return seg
 
+
 func _create_straight_gate() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "straight_gate"
     seg.segment_type = "straight"
     seg.segment_length = 700.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 3
     seg.max_difficulty = 10
@@ -161,12 +167,13 @@ func _create_straight_gate() -> SegmentData:
 
     return seg
 
+
 func _create_shockwave_zone() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "shockwave_zone"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 10
@@ -185,6 +192,7 @@ func _create_shockwave_zone() -> SegmentData:
 
     return seg
 
+
 # ===== CURVE SEGMENTS =====
 
 func _create_gentle_left() -> SegmentData:
@@ -192,7 +200,7 @@ func _create_gentle_left() -> SegmentData:
     seg.segment_id = "gentle_left"
     seg.segment_type = "curve"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = -25.0
     seg.curve_type = "gentle"
     seg.min_difficulty = 1
@@ -210,12 +218,13 @@ func _create_gentle_left() -> SegmentData:
 
     return seg
 
+
 func _create_gentle_right() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "gentle_right"
     seg.segment_type = "curve"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 25.0
     seg.curve_type = "gentle"
     seg.min_difficulty = 1
@@ -233,12 +242,13 @@ func _create_gentle_right() -> SegmentData:
 
     return seg
 
+
 func _create_sharp_left() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "sharp_left"
     seg.segment_type = "curve"
     seg.segment_length = 600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = -60.0
     seg.curve_type = "sharp"
     seg.min_difficulty = 4
@@ -252,12 +262,13 @@ func _create_sharp_left() -> SegmentData:
 
     return seg
 
+
 func _create_sharp_right() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "sharp_right"
     seg.segment_type = "curve"
     seg.segment_length = 600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 60.0
     seg.curve_type = "sharp"
     seg.min_difficulty = 4
@@ -271,6 +282,7 @@ func _create_sharp_right() -> SegmentData:
 
     return seg
 
+
 # ===== COMPLEX SEGMENTS =====
 
 func _create_s_curve() -> SegmentData:
@@ -278,7 +290,7 @@ func _create_s_curve() -> SegmentData:
     seg.segment_id = "s_curve"
     seg.segment_type = "s_curve"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0  # Net zero, but curves both ways
     seg.curve_type = "s_shape"
     seg.min_difficulty = 5
@@ -298,12 +310,13 @@ func _create_s_curve() -> SegmentData:
 
     return seg
 
+
 func _create_slalom() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "slalom"
     seg.segment_type = "straight"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 6
     seg.max_difficulty = 10
@@ -317,7 +330,7 @@ func _create_slalom() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "bomb", "position": Vector2(0, 150)},  # Bomb before the slalom
+        {"type": "bomb", "position": Vector2(0, 150)}, # Bomb before the slalom
         {"type": "orb", "position": Vector2(-60, 250), "value": 15},
         {"type": "orb", "position": Vector2(60, 450), "value": 15},
         {"type": "orb", "position": Vector2(-60, 650), "value": 15},
@@ -326,12 +339,13 @@ func _create_slalom() -> SegmentData:
 
     return seg
 
+
 func _create_narrow_passage() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "narrow_passage"
     seg.segment_type = "straight"
     seg.segment_length = 600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 7
     seg.max_difficulty = 10
@@ -343,18 +357,19 @@ func _create_narrow_passage() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "bomb", "position": Vector2(-60, 150)},  # Bomb to clear the narrow passage
+        {"type": "bomb", "position": Vector2(-60, 150)}, # Bomb to clear the narrow passage
         {"type": "stopwatch", "position": Vector2(60, 400), "duration": 6.0, "slow_factor": 0.4}
     ] as Array[Dictionary]
 
     return seg
+
 
 func _create_wall_gauntlet() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "wall_gauntlet"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 4
     seg.max_difficulty = 10
@@ -375,12 +390,13 @@ func _create_wall_gauntlet() -> SegmentData:
 
     return seg
 
+
 func _create_pulse_timing() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "pulse_timing"
     seg.segment_type = "straight"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 5
     seg.max_difficulty = 10
@@ -401,12 +417,13 @@ func _create_pulse_timing() -> SegmentData:
 
     return seg
 
+
 func _create_split_path() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "split_path"
     seg.segment_type = "straight"
     seg.segment_length = 1600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 2
     seg.max_difficulty = 8
@@ -427,12 +444,13 @@ func _create_split_path() -> SegmentData:
 
     return seg
 
+
 func _create_spike_corridor() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "spike_corridor"
     seg.segment_type = "straight"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 1
     seg.max_difficulty = 9
@@ -443,12 +461,12 @@ func _create_spike_corridor() -> SegmentData:
     # Left wall: rotation=0° (base at wall, extends right into tunnel)
     # Right wall: rotation=180° (base at wall, extends left into tunnel)
     seg.obstacles = [
-        {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 30.0},  # Neg X = right wall
-        {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 30.0},  # Pos x = left wall
+        {"type": "triangle_spike", "position": Vector2(-125, 250), "rotation_degrees": 0, "size": 30.0}, # Neg X = right wall
+        {"type": "triangle_spike", "position": Vector2(125, 400), "rotation_degrees": 180, "size": 30.0}, # Pos x = left wall
         {"type": "triangle_spike", "position": Vector2(-125, 550), "rotation_degrees": 0, "size": 30.0},
         {"type": "triangle_spike", "position": Vector2(75, 700), "rotation_degrees": 180, "size": 50.0}
-        # TODO: figure out the forumla for calculating position based on what the triangle size is
-        #  e.g. why is x=50 correct for size 50 instead of ~100? Probably geometry
+    # TODO: figure out the forumla for calculating position based on what the triangle size is
+    #  e.g. why is x=50 correct for size 50 instead of ~100? Probably geometry
     ] as Array[Dictionary]
 
     seg.collectibles = [
@@ -459,12 +477,13 @@ func _create_spike_corridor() -> SegmentData:
 
     return seg
 
+
 func _create_fog_zone() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "fog_zone"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 9
@@ -472,7 +491,7 @@ func _create_fog_zone() -> SegmentData:
 
     # Smoke screen obscures vision, with pillars hidden inside
     seg.obstacles = [
-        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 250.0, "height": 500.0, "opacity": 0.9},
+        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 300.0, "height": 500.0, "opacity": 0.9},
         {"type": "pillar", "position": Vector2(-40, 350), "radius": 25.0},
         {"type": "pillar", "position": Vector2(40, 450), "radius": 25.0}
     ] as Array[Dictionary]
@@ -484,12 +503,13 @@ func _create_fog_zone() -> SegmentData:
 
     return seg
 
+
 func _create_simple_static_wall() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "simple_wall"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 3
@@ -509,6 +529,7 @@ func _create_simple_static_wall() -> SegmentData:
 
     return seg
 
+
 # ===== NEW SEGMENTS - COMPLEXITY 0-1 (BEGINNER) =====
 
 func _create_orb_highway() -> SegmentData:
@@ -516,7 +537,7 @@ func _create_orb_highway() -> SegmentData:
     seg.segment_id = "orb_highway"
     seg.segment_type = "straight"
     seg.segment_length = 700.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 3
@@ -533,12 +554,13 @@ func _create_orb_highway() -> SegmentData:
 
     return seg
 
+
 func _create_gentle_weave() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "gentle_weave"
     seg.segment_type = "curve"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 15.0
     seg.curve_type = "gentle"
     seg.min_difficulty = 0
@@ -558,12 +580,13 @@ func _create_gentle_weave() -> SegmentData:
 
     return seg
 
+
 func _create_side_paths() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "side_paths"
     seg.segment_type = "straight"
     seg.segment_length = 700.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 4
@@ -585,12 +608,13 @@ func _create_side_paths() -> SegmentData:
 
     return seg
 
+
 func _create_breathing_room() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "breathing_room"
     seg.segment_type = "straight"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 5
@@ -604,13 +628,14 @@ func _create_breathing_room() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-50, 200), "value": 10},
         {"type": "orb", "position": Vector2(50, 200), "value": 10},
-        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 5.0},  # Time bonus in breathing room
+        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 5.0}, # Time bonus in breathing room
         {"type": "orb", "position": Vector2(-50, 700), "value": 10},
         {"type": "orb", "position": Vector2(50, 700), "value": 10},
         {"type": "orb", "position": Vector2(0, 900), "value": 15}
     ] as Array[Dictionary]
 
     return seg
+
 
 # ===== NEW SEGMENTS - COMPLEXITY 2-3 (INTERMEDIATE) =====
 
@@ -619,7 +644,7 @@ func _create_chicane() -> SegmentData:
     seg.segment_id = "chicane"
     seg.segment_type = "s_curve"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0  # Net zero, alternating curves
     seg.curve_type = "zigzag"
     seg.min_difficulty = 3
@@ -640,12 +665,13 @@ func _create_chicane() -> SegmentData:
 
     return seg
 
+
 func _create_pillar_forest() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "pillar_forest"
     seg.segment_type = "straight"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 4
     seg.max_difficulty = 9
@@ -668,12 +694,13 @@ func _create_pillar_forest() -> SegmentData:
 
     return seg
 
+
 func _create_gate_sequence() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "gate_sequence"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 3
     seg.max_difficulty = 8
@@ -693,12 +720,13 @@ func _create_gate_sequence() -> SegmentData:
 
     return seg
 
+
 func _create_curve_and_dodge() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "curve_and_dodge"
     seg.segment_type = "curve"
     seg.segment_length = 850.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 30.0
     seg.curve_type = "gentle"
     seg.min_difficulty = 4
@@ -720,12 +748,13 @@ func _create_curve_and_dodge() -> SegmentData:
 
     return seg
 
+
 func _create_hourglass() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "hourglass"
     seg.segment_type = "straight"
     seg.segment_length = 700.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 3
     seg.max_difficulty = 7
@@ -747,12 +776,13 @@ func _create_hourglass() -> SegmentData:
 
     return seg
 
+
 func _create_smoke_and_mirrors() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "smoke_and_mirrors"
     seg.segment_type = "straight"
     seg.segment_length = 750.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 4
     seg.max_difficulty = 9
@@ -760,7 +790,7 @@ func _create_smoke_and_mirrors() -> SegmentData:
 
     # Smoke screen with triangle spikes hidden inside
     seg.obstacles = [
-        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 250.0, "height": 550.0, "opacity": 0.85},
+        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 300.0, "height": 550.0, "opacity": 0.85},
         {"type": "triangle_spike", "position": Vector2(-125, 300), "rotation_degrees": 0, "size": 35.0},
         {"type": "triangle_spike", "position": Vector2(125, 450), "rotation_degrees": 180, "size": 35.0}
     ] as Array[Dictionary]
@@ -772,6 +802,7 @@ func _create_smoke_and_mirrors() -> SegmentData:
 
     return seg
 
+
 # ===== NEW SEGMENTS - COMPLEXITY 4-5 (ADVANCED) =====
 
 func _create_double_helix() -> SegmentData:
@@ -779,7 +810,7 @@ func _create_double_helix() -> SegmentData:
     seg.segment_id = "double_helix"
     seg.segment_type = "s_curve"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0  # Net zero, sharp alternating curves
     seg.curve_type = "sharp_s"
     seg.min_difficulty = 6
@@ -801,12 +832,13 @@ func _create_double_helix() -> SegmentData:
 
     return seg
 
+
 func _create_gauntlet_run() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "gauntlet_run"
     seg.segment_type = "straight"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 7
     seg.max_difficulty = 10
@@ -831,12 +863,13 @@ func _create_gauntlet_run() -> SegmentData:
 
     return seg
 
+
 func _create_pulse_corridor() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "pulse_corridor"
     seg.segment_type = "straight"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 6
     seg.max_difficulty = 10
@@ -858,12 +891,13 @@ func _create_pulse_corridor() -> SegmentData:
 
     return seg
 
+
 func _create_spiral_descent() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "spiral_descent"
     seg.segment_type = "curve"
     seg.segment_length = 1100.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 45.0  # Continuous curve that tightens
     seg.curve_type = "tightening"
     seg.min_difficulty = 6
@@ -885,12 +919,13 @@ func _create_spiral_descent() -> SegmentData:
 
     return seg
 
+
 func _create_wall_maze() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "wall_maze"
     seg.segment_type = "straight"
     seg.segment_length = 850.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 7
     seg.max_difficulty = 10
@@ -914,12 +949,13 @@ func _create_wall_maze() -> SegmentData:
 
     return seg
 
+
 func _create_fork_in_road() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "fork_in_road"
     seg.segment_type = "straight"
     seg.segment_length = 1200.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 5
     seg.max_difficulty = 9
@@ -943,6 +979,7 @@ func _create_fork_in_road() -> SegmentData:
 
     return seg
 
+
 # ===== NEW SEGMENTS - COMPLEXITY 6+ (EXPERT/CHAOS) =====
 
 func _create_chaos_zone() -> SegmentData:
@@ -950,7 +987,7 @@ func _create_chaos_zone() -> SegmentData:
     seg.segment_id = "chaos_zone"
     seg.segment_type = "straight"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 8
     seg.max_difficulty = 10
@@ -973,12 +1010,13 @@ func _create_chaos_zone() -> SegmentData:
 
     return seg
 
+
 func _create_death_spiral() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "death_spiral"
     seg.segment_type = "curve"
     seg.segment_length = 900.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = -60.0  # Sharp continuous curve
     seg.curve_type = "sharp"
     seg.min_difficulty = 8
@@ -1000,12 +1038,13 @@ func _create_death_spiral() -> SegmentData:
 
     return seg
 
+
 func _create_bullet_hell() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "bullet_hell"
     seg.segment_type = "straight"
     seg.segment_length = 1100.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 9
     seg.max_difficulty = 10
@@ -1013,7 +1052,7 @@ func _create_bullet_hell() -> SegmentData:
 
     # 8-10 pillars in pseudo-random pattern with smoke screen
     seg.obstacles = [
-        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 250.0, "height": 400.0, "opacity": 0.75},
+        {"type": "smoke_screen", "position": Vector2(0, 0), "width": 300.0, "height": 400.0, "opacity": 0.75},
         {"type": "pillar", "position": Vector2(-60, 250), "radius": 25.0},
         {"type": "pillar", "position": Vector2(40, 300), "radius": 25.0},
         {"type": "pillar", "position": Vector2(-30, 400), "radius": 25.0},
@@ -1025,18 +1064,19 @@ func _create_bullet_hell() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "bomb", "position": Vector2(0, 100)},  # Bomb at start of bullet hell
+        {"type": "bomb", "position": Vector2(0, 100)}, # Bomb at start of bullet hell
         {"type": "orb", "position": Vector2(0, 1000), "value": 50}  # Massive reward at end
     ] as Array[Dictionary]
 
     return seg
+
 
 func _create_the_grinder() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "the_grinder"
     seg.segment_type = "s_curve"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0  # Net zero, S-curve
     seg.curve_type = "s_shape"
     seg.min_difficulty = 8
@@ -1052,7 +1092,7 @@ func _create_the_grinder() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "bomb", "position": Vector2(0, 150)},  # Bomb to clear the grinder
+        {"type": "bomb", "position": Vector2(0, 150)}, # Bomb to clear the grinder
         {"type": "orb", "position": Vector2(40, 300), "value": 20},
         {"type": "orb", "position": Vector2(-40, 650), "value": 20},
         {"type": "orb", "position": Vector2(0, 950), "value": 30}
@@ -1060,12 +1100,13 @@ func _create_the_grinder() -> SegmentData:
 
     return seg
 
+
 func _create_asymmetric_madness() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "asymmetric_madness"
     seg.segment_type = "curve"
     seg.segment_length = 950.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 45.0
     seg.curve_type = "gentle"
     seg.min_difficulty = 8
@@ -1088,12 +1129,13 @@ func _create_asymmetric_madness() -> SegmentData:
 
     return seg
 
+
 func _create_spike_valley() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "spike_valley"
     seg.segment_type = "straight"
     seg.segment_length = 800.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 7
     seg.max_difficulty = 10
@@ -1117,6 +1159,7 @@ func _create_spike_valley() -> SegmentData:
 
     return seg
 
+
 # ===== SPECIAL/SITUATIONAL SEGMENTS =====
 
 func _create_rest_zone() -> SegmentData:
@@ -1124,7 +1167,7 @@ func _create_rest_zone() -> SegmentData:
     seg.segment_id = "rest_zone"
     seg.segment_type = "straight"
     seg.segment_length = 1400.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 0
     seg.max_difficulty = 2
@@ -1134,7 +1177,7 @@ func _create_rest_zone() -> SegmentData:
     seg.collectibles = [
         {"type": "orb", "position": Vector2(-50, 300), "value": 10},
         {"type": "orb", "position": Vector2(50, 300), "value": 10},
-        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 8.0},  # Time bonus in rest zone
+        {"type": "hourglass", "position": Vector2(0, 500), "time_bonus": 8.0}, # Time bonus in rest zone
         {"type": "orb", "position": Vector2(-50, 700), "value": 10},
         {"type": "orb", "position": Vector2(50, 700), "value": 10},
         {"type": "orb", "position": Vector2(0, 900), "value": 12},
@@ -1144,12 +1187,13 @@ func _create_rest_zone() -> SegmentData:
 
     return seg
 
+
 func _create_speed_trial() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "speed_trial"
     seg.segment_type = "straight"
     seg.segment_length = 1000.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 4
     seg.max_difficulty = 7
@@ -1171,12 +1215,13 @@ func _create_speed_trial() -> SegmentData:
 
     return seg
 
+
 func _create_treasure_room() -> SegmentData:
     var seg = SegmentData.new()
     seg.segment_id = "treasure_room"
     seg.segment_type = "straight"
     seg.segment_length = 600.0
-    seg.tunnel_width = 250.0
+    seg.tunnel_width = 300.0
     seg.curvature = 0.0
     seg.min_difficulty = 3
     seg.max_difficulty = 6
@@ -1188,7 +1233,7 @@ func _create_treasure_room() -> SegmentData:
     ] as Array[Dictionary]
 
     seg.collectibles = [
-        {"type": "multiplier", "position": Vector2(-40, 350), "duration": 5.0},  # Multiplier collectible
+        {"type": "multiplier", "position": Vector2(-40, 350), "duration": 5.0}, # Multiplier collectible
         {"type": "magnet", "position": Vector2(40, 350), "duration": 6.0},
         {"type": "orb", "position": Vector2(-60, 300), "value": 15},
         {"type": "orb", "position": Vector2(60, 300), "value": 15},
@@ -1198,6 +1243,7 @@ func _create_treasure_room() -> SegmentData:
     ] as Array[Dictionary]
 
     return seg
+
 
 # ===== INDEXING =====
 
@@ -1214,6 +1260,7 @@ func _index_segments() -> void:
                 segments_by_difficulty[diff] = []
             segments_by_difficulty[diff].append(seg)
 
+
 # ===== QUERY METHODS =====
 
 func get_segments_by_difficulty(difficulty: float) -> Array:
@@ -1222,13 +1269,16 @@ func get_segments_by_difficulty(difficulty: float) -> Array:
         return segments_by_difficulty[diff_int]
     return []
 
+
 func get_segments_by_type(type: String) -> Array:
     if type in segments_by_type:
         return segments_by_type[type]
     return []
 
+
 func get_fallback_segment() -> SegmentData:
     return _create_straight_empty()
+
 
 func get_random_segment(rng: RandomNumberGenerator) -> SegmentData:
     if all_segments.is_empty():

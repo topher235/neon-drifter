@@ -40,7 +40,7 @@ func handle_input() -> void:
 
             # Convert screen X (0 to viewport_width) to game X (-tunnel_half_width to +tunnel_half_width)
             var normalized_x = (mouse_pos.x / viewport_size.x) - 0.5  # -0.5 to 0.5
-            target_x = normalized_x * (tunnel_half_width * 3)
+            target_x = normalized_x * (tunnel_half_width * 2.4)
             target_x = clamp(target_x, -tunnel_half_width, tunnel_half_width)
     else:
         # Keep X position when not touching

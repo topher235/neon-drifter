@@ -11,6 +11,7 @@ extends CanvasLayer
 # Animation
 var combo_tween: Tween
 
+
 func _ready() -> void:
     # Connect to game signals
     GameManager.score_changed.connect(_on_score_changed)
@@ -24,9 +25,11 @@ func _ready() -> void:
 
     _update_display()
 
+
 func _process(_delta: float) -> void:
     if GameManager.is_playing():
         _update_distance()
+
 
 func _update_display() -> void:
     score_label.text = "Score: %d" % GameManager.current_score
@@ -47,27 +50,33 @@ func _update_display() -> void:
         timer_label.visible = false
         distance_label.visible = true
 
+
 func _update_distance() -> void:
     distance_label.text = "%.0fm" % (GameManager.distance_traveled / 10.0)
+
 
 func _on_score_changed(_new_score: int) -> void:
     score_label.text = "Score: %d" % _new_score
     _animate_label(score_label)
 
+
 func _on_speed_changed(_new_speed: float) -> void:
     speed_label.text = "%.0f km/h" % (_new_speed / 5.0)
+
 
 func _on_combo_changed(combo: int) -> void:
     combo_label.text = "x%d" % combo
 
     if combo > 1:
-        combo_label.visible = true
+        #        combo_label.visible = true
         _animate_combo(combo)
     else:
         combo_label.visible = false
 
+
 func _on_timer_changed(time_remaining: float) -> void:
     _update_timer_display(time_remaining)
+
 
 func _update_timer_display(time_remaining: float) -> void:
     # Format as seconds with one decimal place
@@ -88,10 +97,12 @@ func _update_timer_display(time_remaining: float) -> void:
         timer_label.modulate = Color.WHITE  # White when plenty of time
         timer_label.scale = Vector2(1.0, 1.0)
 
+
 func _animate_label(label: Label) -> void:
     var tween = create_tween()
     tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.1)
     tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.1)
+
 
 func _animate_combo(combo: int) -> void:
     # Cancel existing tween
@@ -110,13 +121,16 @@ func _animate_combo(combo: int) -> void:
     combo_label.modulate = flash_color
     combo_tween.tween_property(combo_label, "modulate", Color.WHITE, 0.3)
 
+
 func _on_game_started() -> void:
     visible = true
     _update_display()
 
+
 func _on_game_over(_score: int, _distance: float) -> void:
     # Keep HUD visible to show final stats
     pass
+
 
 func _on_pause_pressed() -> void:
     GameManager.pause_game()

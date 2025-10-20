@@ -5,7 +5,7 @@ extends BaseSegment
 ## Has walls on west (left), east (right), and south (bottom)
 ## No obstacles or collectibles
 
-func initialize_starting_segment(tunnel_width: float = 250.0, length: float = 600.0) -> void:
+func initialize_starting_segment(tunnel_width: float = 300.0, length: float = 600.0) -> void:
     # Create minimal segment data
     var data = SegmentData.new()
     data.segment_id = "starting_segment"
@@ -29,17 +29,18 @@ func initialize_starting_segment(tunnel_width: float = 250.0, length: float = 60
     # Add kill zone below the south wall
     _create_boundary_kill_zone()
 
+
 func _draw_starting_walls() -> void:
     # Clear any existing walls first
     for child in walls_container.get_children():
         child.queue_free()
 
-    var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
-    var length = segment_data.segment_length
+    var half_width = segment_data.tunnel_width / 2.0  # Always 150.0
+    var length     = segment_data.segment_length
 
     # All tunnels are now 250px wide, so walls are at fixed positions
     var wall_line_position = half_width
-    var wall_thickness = 16.0
+    var wall_thickness     = 16.0
 
     # Left wall (west) - extends upward from bottom
     _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(-wall_line_position, -length), wall_thickness, false)
@@ -49,6 +50,7 @@ func _draw_starting_walls() -> void:
 
     # Bottom wall (south) - connects left and right at the bottom
     _create_wall_with_collision(Vector2(-wall_line_position, 0), Vector2(wall_line_position, 0), wall_thickness, true)
+
 
 func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float, use_round_caps: bool = false) -> void:
     # Create visual wall (Line2D)
@@ -66,14 +68,14 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
         wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX  # Cap at far end
 
     # Create collision (StaticBody2D with rectangular shape)
-    var wall_collision = StaticBody2D.new()
+    var wall_collision  = StaticBody2D.new()
     var collision_shape = CollisionShape2D.new()
-    var shape = RectangleShape2D.new()
+    var shape           = RectangleShape2D.new()
 
     # Calculate rectangle dimensions and position
-    var wall_length = start_pos.distance_to(end_pos)
+    var wall_length    = start_pos.distance_to(end_pos)
     var wall_direction = (end_pos - start_pos).normalized()
-    var wall_angle = wall_direction.angle()
+    var wall_angle     = wall_direction.angle()
 
     shape.size = Vector2(thickness, wall_length)
 
@@ -92,11 +94,12 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
     walls_container.add_child(wall_visual)
     walls_container.add_child(wall_collision)
 
+
 func _create_boundary_kill_zone() -> void:
     # Create an Area2D that triggers player death if they go below the south wall
-    var kill_zone = Area2D.new()
+    var kill_zone  = Area2D.new()
     var kill_shape = CollisionShape2D.new()
-    var shape = RectangleShape2D.new()
+    var shape      = RectangleShape2D.new()
 
     var half_width = segment_data.tunnel_width / 2.0
 

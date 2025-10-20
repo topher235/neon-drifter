@@ -36,7 +36,7 @@ var magnet_active: bool          = false
 var magnet_timer: Timer
 var magnet_range: float          = 200.0  # Range to attract orbs
 # Movement bounds
-var tunnel_half_width: float = 125.0  # Half of 250
+var tunnel_half_width: float = 150.0  # Half of 300
 # Trail optimization
 var last_trail_point: Vector2        = Vector2.ZERO
 var distance_since_last_point: float = 0.0

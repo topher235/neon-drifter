@@ -14,6 +14,7 @@ var segment_index: int = 0
 # State
 var is_active: bool = false
 
+
 func initialize(data: SegmentData, index: int) -> void:
     segment_data = data
     segment_index = index
@@ -25,12 +26,14 @@ func initialize(data: SegmentData, index: int) -> void:
     _setup_walls()
     _setup_background()
 
+
 func _clear_containers() -> void:
     # Clear any existing children (for pooling)
     for child in obstacles_container.get_children():
         child.queue_free()
     for child in collectibles_container.get_children():
         child.queue_free()
+
 
 func _spawn_obstacles() -> void:
     for obs_data in segment_data.obstacles:
@@ -40,6 +43,7 @@ func _spawn_obstacles() -> void:
             # Convert positive Y (distance into segment) to negative Y (upward direction)
             var pos = obs_data.position
             obstacle.position = Vector2(pos.x, -pos.y)
+
 
 func _create_obstacle(data: Dictionary) -> Node2D:
     var obs_type = data.get("type", "pillar")
@@ -82,7 +86,7 @@ func _create_obstacle(data: Dictionary) -> Node2D:
 
         "smoke_screen":
             var smoke = preload("res://scenes/obstacles/smoke_screen.tscn").instantiate()
-            smoke.width = data.get("width", 250.0)
+            smoke.width = data.get("width", 300.0)
             smoke.height = data.get("height", 300.0)
             smoke.opacity = data.get("opacity", 0.6)
             return smoke
@@ -99,6 +103,7 @@ func _create_obstacle(data: Dictionary) -> Node2D:
             push_warning("Unknown obstacle type: " + obs_type)
             return null
 
+
 func _spawn_collectibles() -> void:
     for col_data in segment_data.collectibles:
         var collectible = _create_collectible(col_data)
@@ -107,6 +112,7 @@ func _spawn_collectibles() -> void:
             # Convert positive Y (distance into segment) to negative Y (upward direction)
             var pos = col_data.position
             collectible.position = Vector2(pos.x, -pos.y)
+
 
 func _create_collectible(data: Dictionary) -> Node2D:
     var col_type = data.get("type", "orb")
@@ -148,7 +154,7 @@ func _create_collectible(data: Dictionary) -> Node2D:
         "hourglass":
             # Only spawn hourglass in DAILY_CHALLENGE or RUSH mode
             if GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE or \
-               GameManager.current_game_mode == GameManager.GameMode.RUSH:
+            GameManager.current_game_mode == GameManager.GameMode.RUSH:
                 var hourglass = preload("res://scenes/collectibles/hourglass.tscn").instantiate()
                 hourglass.time_bonus = data.get("time_bonus", 10.0)
                 return hourglass
@@ -162,22 +168,23 @@ func _create_collectible(data: Dictionary) -> Node2D:
             var bomb = preload("res://scenes/collectibles/bomb.tscn").instantiate()
             return bomb
 
-#        "speed_boost":
-#            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
-#            boost.boost_duration = data.get("duration", 3.0)
-#            return boost
+        #        "speed_boost":
+        #            var boost = preload("res://scenes/collectibles/speed_boost.tscn").instantiate()
+        #            boost.boost_duration = data.get("duration", 3.0)
+        #            return boost
 
         _:
             push_warning("Unknown collectible type: " + col_type)
             return null
+
 
 func _setup_walls() -> void:
     # Clear existing walls
     for child in walls_container.get_children():
         child.queue_free()
 
-    var half_width = segment_data.tunnel_width / 2.0  # Always 125.0
-    var length = segment_data.segment_length
+    var half_width     = segment_data.tunnel_width / 2.0  # Always 150.0
+    var length         = segment_data.segment_length
     var wall_thickness = 16.0
 
     # Check if this is a curved segment
@@ -189,12 +196,13 @@ func _setup_walls() -> void:
         # Curved tunnel - use smooth curve
         _create_curved_walls(half_width, length, segment_data.curvature, wall_thickness)
 
+
 func _create_curved_walls(half_width: float, length: float, curvature_degrees: float, thickness: float) -> void:
     # Generate smooth curved walls using a sine-based curve
     # Negative curvature = curve left, positive = curve right
 
-    var num_points = max(int(length / 20.0), 10)  # Point every ~20px, minimum 10 points
-    var left_points: PackedVector2Array = []
+    var num_points                       = max(int(length / 20.0), 10)  # Point every ~20px, minimum 10 points
+    var left_points: PackedVector2Array  = []
     var right_points: PackedVector2Array = []
 
     # Calculate curve intensity based on curvature
@@ -215,6 +223,7 @@ func _create_curved_walls(half_width: float, length: float, curvature_degrees: f
     # Create curved walls with Line2D and collision
     _create_curved_wall_line(left_points, thickness)
     _create_curved_wall_line(right_points, thickness)
+
 
 func _create_curved_wall_line(points: PackedVector2Array, thickness: float) -> void:
     # Create visual curved wall using Line2D
@@ -237,19 +246,19 @@ func _create_curved_wall_line(points: PackedVector2Array, thickness: float) -> v
 
     for i in range(num_collision_segments):
         var segment_start_idx = int(float(i) / float(num_collision_segments) * (points.size() - 1))
-        var segment_end_idx = int(float(i + 1) / float(num_collision_segments) * (points.size() - 1))
+        var segment_end_idx   = int(float(i + 1) / float(num_collision_segments) * (points.size() - 1))
 
         var start_pos = points[segment_start_idx]
-        var end_pos = points[segment_end_idx]
+        var end_pos   = points[segment_end_idx]
 
         # Create StaticBody2D for this segment
-        var wall_collision = StaticBody2D.new()
+        var wall_collision  = StaticBody2D.new()
         var collision_shape = CollisionShape2D.new()
-        var shape = RectangleShape2D.new()
+        var shape           = RectangleShape2D.new()
 
         # Calculate segment dimensions and position
         var segment_length = start_pos.distance_to(end_pos)
-        var segment_angle = start_pos.angle_to_point(end_pos)
+        var segment_angle  = start_pos.angle_to_point(end_pos)
 
         shape.size = Vector2(thickness, segment_length)
 
@@ -267,6 +276,7 @@ func _create_curved_wall_line(points: PackedVector2Array, thickness: float) -> v
 
         walls_container.add_child(wall_collision)
 
+
 func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness: float) -> void:
     # Create visual wall (Line2D)
     var wall_visual = Line2D.new()
@@ -278,9 +288,9 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
     wall_visual.end_cap_mode = Line2D.LINE_CAP_BOX  # Cap at far end (y=-length)
 
     # Create collision (StaticBody2D with rectangular shape)
-    var wall_collision = StaticBody2D.new()
+    var wall_collision  = StaticBody2D.new()
     var collision_shape = CollisionShape2D.new()
-    var shape = RectangleShape2D.new()
+    var shape           = RectangleShape2D.new()
 
     # Calculate rectangle dimensions and position
     var wall_length = start_pos.distance_to(end_pos)
@@ -300,20 +310,24 @@ func _create_wall_with_collision(start_pos: Vector2, end_pos: Vector2, thickness
     walls_container.add_child(wall_visual)
     walls_container.add_child(wall_collision)
 
+
 func _setup_background() -> void:
     # Simple grid background for MVP
     # Could be enhanced with shaders later
     pass
 
+
 func _process(delta: float) -> void:
     if is_active:
         _update_animations(delta)
+
 
 func _update_animations(_delta: float) -> void:
     # Update any animated elements
     for child in obstacles_container.get_children():
         if child.has_method("update_obstacle"):
             child.update_obstacle(_delta)
+
 
 func deactivate() -> void:
     is_active = false
