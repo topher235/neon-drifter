@@ -6,13 +6,13 @@ extends Control
 
 signal seed_confirmed(seed_value: int)
 signal cancelled
-
 @onready var seed_input: LineEdit = %SeedInput
 @onready var confirm_button: Button = %ConfirmButton
 @onready var cancel_button: Button = %CancelButton
 @onready var random_button: Button = %RandomButton
 @onready var seed_label: Label = %SeedLabel
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 
 func _ready() -> void:
     # Connect button signals
@@ -30,6 +30,7 @@ func _ready() -> void:
 
     visible = false
 
+
 func open_seed_input() -> void:
     """Show the seed input dialog with animation"""
     visible = true
@@ -38,14 +39,19 @@ func open_seed_input() -> void:
     if seed_input:
         # Delay focus grab to after animation starts
         await get_tree().create_timer(0.1).timeout
-        seed_input.grab_focus()
-        seed_input.select_all()
+
+
+#        seed_input.grab_focus()
+#        seed_input.select_all()
+
 
 func close_seed_input() -> void:
     """Hide the seed input dialog"""
-    visible = false
     if animation_player:
-        animation_player.play("RESET")
+        animation_player.play_backwards("open")
+        await animation_player.animation_finished
+    visible = false
+
 
 func _on_confirm_pressed() -> void:
     if not seed_input:
@@ -68,16 +74,19 @@ func _on_confirm_pressed() -> void:
     seed_confirmed.emit(seed_value)
     close_seed_input()
 
+
 func _on_cancel_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     cancelled.emit()
     close_seed_input()
+
 
 func _on_random_pressed() -> void:
     """Generate a new random seed"""
     AudioManager.play_sfx("ui_click")
     if seed_input:
         seed_input.text = str(randi())
+
 
 func _on_seed_text_changed(new_text: String) -> void:
     """Update the seed preview label"""

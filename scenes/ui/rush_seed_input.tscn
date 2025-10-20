@@ -1,10 +1,49 @@
-[gd_scene load_steps=6 format=3 uid="uid://dq8h5x7k2napv"]
+[gd_scene load_steps=7 format=3 uid="uid://var6r85d45w1"]
 
-[ext_resource type="Script" path="res://scenes/ui/rush_seed_input.gd" id="1_rush_seed"]
+[ext_resource type="Script" uid="uid://dqallpbyfhdei" path="res://scenes/ui/rush_seed_input.gd" id="1_rush_seed"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="2_theme"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 48
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_open"]
 resource_name = "open"
@@ -59,45 +98,6 @@ tracks/3/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_reset"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Panel:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1e-05, 1e-05)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Panel:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
 _data = {
 &"RESET": SubResource("Animation_reset"),
@@ -137,7 +137,7 @@ anchor_bottom = 0.5
 offset_left = -225.0
 offset_top = -250.0
 offset_right = 225.0
-offset_bottom = 250.0
+offset_bottom = 450.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1e-05, 1e-05)
@@ -184,6 +184,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="SeedInputLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SeedInputContainer"]
+visible = false
 layout_mode = 2
 text = "Seed Value:"
 
@@ -198,11 +199,13 @@ context_menu_enabled = false
 
 [node name="SeedLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SeedInputContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Seed: 0"
 horizontal_alignment = 1
 
 [node name="Spacer3" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 

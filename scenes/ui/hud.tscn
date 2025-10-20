@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5ixwlkb1000h"]
+[gd_scene load_steps=5 format=3 uid="uid://c5ixwlkb1000h"]
 
 [ext_resource type="Script" uid="uid://bxol08i8juxrt" path="res://scenes/ui/hud.gd" id="1_0mwgc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mwgc"]
+bg_color = Color(0, 0, 0, 0.68235296)
 
 [sub_resource type="LabelSettings" id="LabelSettings_0mwgc"]
 font_size = 32
@@ -40,6 +43,7 @@ layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0mwgc")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TopBar/PanelContainer"]
 layout_mode = 2
