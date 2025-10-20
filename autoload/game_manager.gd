@@ -369,9 +369,17 @@ func get_current_seed() -> int:
 
     match current_game_mode:
         GameMode.DAILY_CHALLENGE:
-            seed_value = daily_seed
+            # For daily challenge, use stored seed if retrying, otherwise use daily seed
+            if current_run_seed != 0:
+                seed_value = current_run_seed
+            else:
+                seed_value = daily_seed
         GameMode.RUSH:
-            seed_value = rush_seed
+            # For RUSH mode, use stored seed if retrying, otherwise use rush seed
+            if current_run_seed != 0:
+                seed_value = current_run_seed
+            else:
+                seed_value = rush_seed
         GameMode.CLASSIC:
             # For classic mode, use stored seed if retrying, otherwise generate new
             if current_run_seed != 0:

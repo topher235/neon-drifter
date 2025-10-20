@@ -56,13 +56,6 @@ Don't forget to add these to the sandbox as well.
     - [ ] Add screen shake when collected
     - [ ] Emit particles from destroyed obstacles when collected
 
-### Todo:
-
-- Implement hourglass, multiplier, and bomb collectible
-- Implement shop modal (move cosmetics to shop)
-- Make non-orb collectibles buyables and add to shop (new tab)
-- Add solid colored trails, gradient colored trails, fire trail, lightning trail, starfield trail
-
 ## Obstacles
 
 Don't forget to add these to the sandbox as well.
@@ -105,6 +98,7 @@ Players can share seeds and times.
 - [ ] Refine styling of the modal
 - [X] Update player movement to match daily mode
 - [X] Set a max number of segments, similar to daily mode
+- [ ] Fix retry not using correct seed
 
 ## Meta Progression
 

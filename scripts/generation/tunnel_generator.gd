@@ -20,6 +20,7 @@ var current_difficulty: float = 0.0
 var segments_generated: int = 0
 var last_segment_y: float = 0.0
 var max_segments: int = -1  # -1 = infinite (classic mode), positive = fixed count (daily challenge)
+var is_seeded_mode: bool = false  # True for DAILY_CHALLENGE and RUSH (deterministic generation)
 
 # Library & RNG
 var segment_library: SegmentLibrary
@@ -29,6 +30,7 @@ var rng: RandomNumberGenerator
 var recent_segments: Array[SegmentData] = []  # Store full data instead of just types
 var segments_since_straight: int = 0
 var segments_since_fork: int = 0
+var has_spike_corridor: bool = false  # Track if spike corridor has been generated (for seeded modes)
 
 func _ready() -> void:
     segment_library = SegmentLibrary.new()
@@ -46,20 +48,24 @@ func initialize(seed_value: int = -1, is_daily_challenge: bool = false, is_rush:
     recent_segments.clear()
     segments_since_straight = 0
     segments_since_fork = 0
+    has_spike_corridor = false
 
     # Set max segments for limited modes (daily challenge and rush)
     if is_daily_challenge or GameManager.current_game_mode == GameManager.GameMode.DAILY_CHALLENGE:
         max_segments = 10  # 10 middle segments (plus start and end)
+        is_seeded_mode = true  # Enable deterministic generation
     elif is_rush or GameManager.current_game_mode == GameManager.GameMode.RUSH:
         max_segments = 15  # 15 middle segments (plus start and end) for RUSH mode
+        is_seeded_mode = true  # Enable deterministic generation
     else:
         max_segments = -1  # Infinite generation for classic mode
+        is_seeded_mode = false  # Classic mode can have random variation
 
     _clear_segments()
     _initialize_pool()
     _generate_initial_segments()
 
-    print("Tunnel Generator initialized with seed: %d, max_segments: %d" % [rng.seed, max_segments])
+    print("Tunnel Generator initialized with seed: %d, max_segments: %d, seeded_mode: %s" % [rng.seed, max_segments, is_seeded_mode])
 
 func _initialize_pool() -> void:
     if not use_pooling:
@@ -208,21 +214,47 @@ func _spawn_next_segment() -> BaseSegment:
 
     segments_since_fork += 1
 
+    # Track if spike corridor has been generated (for seeded modes)
+    if chosen_data.segment_id == "spike_corridor":
+        has_spike_corridor = true
+
     segment_spawned.emit(segment)
     return segment
 
 func _get_valid_segments() -> Array[SegmentData]:
-    # Get segments appropriate for current difficulty
-    var candidates = segment_library.get_segments_by_difficulty(current_difficulty)
+    # In seeded modes, use all segments regardless of difficulty (just filter by complexity)
+    # In classic mode, use difficulty-appropriate segments
+    var candidates: Array
+    if is_seeded_mode:
+        candidates = segment_library.all_segments
+    else:
+        candidates = segment_library.get_segments_by_difficulty(current_difficulty)
+
     var valid: Array[SegmentData] = []
-    
+
     for seg_data in candidates:
+        # Filter out complexity 0-1 segments in seeded modes (DAILY_CHALLENGE and RUSH)
+        if is_seeded_mode and seg_data.complexity <= 1:
+            continue
+
         if _validate_segment_rules(seg_data):
             valid.append(seg_data)
 
     return valid
 
 func _validate_segment_rules(seg_data: SegmentData) -> bool:
+    # Seeded mode rule: Force spike corridor if not yet generated and approaching midpoint
+    if is_seeded_mode and not has_spike_corridor:
+        # Force spike corridor around the middle of the run (segment 5-7 for daily, 7-10 for rush)
+        var force_spike_at = 6 if max_segments == 10 else 9  # Middle segment
+        if segments_generated == force_spike_at:
+            # Only accept spike corridor at this point
+            return seg_data.segment_id == "spike_corridor"
+        elif segments_generated > force_spike_at:
+            # Fallback: if we missed forcing it, strongly prefer it now
+            if seg_data.segment_id == "spike_corridor":
+                return true  # Always accept spike corridor if we haven't had one yet
+
     # Rule 1: No more than 2 sharp turns in a row
     if abs(seg_data.curvature) > 45:
         var sharp_count = 0
@@ -250,8 +282,8 @@ func _validate_segment_rules(seg_data: SegmentData) -> bool:
 #            push_warning("Limit consecutive similar types")
 #            return false  # Don't allow 4 in a row
 
-    # Rule 4: Early game should be easier
-    if segments_generated < 5:
+    # Rule 4: Early game should be easier (disabled in seeded modes since we filter complexity 0-1)
+    if not is_seeded_mode and segments_generated < 5:
         if seg_data.complexity >= 1:
             push_warning("Early game should be easier")
         return seg_data.complexity <= 1
@@ -267,12 +299,16 @@ func _weighted_random_segment(segments: Array[SegmentData]) -> SegmentData:
     var total_weight: float = 0.0
 
     for seg in segments:
-        # Calculate how well this segment matches current difficulty
-        var seg_mid_difficulty = (seg.min_difficulty + seg.max_difficulty) / 2.0
-        var diff_distance = abs(seg_mid_difficulty - current_difficulty)
+        var weight = 1.0
 
-        # Weight decreases with distance from ideal difficulty
-        var weight = 1.0 / (1.0 + diff_distance * 0.5)
+        # In seeded modes, ignore difficulty matching (all complexities are equally valid)
+        # In classic mode, weight by difficulty match
+        if not is_seeded_mode:
+            # Calculate how well this segment matches current difficulty
+            var seg_mid_difficulty = (seg.min_difficulty + seg.max_difficulty) / 2.0
+            var diff_distance = abs(seg_mid_difficulty - current_difficulty)
+            # Weight decreases with distance from ideal difficulty
+            weight = 1.0 / (1.0 + diff_distance * 0.5)
 
         # Apply variety penalty/bonus based on recent usage
         var times_used = 0
@@ -309,6 +345,11 @@ func _apply_variation(data: SegmentData) -> SegmentData:
 
     # Use consistent tunnel width across all segments
     varied.tunnel_width = 250.0
+
+    # Skip random variation in seeded modes (DAILY_CHALLENGE and RUSH)
+    # This ensures deterministic, reproducible tunnel layouts
+    if is_seeded_mode:
+        return varied
 
     # Scale variation with difficulty (1.0x to 1.5x)
     var variance_scale = 1.0 + (current_difficulty / 10.0) * 0.5
@@ -351,12 +392,12 @@ func _add_random_obstacle(data: SegmentData) -> void:
     var obs_type = obstacle_types[rng.randi_range(0, obstacle_types.size() - 1)]
 
     var new_obstacle = {
-                           "type": obs_type,
-                           "position": Vector2(
-                               rng.randf_range(-data.tunnel_width/2 + 50, data.tunnel_width/2 - 50),
-                               rng.randf_range(200, data.segment_length - 200)
-                           )
-                       }
+        "type": obs_type,
+        "position": Vector2(
+            rng.randf_range(-data.tunnel_width/2 + 50, data.tunnel_width/2 - 50),
+            rng.randf_range(200, data.segment_length - 200)
+        )
+    }
 
     if obs_type == "pillar":
         new_obstacle["radius"] = rng.randf_range(25.0, 35.0)
@@ -371,12 +412,12 @@ func _add_random_collectible(data: SegmentData) -> void:
         col_type = "speed_boost"
 
     var new_collectible = {
-                              "type": col_type,
-                              "position": Vector2(
-                                  rng.randf_range(-data.tunnel_width/2 + 30, data.tunnel_width/2 - 30),
-                                  rng.randf_range(150, data.segment_length - 150)
-                              )
-                          }
+        "type": col_type,
+        "position": Vector2(
+            rng.randf_range(-data.tunnel_width/2 + 30, data.tunnel_width/2 - 30),
+            rng.randf_range(150, data.segment_length - 150)
+        )
+    }
 
     if col_type == "orb":
         new_collectible["value"] = 10 if rng.randf() < 0.8 else 20  # 80% normal, 20% bonus
@@ -413,8 +454,10 @@ func _update_difficulty() -> void:
     # Use GameManager's difficulty directly for consistency
     var base_difficulty = GameManager.get_difficulty()
 
-    # Add some randomness for variety
-    var variation = rng.randf_range(-0.5, 0.5)
+    # Add some randomness for variety (but not in seeded modes)
+    var variation = 0.0
+    if not is_seeded_mode:
+        variation = rng.randf_range(-0.5, 0.5)
 
     current_difficulty = clamp(base_difficulty + variation, 0.0, 10.0)
 

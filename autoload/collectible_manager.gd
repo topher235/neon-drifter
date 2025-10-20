@@ -19,7 +19,7 @@ func _initialize_collectibles() -> void:
 	var orb_data = CollectibleData.new()
 	orb_data.collectible_id = "orb"
 	orb_data.collectible_name = "Orb"
-	orb_data.description = "Collect orbs to earn points and currency for unlocking items."
+	orb_data.description = "Earn points and currency."
 	orb_data.collectible_type = "orb"
 	orb_data.collectible_color = Color(0, 1, 1)  # Cyan
 	orb_data.unlocked_by_default = true
@@ -31,7 +31,7 @@ func _initialize_collectibles() -> void:
 	var magnet_data = CollectibleData.new()
 	magnet_data.collectible_id = "magnet"
 	magnet_data.collectible_name = "Magnet"
-	magnet_data.description = "Automatically attracts nearby orbs to you for a limited time."
+	magnet_data.description = "Attact nearby orbs to you."
 	magnet_data.collectible_type = "magnet"
 	magnet_data.collectible_color = Color(0.2, 0.5, 1.0)  # Blue
 	magnet_data.unlocked_by_default = false
@@ -43,7 +43,7 @@ func _initialize_collectibles() -> void:
 	var multiplier_data = CollectibleData.new()
 	multiplier_data.collectible_id = "multiplier"
 	multiplier_data.collectible_name = "Multiplier"
-	multiplier_data.description = "Doubles your score multiplier temporarily."
+	multiplier_data.description = "Increase your score multiplier."
 	multiplier_data.collectible_type = "multiplier"
 	multiplier_data.collectible_color = Color(1.0, 0.8, 0.0)  # Gold
 	multiplier_data.unlocked_by_default = false
@@ -55,7 +55,7 @@ func _initialize_collectibles() -> void:
 	var star_data = CollectibleData.new()
 	star_data.collectible_id = "star"
 	star_data.collectible_name = "Star"
-	star_data.description = "Collect for a large point bonus!"
+	star_data.description = "Gain invulnerability"
 	star_data.collectible_type = "star"
 	star_data.collectible_color = Color(1.0, 1.0, 0.0)  # Yellow
 	star_data.unlocked_by_default = false

@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpq8m5n7k4sat"]
+[gd_scene load_steps=2 format=3 uid="uid://bioeylf60bfju"]
 
-[ext_resource type="Script" path="res://scenes/ui/collectible_shop_item.gd" id="1_collectible_item"]
+[ext_resource type="Script" uid="uid://dcnagh2y8xmuk" path="res://scenes/ui/collectible_shop_item.gd" id="1_collectible_item"]
 
 [node name="CollectibleShopItem" type="PanelContainer"]
 custom_minimum_size = Vector2(180, 250)
@@ -24,6 +24,7 @@ layout_mode = 2
 [node name="PreviewIcon" type="ColorRect" parent="MarginContainer/VBoxContainer/PreviewContainer"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
+mouse_filter = 2
 color = Color(0, 1, 1, 1)
 
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
