@@ -10,6 +10,8 @@ extends CanvasLayer
 
 # Animation
 var combo_tween: Tween
+var score_tween: Tween
+var displayed_score: int = 0
 
 
 func _ready() -> void:
@@ -32,7 +34,8 @@ func _process(_delta: float) -> void:
 
 
 func _update_display() -> void:
-    score_label.text = "Score: %d" % GameManager.current_score
+    displayed_score = GameManager.current_score
+    score_label.text = "Score: %d" % displayed_score
     distance_label.text = "%.0fm" % (GameManager.distance_traveled / 10.0)
     combo_label.text = "x%d" % GameManager.combo_multiplier
     speed_label.text = "%.0f km/h" % (GameManager.current_speed / 5.0)  # Arbitrary conversion
@@ -56,8 +59,20 @@ func _update_distance() -> void:
 
 
 func _on_score_changed(_new_score: int) -> void:
-    score_label.text = "Score: %d" % _new_score
+    # Cancel existing score tween if running
+    if score_tween and score_tween.is_running():
+        score_tween.kill()
+
+    # Animate counting from current displayed score to new score
+    score_tween = create_tween()
+    score_tween.tween_method(_update_score_display, displayed_score, _new_score, 0.3)
+    displayed_score = _new_score
+
     _animate_label(score_label)
+
+
+func _update_score_display(value: int) -> void:
+    score_label.text = "Score: %d" % value
 
 
 func _on_speed_changed(_new_speed: float) -> void:
