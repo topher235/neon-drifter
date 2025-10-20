@@ -1,13 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://coql3r5d7x8y5"]
+[gd_scene load_steps=13 format=3 uid="uid://coql3r5d7x8y5"]
 
 [ext_resource type="PackedScene" uid="uid://dcvhm68iau6s" path="res://scenes/ui/neon_grid_background.tscn" id="1_bg"]
 [ext_resource type="Theme" uid="uid://b3u4wxbvbpmyv" path="res://resources/themes/neon-wave.tres" id="1_fe2o3"]
 [ext_resource type="Script" uid="uid://btfjpmqe56wav" path="res://scenes/ui/main_menu.gd" id="1_sl1te"]
 [ext_resource type="Texture2D" uid="uid://cinr0o55lq335" path="res://assets/icons/settings.png" id="4_settings_icon"]
-[ext_resource type="Texture2D" uid="uid://cmk8p9n4q6r2s" path="res://assets/icons/shop.png" id="4_shop_icon"]
+[ext_resource type="Texture2D" uid="uid://d3185p2c8l0yb" path="res://assets/icons/shop.png" id="4_shop_icon"]
 [ext_resource type="PackedScene" uid="uid://dbp1ulnofsv7n" path="res://scenes/ui/settings_modal.tscn" id="5_settings_modal"]
-[ext_resource type="PackedScene" uid="uid://cqk7y8n3h5m9p" path="res://scenes/ui/shop_modal.tscn" id="6_shop_modal"]
-[ext_resource type="PackedScene" uid="uid://dq8h5x7k2m9pv" path="res://scenes/ui/rush_seed_input.tscn" id="6_rush_seed_input"]
+[ext_resource type="PackedScene" path="res://scenes/ui/rush_seed_input.tscn" id="6_rush_seed_input"]
+[ext_resource type="PackedScene" uid="uid://bhafo2kjij4x7" path="res://scenes/ui/shop_modal.tscn" id="6_shop_modal"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe2o3"]
 font_size = 72
@@ -119,7 +119,6 @@ vertical_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-size_flags_horizontal = 4
 text = "RUSH MODE"
 
 [node name="HighScoreLabel" type="Label" parent="VBoxContainer"]

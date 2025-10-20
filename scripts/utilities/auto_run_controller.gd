@@ -4,11 +4,13 @@ extends PlayerController
 ## Auto-run controller for classic mode
 ## Player controls X position, Y moves automatically upward
 
-var target_x: float = 0.0
+var target_x: float              = 0.0
 var auto_speed_multiplier: float = 1.2
+
 
 func _ready() -> void:
     super._ready()
+
 
 func get_target_position(current_position: Vector2, delta: float) -> Vector2:
     var target := Vector2.ZERO
@@ -22,10 +24,11 @@ func get_target_position(current_position: Vector2, delta: float) -> Vector2:
 
     return target
 
+
 func handle_input() -> void:
     if Input.is_action_pressed("touch"):
         # Check if mouse is over UI
-        var viewport = player.get_viewport()
+        var viewport  = player.get_viewport()
         var mouse_pos = viewport.get_mouse_position()
 
         # Check if there's a Control node at this position (UI element)
@@ -37,16 +40,18 @@ func handle_input() -> void:
 
             # Convert screen X (0 to viewport_width) to game X (-tunnel_half_width to +tunnel_half_width)
             var normalized_x = (mouse_pos.x / viewport_size.x) - 0.5  # -0.5 to 0.5
-            target_x = normalized_x * (tunnel_half_width * 2)
+            target_x = normalized_x * (tunnel_half_width * 3)
             target_x = clamp(target_x, -tunnel_half_width, tunnel_half_width)
     else:
-        # Return to center when not touching
-        target_x = 0.0
+        # Keep X position when not touching
+        target_x = target_x
+
 
 func _is_ui_at_position(viewport: Viewport, position: Vector2) -> bool:
     # Get all nodes at this position by checking Control nodes in the scene
     var root = viewport.get_tree().root
     return _check_control_at_position(root, position)
+
 
 func _check_control_at_position(node: Node, position: Vector2) -> bool:
     # Check if this node is an interactive UI element at the position

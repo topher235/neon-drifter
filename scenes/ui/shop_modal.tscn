@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cqk7y8n3h5nap"]
+[gd_scene load_steps=6 format=3 uid="uid://bhafo2kjij4x7"]
 
-[ext_resource type="Script" uid="uid://bv3x9m2k4n8wp" path="res://scenes/ui/shop_modal.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cv14jsk7orw0r" path="res://scenes/ui/shop_modal.gd" id="1_shop"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 48
@@ -203,7 +203,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="DescriptionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TabContainer/Collectibles/CollectiblesVBox/DescriptionPanel/MarginContainer"]
 layout_mode = 2
-text = "Select a collectible to view its description"
+text = "Select to view description"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
