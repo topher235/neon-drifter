@@ -95,6 +95,7 @@ func _on_menu_pressed() -> void:
     menu_button.disabled = true
 
     AudioManager.play_sfx("ui_back")
+    AudioManager.stop_music(true)
     GameManager.return_to_menu()
     await SceneManager.goto_main_menu()
 

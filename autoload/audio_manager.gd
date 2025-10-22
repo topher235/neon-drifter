@@ -125,7 +125,7 @@ func stop_music(fade_out: bool = true) -> void:
 
 
 # SFX Control
-func play_sfx(sfx_name: String, pitch_variation: float = 0.0) -> void:
+func play_sfx(sfx_name: String, pitch_variation: float = 0.0, volume_db: float = 0.0) -> void:
     if not sfx_name in sfx_library:
         push_warning("SFX not found: " + sfx_name)
         return
@@ -139,6 +139,8 @@ func play_sfx(sfx_name: String, pitch_variation: float = 0.0) -> void:
     sfx_player_index = (sfx_player_index + 1) % MAX_SFX_PLAYERS
 
     player.stream = load(sfx_library[sfx_name])
+    player.volume_db = volume_db
+
     if pitch_variation > 0.0:
         player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
     else:

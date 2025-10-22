@@ -239,7 +239,7 @@ func _handle_end_segment_trigger(trigger: Area2D) -> void:
 
 func _die() -> void:
     print("Player collision detected!")
-    AudioManager.play_sfx("collision")
+    AudioManager.play_sfx("collision", 0.0, 6.0)
     _spawn_death_particles()
     _trigger_screen_shake()
     await get_tree().create_timer(death_particles.lifetime * 0.7).timeout

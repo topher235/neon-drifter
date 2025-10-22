@@ -12,13 +12,13 @@ var save_data = {
                     "current_orbs": 0,
                     "unlocked_trails": ["default"],
                     "selected_trail": "default",
-                    "unlocked_collectibles": ["orb"],  # Orbs always unlocked by default
-                    "sfx_volume": 0.8,
-                    "music_volume": 0.6,
+                    "unlocked_collectibles": ["orb"], # Orbs always unlocked by default
+                    "sfx_volume": 1.0,
+                    "music_volume": 0.4,
                     "first_launch": true,
                     "daily_challenge_completed": false,
                     "last_daily_completion_date": "",
-                    "stats": {},  # StatsManager data
+                    "stats": {}, # StatsManager data
                     "achievements": {}  # AchievementManager data
                 }
 

@@ -120,7 +120,7 @@ func _on_cosmetic_unlock_requested(cosmetic_id: String) -> void:
         _refresh_all_previews()
     else:
         # Not enough orbs
-        AudioManager.play_sfx("collision")
+        AudioManager.play_sfx("collision", 0.0, 6.0)
         print("Not enough orbs to unlock %s" % cosmetic_id)
 
 
