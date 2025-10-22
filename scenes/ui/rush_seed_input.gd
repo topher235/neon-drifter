@@ -34,6 +34,7 @@ func _ready() -> void:
 func open_seed_input() -> void:
     """Show the seed input dialog with animation"""
     visible = true
+    AudioManager.play_sfx("ui_modal_open")
     if animation_player:
         animation_player.play("open")
     if seed_input:
@@ -41,12 +42,9 @@ func open_seed_input() -> void:
         await get_tree().create_timer(0.1).timeout
 
 
-#        seed_input.grab_focus()
-#        seed_input.select_all()
-
-
 func close_seed_input() -> void:
     """Hide the seed input dialog"""
+    AudioManager.play_sfx("ui_modal_close")
     if animation_player:
         animation_player.play_backwards("open")
         await animation_player.animation_finished
@@ -70,7 +68,7 @@ func _on_confirm_pressed() -> void:
     if seed_value == 0 and seed_text != "0":
         seed_value = seed_text.hash()
 
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_start_game")
     seed_confirmed.emit(seed_value)
     close_seed_input()
 

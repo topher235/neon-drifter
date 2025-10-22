@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://dteba0k0kgair"
-path="res://.godot/imported/atmosphere-loop.wav-687cb3742257b3c805500402c77a53f3.sample"
+path="res://.godot/imported/atmosphere-loop.wav-432404a99d45f26919c0f7d8f29e1de1.sample"
 
 [deps]
 
-source_file="res://assets/music/atmosphere-loop.wav"
-dest_files=["res://.godot/imported/atmosphere-loop.wav-687cb3742257b3c805500402c77a53f3.sample"]
+source_file="res://assets/audio/music/atmosphere-loop.wav"
+dest_files=["res://.godot/imported/atmosphere-loop.wav-432404a99d45f26919c0f7d8f29e1de1.sample"]
 
 [params]
 

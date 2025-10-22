@@ -24,13 +24,13 @@ func _ready() -> void:
 
 
 func _on_continue_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_modal_close")
     GameManager.resume_game()
     hide_pause_screen()
 
 
 func _on_menu_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_back")
     GameManager.return_to_menu.call_deferred()
     hide_pause_screen()
     await SceneManager.goto_main_menu()
@@ -41,6 +41,7 @@ func show_pause_screen() -> void:
     _load_settings_to_ui()
 
     visible = true
+    AudioManager.play_sfx("ui_modal_open")
 
     # Reset and play animation
     animation_player.stop()

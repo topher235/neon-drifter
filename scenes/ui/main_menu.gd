@@ -14,7 +14,8 @@ extends Control
 @onready var rush_seed_input: RushSeedInput = $RushSeedInput
 
 var title_character_labels: Array[Label] = []
-var title_original_y: float = 0.0
+var title_original_y: float              = 0.0
+
 
 func _ready() -> void:
     play_button.pressed.connect(_on_play_pressed)
@@ -37,8 +38,10 @@ func _ready() -> void:
     # Play menu music
     AudioManager.play_music("menu")
 
+
 func _update_high_score() -> void:
     high_score_label.text = "High Score: %d" % GameManager.high_score
+
 
 func _update_daily_checkmark() -> void:
     # Show checkmark if daily challenge is completed
@@ -46,6 +49,7 @@ func _update_daily_checkmark() -> void:
         daily_checkmark.visible = true
     else:
         daily_checkmark.visible = false
+
 
 func _animate_title() -> void:
     # Create individual labels for each character
@@ -55,9 +59,9 @@ func _animate_title() -> void:
     var title_text = title_label.text
 
     # Get original label properties
-    var original_font = title_label.get_theme_font("font")
+    var original_font      = title_label.get_theme_font("font")
     var original_font_size = 72 # title_label.get_theme_font_size("font_size")
-    var original_color = title_label.get_theme_color("font_color")
+    var original_color     = title_label.get_theme_color("font_color")
 
     # Get the title_label's parent (should be a Control wrapper)
     var wrapper = title_label.get_parent()
@@ -88,23 +92,27 @@ func _animate_title() -> void:
         container.add_child(char_label)
         title_character_labels.append(char_label)
 
+
 func _process(_delta: float) -> void:
     # Animate each character with a phase offset
     var time = Time.get_ticks_msec() / 1000.0
 
     for i in range(title_character_labels.size()):
-        var char_label = title_character_labels[i]
+        var char_label   = title_character_labels[i]
         var phase_offset = i * 0.3  # Offset each character's wave
-        var wave_offset = sin(time * 2.0 + phase_offset) * 8.0
+        var wave_offset  = sin(time * 2.0 + phase_offset) * 8.0
         char_label.position.y = wave_offset
 
+
 func _on_play_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_start_game")
     _start_game(false)
 
+
 func _on_daily_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_start_game")
     _start_game(true)
+
 
 func _on_rush_pressed() -> void:
     """Open seed input dialog for RUSH mode"""
@@ -112,26 +120,32 @@ func _on_rush_pressed() -> void:
     if rush_seed_input:
         rush_seed_input.open_seed_input()
 
+
 func _on_rush_seed_confirmed(seed_value: int) -> void:
     """Start RUSH mode with the specified seed"""
     print("Starting RUSH mode with seed: %d" % seed_value)
     GameManager.set_rush_seed(seed_value)
     _start_game_rush()
 
+
 func _on_rush_seed_cancelled() -> void:
     """User cancelled seed input"""
     print("RUSH mode cancelled")
 
+
 func _on_quit_pressed() -> void:
     get_tree().quit()
+
 
 func _on_settings_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     settings_modal.open_settings()
 
+
 func _on_shop_pressed() -> void:
     AudioManager.play_sfx("ui_click")
     shop_modal.open_shop()
+
 
 func _start_game(daily_challenge: bool) -> void:
     # Set game mode in GameManager
@@ -145,6 +159,7 @@ func _start_game(daily_challenge: bool) -> void:
 
     # Use SceneManager for smooth transition
     await SceneManager.goto_game()
+
 
 func _start_game_rush() -> void:
     """Start RUSH mode (seeded run)"""

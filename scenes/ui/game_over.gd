@@ -9,8 +9,9 @@ extends Control
 @onready var retry_button: Button = %RetryButton
 @onready var menu_button: Button = %MenuButton
 
-var final_score: int = 0
+var final_score: int      = 0
 var final_distance: float = 0.0
+
 
 func _ready() -> void:
     visible = false
@@ -19,12 +20,14 @@ func _ready() -> void:
 
     GameManager.game_over.connect(_on_game_over)
 
+
 func _on_game_over(score: int, distance: float) -> void:
     final_score = score
     final_distance = distance
 
     _display_stats()
     _show_screen()
+
 
 func _display_stats() -> void:
     final_score_label.text = "Score: %d" % final_score
@@ -57,6 +60,7 @@ func _display_stats() -> void:
     else:
         time_taken_label.visible = false
 
+
 func _show_screen() -> void:
     visible = true
     modulate = Color(1, 1, 1, 0)
@@ -64,14 +68,16 @@ func _show_screen() -> void:
     var tween = create_tween()
     tween.tween_property(self, "modulate", Color.WHITE, 0.3)
 
+
 func _on_retry_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_start_game")
     visible = false
     # Reload the scene completely to reset everything with the same seed
     # The seed is preserved in GameManager.current_run_seed
     await SceneManager.reload_current_scene()
 
+
 func _on_menu_pressed() -> void:
-    AudioManager.play_sfx("ui_click")
+    AudioManager.play_sfx("ui_back")
     GameManager.return_to_menu()
     await SceneManager.goto_main_menu()

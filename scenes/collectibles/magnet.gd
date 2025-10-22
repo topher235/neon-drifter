@@ -5,8 +5,10 @@ extends BaseCollectible
 
 @onready var magnet_visual: Polygon2D = %MagnetVisual
 
+
 func _ready() -> void:
     super._ready()
+
 
 func _animate(delta: float) -> void:
     super._animate(delta)
@@ -22,5 +24,5 @@ func _on_collected() -> void:
     if player and player.has_method("activate_magnet"):
         player.activate_magnet(magnet_duration)
 
-    AudioManager.play_sfx("orb_collect", -0.3)  # Lower pitch for magnet
+    AudioManager.play_sfx("item_collect", -0.3)  # Lower pitch for magnet
     _spawn_particles()

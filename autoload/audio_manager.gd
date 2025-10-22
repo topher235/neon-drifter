@@ -4,34 +4,42 @@ extends Node
 var master_bus_idx: int
 var music_bus_idx: int
 var sfx_bus_idx: int
-
 # Music player
 var music_player: AudioStreamPlayer
-
 # SFX pool
-const MAX_SFX_PLAYERS = 16
+const MAX_SFX_PLAYERS                     = 16
 var sfx_players: Array[AudioStreamPlayer] = []
-var sfx_player_index: int = 0
+var sfx_player_index: int                 = 0
 
 # Audio files (to be loaded)
-var sfx_library = {
-                      "orb_collect": "res://assets/audio/sfx/orb_collect.wav",
-                      "speed_boost": "res://assets/audio/sfx/speed_boost.wav",
-                      "collision": "res://assets/audio/sfx/collision.wav",
-                      "combo": "res://assets/audio/sfx/combo.wav",
-                      "ui_click": "res://assets/audio/sfx/ui_click.wav"
-                  }
+var sfx_library: Dictionary = {
+                                  "orb_collect": "res://assets/audio/sfx/orb_collect.wav",
+                                  "item_collect": "res://assets/audio/sfx/item_collect.wav",
+                                  "speed_boost": "res://assets/audio/sfx/speed_boost.wav",
+                                  "collision": "res://assets/audio/sfx/collision.wav",
+                                  "combo": "res://assets/audio/sfx/combo.wav",
+                                  "unlock": "res://assets/audio/sfx/unlock.wav",
+                                  "ui_click": "res://assets/audio/sfx/ui_click.wav",
+                                  "ui_modal_open": "res://assets/audio/sfx/ui_modal_open.wav",
+                                  "ui_modal_close": "res://assets/audio/sfx/ui_modal_close.wav",
+                                  "ui_pause_open": "res://assets/audio/sfx/ui_pause_open.wav",
+                                  "ui_start_game": "res://assets/audio/sfx/ui_start_game.wav",
+                                  "ui_error": "res://assets/audio/sfx/ui_error.wav",
+                                  "ui_back": "res://assets/audio/sfx/ui_back.wav",
+                              }
 
-var music_tracks = {
-                       "gameplay": "res://assets/audio/music/gameplay_loop.ogg",
-                       "menu": "res://assets/music/atmosphere-loop.wav"
-                   }
+var music_tracks: Dictionary = {
+                                   "gameplay": "res://assets/audio/music/gameplay_loop.ogg",
+                                   "menu": "res://assets/audio/music/atmosphere-loop.wav"
+                               }
+
 
 func _ready() -> void:
     _setup_audio_buses()
     _create_music_player()
     _create_sfx_pool()
     _load_audio_settings()
+
 
 func _setup_audio_buses() -> void:
     master_bus_idx = AudioServer.get_bus_index("Master")
@@ -51,10 +59,12 @@ func _setup_audio_buses() -> void:
         AudioServer.set_bus_send(2, "Master")
         sfx_bus_idx = 2
 
+
 func _create_music_player() -> void:
     music_player = AudioStreamPlayer.new()
     music_player.bus = "Music"
     add_child(music_player)
+
 
 func _create_sfx_pool() -> void:
     for i in MAX_SFX_PLAYERS:
@@ -63,9 +73,11 @@ func _create_sfx_pool() -> void:
         add_child(player)
         sfx_players.append(player)
 
+
 func _load_audio_settings() -> void:
     set_music_volume(SaveManager.get_music_volume())
     set_sfx_volume(SaveManager.get_sfx_volume())
+
 
 # Music Control
 func play_music(track_name: String, fade_in: bool = true) -> void:
@@ -89,6 +101,7 @@ func play_music(track_name: String, fade_in: bool = true) -> void:
     else:
         music_player.play()
 
+
 func stop_music(fade_out: bool = true) -> void:
     if fade_out:
         var tween = create_tween()
@@ -96,6 +109,7 @@ func stop_music(fade_out: bool = true) -> void:
         tween.tween_callback(music_player.stop)
     else:
         music_player.stop()
+
 
 # SFX Control
 func play_sfx(sfx_name: String, pitch_variation: float = 0.0) -> void:
@@ -119,47 +133,59 @@ func play_sfx(sfx_name: String, pitch_variation: float = 0.0) -> void:
 
     player.play()
 
+
 # Volume Control
 func set_music_volume(volume: float) -> void:
     var db = linear_to_db(volume)
     AudioServer.set_bus_volume_db(music_bus_idx, db)
     AudioServer.set_bus_mute(music_bus_idx, volume < 0.01)
 
+
 func set_sfx_volume(volume: float) -> void:
     var db = linear_to_db(volume)
     AudioServer.set_bus_volume_db(sfx_bus_idx, db)
     AudioServer.set_bus_mute(sfx_bus_idx, volume < 0.01)
 
+
 func get_music_volume() -> float:
     return db_to_linear(AudioServer.get_bus_volume_db(music_bus_idx))
 
+
 func get_sfx_volume() -> float:
     return db_to_linear(AudioServer.get_bus_volume_db(sfx_bus_idx))
+
 
 # Mute/Unmute Control
 func mute_music() -> void:
     AudioServer.set_bus_mute(music_bus_idx, true)
 
+
 func unmute_music() -> void:
     AudioServer.set_bus_mute(music_bus_idx, false)
+
 
 func mute_sfx() -> void:
     AudioServer.set_bus_mute(sfx_bus_idx, true)
 
+
 func unmute_sfx() -> void:
     AudioServer.set_bus_mute(sfx_bus_idx, false)
+
 
 func is_music_muted() -> bool:
     return AudioServer.is_bus_mute(music_bus_idx)
 
+
 func is_sfx_muted() -> bool:
     return AudioServer.is_bus_mute(sfx_bus_idx)
+
 
 # Utility
 func linear_to_db(linear: float) -> float:
     if linear <= 0.0:
         return -80.0
     return 20.0 * log(linear) / log(10.0)
+
 
 func db_to_linear(db: float) -> float:
     if db <= -80.0:

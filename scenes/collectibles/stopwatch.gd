@@ -6,8 +6,10 @@ extends BaseCollectible
 
 @onready var stopwatch_visual: Polygon2D = %StopwatchVisual
 
+
 func _ready() -> void:
     super._ready()
+
 
 func _animate(delta: float) -> void:
     super._animate(delta)
@@ -15,6 +17,7 @@ func _animate(delta: float) -> void:
     # Add gentle rotation animation (like a ticking watch)
     if stopwatch_visual:
         stopwatch_visual.rotation = sin(bob_offset * 2.0) * 0.15
+
 
 func _on_collected() -> void:
     # Activate slow effect on player/game
@@ -24,5 +27,5 @@ func _on_collected() -> void:
     # Enable CRT effect
     Events.crt_enabled.emit()
 
-    AudioManager.play_sfx("orb_collect", -0.5)  # Even lower pitch for stopwatch
+    AudioManager.play_sfx("item_collect", -0.5)  # Even lower pitch for stopwatch
     _spawn_particles()

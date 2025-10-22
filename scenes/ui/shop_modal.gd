@@ -34,6 +34,7 @@ func _ready() -> void:
 
     # Set default tab to Cosmetics (index 0)
     tab_container.current_tab = 0
+    tab_container.tab_clicked.connect(_on_tab_clicked)
 
     # Update orb count
     if not Events.orb_count_updated.is_connected(_update_orb_count):
@@ -45,9 +46,13 @@ func _on_close_button_pressed() -> void:
     close_shop()
 
 
+func _on_tab_clicked(_tab: int) -> void:
+    AudioManager.play_sfx("ui_click")
+
+
 ## Public method to open the shop modal
 func open_shop() -> void:
-    print("open shop")
+    AudioManager.play_sfx("ui_modal_open")
     _update_orb_count()
     visible = true  # Make modal visible
 
@@ -62,6 +67,7 @@ func open_shop() -> void:
 
 ## Public method to close the shop modal
 func close_shop() -> void:
+    AudioManager.play_sfx("ui_modal_close")
     if animation_player.has_animation("open"):
         animation_player.play_backwards("open")
         await animation_player.animation_finished
@@ -110,7 +116,7 @@ func _on_cosmetic_unlock_requested(cosmetic_id: String) -> void:
     var success = CosmeticManager.unlock_cosmetic(cosmetic_id)
 
     if success:
-        AudioManager.play_sfx("ui_click")
+        AudioManager.play_sfx("unlock")
         _refresh_all_previews()
     else:
         # Not enough orbs
@@ -194,16 +200,17 @@ func _on_collectible_unlock_requested(collectible_id: String) -> void:
     var success = CollectibleManager.unlock_collectible(collectible_id)
 
     if success:
-        AudioManager.play_sfx("ui_click")
+        AudioManager.play_sfx("unlock")
         _refresh_all_collectible_items()
     else:
         # Not enough orbs
-        AudioManager.play_sfx("collision")
+        AudioManager.play_sfx("ui_error")
         print("Not enough orbs to unlock collectible %s" % collectible_id)
 
 
 func _on_collectible_item_clicked(collectible_id: String, description: String) -> void:
     """Handle collectible item clicked - show description in panel"""
+    AudioManager.play_sfx("ui_click")
     var collectible_name = ""
     if CollectibleManager.collectibles.has(collectible_id):
         collectible_name = CollectibleManager.collectibles[collectible_id].collectible_name

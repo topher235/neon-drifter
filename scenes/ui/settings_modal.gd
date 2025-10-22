@@ -9,6 +9,7 @@ extends Control
 @onready var sound_check: CheckButton = $Panel/MarginContainer/VBoxContainer/TabContainer/Settings/SettingsVBox/SoundSetting/SoundCheckButton
 @onready var close_button: Button = $Panel/MarginContainer/VBoxContainer/CloseButton
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 var settings_data: SettingsData
 
 
@@ -25,6 +26,7 @@ func _ready() -> void:
 
     # Set default tab to Settings (index 0)
     tab_container.current_tab = 0
+    tab_container.tab_clicked.connect(_on_tab_clicked)
 
     # Initialize UI with current settings
     _load_settings_to_ui()
@@ -39,11 +41,17 @@ func _load_settings_to_ui() -> void:
     sound_check.set_pressed_no_signal(settings_data.sound_enabled)
 
 
+func _on_tab_clicked(_tab: int) -> void:
+    AudioManager.play_sfx("ui_click")
+
+
 func _on_music_toggled(button_pressed: bool) -> void:
+    AudioManager.play_sfx("ui_click")
     settings_data.set_music_enabled(button_pressed)
 
 
 func _on_sound_toggled(button_pressed: bool) -> void:
+    AudioManager.play_sfx("ui_click")
     settings_data.set_sound_enabled(button_pressed)
 
 
@@ -53,7 +61,7 @@ func _on_close_button_pressed() -> void:
 
 ## Public method to open the settings modal
 func open_settings() -> void:
-    print("open settings")
+    AudioManager.play_sfx("ui_modal_open")
     _load_settings_to_ui()
     visible = true  # Make modal visible
 
@@ -68,6 +76,7 @@ func open_settings() -> void:
 
 ## Public method to close the settings modal
 func close_settings() -> void:
+    AudioManager.play_sfx("ui_modal_close")
     if animation_player.has_animation("open"):
         animation_player.play_backwards("open")
         await animation_player.animation_finished
