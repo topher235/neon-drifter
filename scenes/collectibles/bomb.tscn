@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://dhsig5tikmyj7"]
+[gd_scene load_steps=5 format=3 uid="uid://dhsig5tikmyj7"]
 
-[ext_resource type="Script" path="res://scenes/collectibles/bomb.gd" id="1_bomb"]
+[ext_resource type="Script" uid="uid://2fb02mrsslkm" path="res://scenes/collectibles/bomb.gd" id="1_bomb"]
+[ext_resource type="Texture2D" uid="uid://bi5ect5rrw13l" path="res://assets/icons/bomb.png" id="2_nqisq"]
+[ext_resource type="Shader" uid="uid://bcx2nausj68id" path="res://assets/shaders/neon_icon.gdshader" id="3_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bomb"]
+shader = ExtResource("3_shader")
+shader_parameter/target_color = Color(1, 1, 1, 1)
 
 [node name="Bomb" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
 script = ExtResource("1_bomb")
@@ -8,9 +14,13 @@ visual = NodePath("Visual")
 collision_shape = NodePath("CollisionShape2D")
 
 [node name="Visual" type="ColorRect" parent="."]
+visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_bomb")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_nqisq")

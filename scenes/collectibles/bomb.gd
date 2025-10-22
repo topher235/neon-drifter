@@ -11,7 +11,8 @@ var polygon_node: Polygon2D = null
 func _ready() -> void:
     super._ready()
     add_to_group("bomb")
-    _setup_visual()
+    # Not setting up visual since we added an icon as the visual
+#    _setup_visual()
     _setup_collision()
 
 
