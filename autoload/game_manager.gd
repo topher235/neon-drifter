@@ -21,18 +21,19 @@ var combo_multiplier: int = 1
 var max_combo: int        = 0
 var orbs_collected: int   = 0
 # Distance & Speed
-var distance_traveled: float      = 0.0
-var current_speed: float          = 300.0
-var base_speed: float             = 300.0
-var max_speed: float              = 800.0
-var speed_increase_rate: float    = 2.0  # pixels/sec increase per second
-var speed_boost_multiplier: float = 1.5
-var speed_boost_duration: float   = 0.0
-var slowdown_multiplier: float    = 1.0
-var slowdown_duration: float      = 0.0
-var orb_multiplier_active: bool   = false
+var distance_traveled: float       = 0.0
+var current_speed: float           = 300.0
+var base_speed: float              = 300.0
+var max_speed: float               = 800.0
+var speed_increase_rate: float     = 2.0  # speed increase per distance milestone
+var speed_increase_interval: float = 20.0  # distance units between speed increases
+var speed_boost_multiplier: float  = 1.5
+var speed_boost_duration: float    = 0.0
+var slowdown_multiplier: float     = 1.0
+var slowdown_duration: float       = 0.0
+var orb_multiplier_active: bool    = false
 var orb_multiplier_duration: float = 0.0
-var orb_point_multiplier: int     = 2  # Doubles orb value
+var orb_point_multiplier: int      = 2  # Doubles orb value
 # Difficulty
 var game_time: float  = 0.0
 var difficulty: float = 0.0
@@ -50,7 +51,7 @@ var longest_distance: float = 0.0
 # Death tracking
 var death_cause: String = ""  # "pillar", "pulse_gate", "timeout"
 # Collectible tracking (for daily challenge stats)
-var total_collectibles_in_run: int = 0
+var total_collectibles_in_run: int     = 0
 var collectibles_collected_in_run: int = 0
 
 
@@ -284,8 +285,10 @@ func _update_game_time(delta: float) -> void:
 
 
 func _update_speed(delta: float) -> void:
-    # Natural speed increase
-    var target_speed = min(base_speed + (game_time * speed_increase_rate), max_speed)
+    # Natural speed increase based on distance traveled
+    # Calculate how many distance milestones have been reached
+    var distance_milestones = floor(distance_traveled / speed_increase_interval)
+    var target_speed        = min(base_speed + (distance_milestones * speed_increase_rate), max_speed)
 
     # Apply speed boost
     if speed_boost_duration > 0.0:

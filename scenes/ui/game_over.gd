@@ -25,6 +25,8 @@ func _on_game_over(score: int, distance: float) -> void:
     final_score = score
     final_distance = distance
 
+    # Small wait so player can see where they died
+    await get_tree().create_timer(0.15).timeout
     _display_stats()
     _show_screen()
 
