@@ -26,6 +26,10 @@ func _ready() -> void:
     # Set up input validation
     if seed_input:
         seed_input.text_changed.connect(_on_seed_text_changed)
+        seed_input.max_length = 12  # Limit to 12 digits
+        # Set up character filtering for numbers only
+        var regex = RegEx.new()
+        regex.compile("^[0-9]*$")  # Only allow digits
         seed_input.text = str(randi())  # Start with random seed
 
     visible = false
@@ -57,16 +61,12 @@ func _on_confirm_pressed() -> void:
 
     var seed_text = seed_input.text.strip_edges()
 
-    # Validate input
+    # Validate input - default to 0 if empty
     if seed_text.is_empty():
         seed_text = "0"
 
-    # Convert to int (GDScript handles invalid strings by returning 0)
+    # Convert to int (guaranteed to be numeric due to filtering)
     var seed_value = seed_text.to_int()
-
-    # If text was not a valid number, use hash of the string
-    if seed_value == 0 and seed_text != "0":
-        seed_value = seed_text.hash()
 
     AudioManager.play_sfx("ui_start_game")
     seed_confirmed.emit(seed_value)
@@ -87,15 +87,28 @@ func _on_random_pressed() -> void:
 
 
 func _on_seed_text_changed(new_text: String) -> void:
-    """Update the seed preview label"""
+    """Update the seed preview label and filter non-numeric input"""
+    if not seed_input:
+        return
+
+    # Filter out non-numeric characters
+    var filtered_text = ""
+    for character in new_text:
+        if character.is_valid_int():
+            filtered_text += character
+
+    # Update the input if filtering occurred
+    if filtered_text != new_text:
+        seed_input.text = filtered_text
+        seed_input.caret_column = filtered_text.length()
+        return
+
+    # Update label
     if not seed_label:
         return
 
-    var seed_value = new_text.to_int()
-    if seed_value == 0 and new_text != "0" and not new_text.is_empty():
-        # Invalid number, show hash
-        seed_label.text = "Seed: %d (hash)" % new_text.hash()
-    elif new_text.is_empty():
+    if filtered_text.is_empty():
         seed_label.text = "Seed: (empty)"
     else:
+        var seed_value = filtered_text.to_int()
         seed_label.text = "Seed: %d" % seed_value
