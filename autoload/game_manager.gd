@@ -123,6 +123,9 @@ func end_game() -> void:
     if orbs_collected > 0:
         SaveManager.add_orbs(orbs_collected)
 
+    # Check if review prompt should be shown
+    ReviewManager.on_game_completed()
+
     game_over.emit(current_score, distance_traveled)
     print("Game Over - Score: %d, Distance: %.1f, Orbs: %d" % [current_score, distance_traveled, orbs_collected])
 

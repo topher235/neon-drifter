@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ctk67ij7axc7n"]
+[gd_scene load_steps=4 format=3 uid="uid://ctk67ij7axc7n"]
 
 [ext_resource type="Script" uid="uid://dqapk1imtt32t" path="res://scenes/ui/game_over.gd" id="1_60xr3"]
+[ext_resource type="PackedScene" uid="uid://bdr6e5yh8wm2f" path="res://scenes/ui/review_prompt_modal.tscn" id="2_review"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 64
@@ -124,3 +125,5 @@ text = "MAIN MENU"
 [node name="Control" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+
+[node name="ReviewPromptModal" parent="." instance=ExtResource("2_review")]

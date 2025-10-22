@@ -8,6 +8,7 @@ extends Control
 @onready var time_taken_label: Label = %TimeTakenLabel
 @onready var retry_button: Button = %RetryButton
 @onready var menu_button: Button = %MenuButton
+@onready var review_prompt_modal: ReviewPromptModal = $ReviewPromptModal
 
 var final_score: int      = 0
 var final_distance: float = 0.0
@@ -19,6 +20,9 @@ func _ready() -> void:
     menu_button.pressed.connect(_on_menu_pressed)
 
     GameManager.game_over.connect(_on_game_over)
+
+    # Connect to ReviewManager signal
+    ReviewManager.review_prompt_ready.connect(_on_review_prompt_ready)
 
 
 func _on_game_over(score: int, distance: float) -> void:
@@ -104,3 +108,13 @@ func _on_menu_pressed() -> void:
     # Re-enable buttons in case transition failed
     retry_button.disabled = false
     menu_button.disabled = false
+
+
+func _on_review_prompt_ready() -> void:
+    """Called when ReviewManager determines conditions are met for review prompt"""
+    # Wait a bit so user sees their final score first
+    await get_tree().create_timer(1.5).timeout
+
+    # Show the review prompt modal
+    if review_prompt_modal:
+        review_prompt_modal.show_prompt()

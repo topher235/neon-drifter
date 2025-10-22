@@ -19,7 +19,14 @@ var save_data = {
                     "daily_challenge_completed": false,
                     "last_daily_completion_date": "",
                     "stats": {}, # StatsManager data
-                    "achievements": {}  # AchievementManager data
+                    "achievements": {},  # AchievementManager data
+                    "review_data": {  # ReviewManager data
+                        "games_since_last_prompt": 0,
+                        "review_prompt_shown_count": 0,
+                        "last_review_prompt_date": "",
+                        "user_dismissed_permanently": false,
+                        "user_left_review": false
+                    }
                 }
 
 
@@ -262,6 +269,27 @@ func reset_save_data() -> void:
         "daily_challenge_completed": false,
         "last_daily_completion_date": "",
         "stats": {},
-        "achievements": {}
+        "achievements": {},
+        "review_data": {
+            "games_since_last_prompt": 0,
+            "review_prompt_shown_count": 0,
+            "last_review_prompt_date": "",
+            "user_dismissed_permanently": false,
+            "user_left_review": false
+        }
     }
     _write_save_data()
+
+
+# Review data persistence
+func save_review_data(review_data: Dictionary) -> void:
+    """Save review data from ReviewManager"""
+    save_data.review_data = review_data
+    _write_save_data()
+
+
+func load_review_data() -> Dictionary:
+    """Load review data for ReviewManager"""
+    if save_data.has("review_data"):
+        return save_data.review_data
+    return {}

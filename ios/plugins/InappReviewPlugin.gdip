@@ -1,0 +1,26 @@
+;
+; © 2024-present https://github.com/cengiz-pz
+;
+
+[config]
+name="InappReviewPlugin"
+binary="InappReviewPlugin.xcframework"
+
+initialization="InappReviewPlugin_init"
+deinitialization="InappReviewPlugin_deinit"
+
+use_swift_runtime=true
+
+
+[dependencies]
+linked=[]
+embedded=[]
+system=[]
+
+capabilities=[]
+
+files=[]
+
+linker_flags=[]
+
+[plist]

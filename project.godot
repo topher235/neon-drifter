@@ -27,6 +27,7 @@ CosmeticManager="*res://autoload/cosmetic_manager.gd"
 StatsManager="*res://autoload/stats_manager.gd"
 AchievementManager="*res://autoload/achievement_manager.gd"
 CollectibleManager="*res://autoload/collectible_manager.gd"
+ReviewManager="*res://autoload/review_manager.gd"
 
 [display]
 
@@ -38,6 +39,10 @@ window/size/window_height_override=1280
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/InappReviewPlugin/plugin.cfg")
 
 [gui]
 
