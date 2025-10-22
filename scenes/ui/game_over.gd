@@ -65,19 +65,39 @@ func _show_screen() -> void:
     visible = true
     modulate = Color(1, 1, 1, 0)
 
+    # Re-enable buttons when showing the screen
+    retry_button.disabled = false
+    menu_button.disabled = false
+
     var tween = create_tween()
     tween.tween_property(self, "modulate", Color.WHITE, 0.3)
 
 
 func _on_retry_pressed() -> void:
+    # Disable buttons immediately to prevent multiple clicks
+    retry_button.disabled = true
+    menu_button.disabled = true
+
     AudioManager.play_sfx("ui_start_game")
     visible = false
     # Reload the scene completely to reset everything with the same seed
     # The seed is preserved in GameManager.current_run_seed
     await SceneManager.reload_current_scene()
 
+    # Re-enable buttons in case transition failed
+    retry_button.disabled = false
+    menu_button.disabled = false
+
 
 func _on_menu_pressed() -> void:
+    # Disable buttons immediately to prevent multiple clicks
+    retry_button.disabled = true
+    menu_button.disabled = true
+
     AudioManager.play_sfx("ui_back")
     GameManager.return_to_menu()
     await SceneManager.goto_main_menu()
+
+    # Re-enable buttons in case transition failed
+    retry_button.disabled = false
+    menu_button.disabled = false

@@ -29,9 +29,11 @@ var sfx_library: Dictionary = {
                               }
 
 var music_tracks: Dictionary = {
-                                   "gameplay": "res://assets/audio/music/gameplay_loop.ogg",
+                                   "gameplay": "res://assets/audio/music/gameplay_loop.wav",
                                    "menu": "res://assets/audio/music/atmosphere-loop.wav"
                                }
+
+var fade_tween: Tween
 
 
 func _ready() -> void:
@@ -90,23 +92,34 @@ func play_music(track_name: String, fade_in: bool = true) -> void:
         print("Music file not yet created: " + track_name)
         return
 
+    # Kill any existing tweens on the music player first
+    if fade_tween:
+        fade_tween.kill()
+
+    # Stop any currently playing music
+    music_player.stop()
+
     var stream = load(music_tracks[track_name])
     music_player.stream = stream
 
     if fade_in:
         music_player.volume_db = -80
         music_player.play()
-        var tween = create_tween()
-        tween.tween_property(music_player, "volume_db", 0, 1.0)
+        fade_tween = create_tween()
+        fade_tween.tween_property(music_player, "volume_db", 0, 1.0)
     else:
+        music_player.volume_db = 0
         music_player.play()
 
 
 func stop_music(fade_out: bool = true) -> void:
     if fade_out:
-        var tween = create_tween()
-        tween.tween_property(music_player, "volume_db", -80, 1.0)
-        tween.tween_callback(music_player.stop)
+        if fade_tween:
+            fade_tween.kill()
+
+        fade_tween = create_tween()
+        fade_tween.tween_property(music_player, "volume_db", -80, 1.0)
+        fade_tween.tween_callback(music_player.stop)
     else:
         music_player.stop()
 
