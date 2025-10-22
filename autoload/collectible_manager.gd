@@ -21,6 +21,7 @@ func _initialize_collectibles() -> void:
     orb_data.description = "Earn points and currency"
     orb_data.collectible_type = "orb"
     orb_data.collectible_color = Color(0, 1, 1)  # Cyan
+    orb_data.scene_path = "res://scenes/collectibles/orb.tscn"
     orb_data.unlocked_by_default = true
     orb_data.buyable = false
     orb_data.orb_cost = 0
@@ -33,6 +34,7 @@ func _initialize_collectibles() -> void:
     magnet_data.description = "Attact nearby orbs to you"
     magnet_data.collectible_type = "magnet"
     magnet_data.collectible_color = Color(0.2, 0.5, 1.0)  # Blue
+    magnet_data.scene_path = "res://scenes/collectibles/magnet.tscn"
     magnet_data.unlocked_by_default = false
     magnet_data.buyable = true
     magnet_data.orb_cost = 150
@@ -42,9 +44,10 @@ func _initialize_collectibles() -> void:
     var multiplier_data = CollectibleData.new()
     multiplier_data.collectible_id = "multiplier"
     multiplier_data.collectible_name = "Multiplier"
-    multiplier_data.description = "Increase your score multiplier."
+    multiplier_data.description = "Increase your score multiplier"
     multiplier_data.collectible_type = "multiplier"
     multiplier_data.collectible_color = Color(1.0, 0.8, 0.0)  # Gold
+    multiplier_data.scene_path = "res://scenes/collectibles/multiplier.tscn"
     multiplier_data.unlocked_by_default = false
     multiplier_data.buyable = true
     multiplier_data.orb_cost = 200
@@ -57,6 +60,7 @@ func _initialize_collectibles() -> void:
     star_data.description = "Temporarily gain invulnerability"
     star_data.collectible_type = "star"
     star_data.collectible_color = Color(1.0, 1.0, 0.0)  # Yellow
+    star_data.scene_path = "res://scenes/collectibles/star.tscn"
     star_data.unlocked_by_default = false
     star_data.buyable = true
     star_data.orb_cost = 100
@@ -69,6 +73,7 @@ func _initialize_collectibles() -> void:
     stopwatch_data.description = "Temporarily slows down time"
     stopwatch_data.collectible_type = "stopwatch"
     stopwatch_data.collectible_color = Color(0.6, 0.6, 0.6)  # Silver
+    stopwatch_data.scene_path = "res://scenes/collectibles/stopwatch.tscn"
     stopwatch_data.unlocked_by_default = false
     stopwatch_data.buyable = true
     stopwatch_data.orb_cost = 250
@@ -81,6 +86,7 @@ func _initialize_collectibles() -> void:
     hourglass_data.description = "Add extra time"
     hourglass_data.collectible_type = "hourglass"
     hourglass_data.collectible_color = Color(0.8, 0.6, 0.4)  # Sand/Bronze
+    hourglass_data.scene_path = "res://scenes/collectibles/hourglass.tscn"
     hourglass_data.unlocked_by_default = false
     hourglass_data.buyable = true
     hourglass_data.orb_cost = 175
@@ -93,6 +99,7 @@ func _initialize_collectibles() -> void:
     bomb_data.description = "Clear all nearby obstacles"
     bomb_data.collectible_type = "bomb"
     bomb_data.collectible_color = Color(1.0, 0.3, 0.0)  # Orange/Red
+    bomb_data.scene_path = "res://scenes/collectibles/bomb.tscn"
     bomb_data.unlocked_by_default = false
     bomb_data.buyable = true
     bomb_data.orb_cost = 300

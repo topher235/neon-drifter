@@ -210,7 +210,6 @@ func _on_collectible_unlock_requested(collectible_id: String) -> void:
 
 func _on_collectible_item_clicked(collectible_id: String, description: String) -> void:
     """Handle collectible item clicked - show description in panel"""
-    AudioManager.play_sfx("ui_click")
     var collectible_name = ""
     if CollectibleManager.collectibles.has(collectible_id):
         collectible_name = CollectibleManager.collectibles[collectible_id].collectible_name

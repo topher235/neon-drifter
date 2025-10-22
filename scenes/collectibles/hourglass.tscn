@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8eae1f2g3h4i"]
+[gd_scene load_steps=5 format=3 uid="uid://c8eae1f2g3h4i"]
 
-[ext_resource type="Script" path="res://scenes/collectibles/hourglass.gd" id="1_hourglass"]
+[ext_resource type="Script" uid="uid://d0v6xu5nndm4g" path="res://scenes/collectibles/hourglass.gd" id="1_hourglass"]
+[ext_resource type="Texture2D" uid="uid://diswg4toce05i" path="res://assets/icons/hourglass.png" id="2_gj3fn"]
+[ext_resource type="Shader" uid="uid://bcx2nausj68id" path="res://assets/shaders/neon_icon.gdshader" id="2_rd7g0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wo6ah"]
+shader = ExtResource("2_rd7g0")
+shader_parameter/target_color = Color(0, 1, 1, 1)
 
 [node name="Hourglass" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
 script = ExtResource("1_hourglass")
@@ -8,9 +14,13 @@ visual = NodePath("Visual")
 collision_shape = NodePath("CollisionShape2D")
 
 [node name="Visual" type="ColorRect" parent="."]
+visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_wo6ah")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_gj3fn")

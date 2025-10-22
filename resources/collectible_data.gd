@@ -7,8 +7,9 @@ extends Resource
 @export var collectible_id: String = ""
 @export var collectible_name: String = ""
 @export var description: String = ""  # What the collectible does
-@export var icon_texture: Texture2D  # Preview icon for shop
+@export var icon_texture: Texture2D  # Preview icon for shop (for PNG-based collectibles)
 @export var collectible_color: Color = Color.WHITE  # Visual color for preview
+@export var scene_path: String = ""  # Path to collectible scene for preview rendering
 
 # Unlock system
 @export var unlocked_by_default: bool = true  # True for orbs

@@ -21,11 +21,12 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="PreviewIcon" type="ColorRect" parent="MarginContainer/VBoxContainer/PreviewContainer"]
+[node name="PreviewIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PreviewContainer"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0, 1, 1, 1)
+expand_mode = 1
+stretch_mode = 5
 
 [node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

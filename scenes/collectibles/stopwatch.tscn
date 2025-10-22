@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqw8k3m5vx7p2"]
+[gd_scene load_steps=6 format=3 uid="uid://cqw8k3m5vx7p2"]
 
-[ext_resource type="Script" path="res://scenes/collectibles/stopwatch.gd" id="1_stopwatch"]
+[ext_resource type="Script" uid="uid://c2t8y5s3ki06y" path="res://scenes/collectibles/stopwatch.gd" id="1_stopwatch"]
+[ext_resource type="Shader" uid="uid://bcx2nausj68id" path="res://assets/shaders/neon_icon.gdshader" id="2_t6aft"]
+[ext_resource type="Texture2D" uid="uid://c70n4qpdlm731" path="res://assets/icons/stopwatch.png" id="3_hnn06"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_stopwatch"]
 radius = 18.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vti88"]
+shader = ExtResource("2_t6aft")
+shader_parameter/target_color = Color(1, 0.9372549, 0, 1)
 
 [node name="Stopwatch" type="Area2D" node_paths=PackedStringArray("visual", "collision_shape")]
 script = ExtResource("1_stopwatch")
@@ -11,20 +17,22 @@ visual = NodePath("Visual")
 collision_shape = NodePath("CollisionShape2D")
 
 [node name="Visual" type="Node2D" parent="."]
+visible = false
 
 [node name="StopwatchVisual" type="Polygon2D" parent="Visual"]
 unique_name_in_owner = true
-color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(0, -18, 3.44, -17.67, 6.73, -16.71, 9.74, -15.14, 12.37, -13, 14.55, -10.39, 16.19, -7.39, 17.24, -4.1, 17.67, -0.65, 17.67, 0.65, 17.24, 4.1, 16.19, 7.39, 14.55, 10.39, 12.37, 13, 9.74, 15.14, 6.73, 16.71, 3.44, 17.67, 0, 18, -3.44, 17.67, -6.73, 16.71, -9.74, 15.14, -12.37, 13, -14.55, 10.39, -16.19, 7.39, -17.24, 4.1, -17.67, 0.65, -17.67, -0.65, -17.24, -4.1, -16.19, -7.39, -14.55, -10.39, -12.37, -13, -9.74, -15.14, -6.73, -16.71, -3.44, -17.67)
 
 [node name="TrianglePointer" type="Polygon2D" parent="Visual"]
-color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(0, -22, -3, -16, 3, -16)
 
 [node name="PointLight2D" type="PointLight2D" parent="Visual"]
-color = Color(1, 1, 1, 1)
-energy = 1.0
 texture_scale = 1.3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_stopwatch")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_vti88")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_hnn06")

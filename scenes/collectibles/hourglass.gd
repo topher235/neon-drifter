@@ -8,7 +8,8 @@ extends BaseCollectible
 func _ready() -> void:
     super._ready()
     add_to_group("hourglass")
-    _setup_visual()
+    # Not setting up visual since we're using an icon now
+    #    _setup_visual()
     _setup_collision()
 
 
